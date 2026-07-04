@@ -163,5 +163,7 @@ jobs:
       - run: pnpm --filter @app/backend exec prisma migrate deploy
         working-directory: templates/fullstack
 
+      - run: pnpm --filter @app/frontend build
+
       - run: pnpm test:e2e
         working-directory: templates/fullstack

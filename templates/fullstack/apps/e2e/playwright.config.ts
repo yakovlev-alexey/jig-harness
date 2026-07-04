@@ -44,7 +44,8 @@ export default defineConfig({
           },
         },
         {
-          command: 'pnpm --filter @app/frontend preview --port 4173 --strictPort',
+          command:
+            'pnpm --filter @app/frontend build && pnpm --filter @app/frontend preview --port 4173 --strictPort',
           url: baseURL,
           reuseExistingServer: !process.env.CI,
           timeout: 120_000,

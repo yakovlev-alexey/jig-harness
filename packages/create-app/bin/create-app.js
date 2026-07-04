@@ -200,6 +200,12 @@ function main() {
 
   writeJson(join(args.targetDir, 'package.json'), rootPkg);
 
+  const envExample = join(args.targetDir, 'apps/backend/.env.example');
+  const envFile = join(args.targetDir, 'apps/backend/.env');
+  if (existsSync(envExample) && !existsSync(envFile)) {
+    cpSync(envExample, envFile);
+  }
+
   if (!args.skipInstall) {
     console.log('Installing dependencies...');
     run('pnpm', ['install'], args.targetDir);
@@ -210,7 +216,9 @@ function main() {
     run('git', ['init'], args.targetDir);
   }
 
-  console.log(`Done! Next steps:\n  cd ${basename(args.targetDir)}\n  pnpm verify`);
+  console.log(
+    `Done! Next steps:\n  cd ${basename(args.targetDir)}\n  pnpm db:setup\n  pnpm verify\n  pnpm dev`,
+  );
 }
 
 main();

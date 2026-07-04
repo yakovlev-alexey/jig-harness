@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Where should I put a new Fastify endpoint for user registration?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can my command call findUserByEmailQuery directly?",
+    "should_trigger": true
+  },
+  {
+    "query": "What layer segments are allowed under src/slices/users?",
+    "should_trigger": true
+  },
+  {
+    "query": "Should domain code import prisma client?",
+    "should_trigger": true
+  },
+  {
+    "query": "Add a hero banner component to the landing slice",
+    "should_trigger": false
+  },
+  {
+    "query": "Bootstrap a new fullstack monorepo from scratch",
+    "should_trigger": false
+  }
+]

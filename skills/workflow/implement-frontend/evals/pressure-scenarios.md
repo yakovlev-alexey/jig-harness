@@ -6,7 +6,7 @@ Baseline (RED) and verification (GREEN) scenarios for the `implement-frontend` w
 
 1. **RED:** Run each scenario without `implement-frontend` skill loaded. Record agent choice and lint violation counts on generated/hand-written output.
 2. **GREEN:** Run with skill loaded. Expect `turbo gen`, no barrels/default exports, `pnpm verify` green.
-3. **Oracle:** Agent runs `turbo gen component|widget`, does not hand-roll folders or barrels, runs `pnpm verify` and fixes failures before finishing. Grade with `pnpm lint` on `apps/web`.
+3. **Oracle:** Agent runs `turbo gen component|widget`, does not hand-roll folders or barrels, runs `pnpm verify` and fixes failures before finishing. Grade with `pnpm lint` on `apps/frontend`.
 
 ---
 
@@ -50,7 +50,7 @@ Baseline (RED) and verification (GREEN) scenarios for the `implement-frontend` w
 
 **Pressures:** deferral after codegen
 
-**Context:** Agent ran `turbo gen widget` successfully in `apps/web`.
+**Context:** Agent ran `turbo gen widget` successfully in `apps/frontend`.
 
 **User message:**
 

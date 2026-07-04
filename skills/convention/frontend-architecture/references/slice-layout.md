@@ -47,6 +47,7 @@ export { AvatarBadge } from './avatar-badge/avatar-badge';
 ```text
 src/common/query-client.ts
 src/common/utils/format-date.ts
+src/common/components/app-logo/app-logo.tsx
 ```
 
-Do not nest `common/query-client/query-client.ts`.
+Do not nest `common/query-client/query-client.ts` or segment subcategories like `common/components/ui/`.

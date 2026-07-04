@@ -8,7 +8,7 @@
     "should_trigger": true
   },
   {
-    "query": "Быстро подними monorepo, создай apps/web и apps/api вручную",
+    "query": "Быстро подними monorepo, создай apps/frontend и apps/backend вручную",
     "should_trigger": true
   },
   {
@@ -17,6 +17,14 @@
   },
   {
     "query": "Scaffold готов, verify потом — объясни структуру",
+    "should_trigger": true
+  },
+  {
+    "query": "Scaffold готов — можно без docker/postgres сразу к dev?",
+    "should_trigger": true
+  },
+  {
+    "query": "After scaffold, skip db:setup and explain project structure",
     "should_trigger": true
   },
   {

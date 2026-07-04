@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Add a POST /billing/invoices endpoint in apps/backend",
+    "should_trigger": true
+  },
+  {
+    "query": "Create users slice backend folders — I'll mkdir manually",
+    "should_trigger": true
+  },
+  {
+    "query": "Add create-invoice usecase and wire it to the endpoint",
+    "should_trigger": true
+  },
+  {
+    "query": "Refactor command/query separation in the users slice",
+    "should_trigger": true
+  },
+  {
+    "query": "Add a landing page widget in apps/frontend",
+    "should_trigger": false
+  },
+  {
+    "query": "Bootstrap a new jig monorepo",
+    "should_trigger": false
+  }
+]

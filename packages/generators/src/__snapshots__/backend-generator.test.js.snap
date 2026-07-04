@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`backend generators L-gen > endpoint output matches snapshot and passes eslint > endpoint.ts 1`] = `
+"import type { FastifyPluginAsync } from 'fastify';
+
+export const createInvoiceEndpoint: FastifyPluginAsync = async (app) => {
+  app.post('/billing/create-invoice', async (_request, reply) => {
+    return reply.code(501).send({ message: 'CreateInvoice not implemented yet' });
+  });
+};
+"
+`;
+
+exports[`backend generators L-gen > usecase output matches snapshot and passes eslint > usecase.ts 1`] = `
+"export async function createInvoiceUsecase(): Promise<void> {
+  throw new Error('CreateInvoiceUsecase not implemented yet');
+}
+"
+`;

@@ -23,3 +23,5 @@ catalog:
   '@types/node': ^24.0.10
   tsx: ^4.20.3
   vitest: ^3.2.4
+  prisma: ^6.11.1
+  '@prisma/client': ^6.11.1

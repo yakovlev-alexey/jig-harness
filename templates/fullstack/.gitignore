@@ -3,3 +3,4 @@ dist
 .turbo
 *.tsbuildinfo
 .jig-tarballs
+apps/backend/.env

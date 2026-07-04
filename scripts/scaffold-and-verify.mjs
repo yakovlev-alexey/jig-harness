@@ -12,13 +12,29 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const TARBALLS_DIR = join(ROOT, '.scaffold-tarballs');
 
-function run(cmd, args, cwd = ROOT) {
+const isCI = process.env.CI === 'true';
+const DEFAULT_DATABASE_URL = isCI
+  ? 'postgresql://postgres:postgres@localhost:5432/jig_test?schema=public'
+  : 'postgresql://postgres:postgres@localhost:5432/jig_dev?schema=public';
+
+function run(cmd, args, cwd = ROOT, env = process.env) {
   const result = spawnSync(cmd, args, {
     cwd,
     stdio: 'inherit',
     shell: process.platform === 'win32',
+    env,
   });
   if (result.status !== 0) process.exit(result.status ?? 1);
+}
+
+function tryRun(cmd, args, cwd = ROOT, env = process.env) {
+  const result = spawnSync(cmd, args, {
+    cwd,
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+    env,
+  });
+  return result.status === 0;
 }
 
 const packages = [
@@ -40,16 +56,46 @@ for (const pkg of packages) {
 const tmpDir = mkdtempSync(join(tmpdir(), 'jig-scaffold-'));
 const projectDir = join(tmpDir, 'test-app');
 
+const scaffoldEnv = {
+  ...process.env,
+  DATABASE_URL: process.env.DATABASE_URL ?? DEFAULT_DATABASE_URL,
+};
+
 try {
-  run('node', [
-    join(ROOT, 'packages/create-app/bin/create-app.js'),
-    projectDir,
-    '--tarballs-dir',
-    TARBALLS_DIR,
-    '--skip-git',
-  ]);
-  run('pnpm', ['verify'], projectDir);
-  run('node', [join(ROOT, 'scripts/verify-turbo-gen.mjs'), join(projectDir, 'apps/web')]);
+  run(
+    'node',
+    [
+      join(ROOT, 'packages/create-app/bin/create-app.js'),
+      projectDir,
+      '--tarballs-dir',
+      TARBALLS_DIR,
+      '--skip-git',
+    ],
+    ROOT,
+    scaffoldEnv,
+  );
+
+  if (!isCI) {
+    tryRun('pnpm', ['db:up'], projectDir, scaffoldEnv);
+  }
+
+  if (
+    !tryRun(
+      'pnpm',
+      ['--filter', '@app/backend', 'exec', 'prisma', 'migrate', 'deploy'],
+      projectDir,
+      scaffoldEnv,
+    )
+  ) {
+    if (isCI) {
+      process.exit(1);
+    }
+    console.warn('WARN: Postgres unavailable — skipping migrate; static verify only');
+  }
+
+  run('pnpm', ['verify'], projectDir, scaffoldEnv);
+  run('node', [join(ROOT, 'scripts/verify-turbo-gen.mjs'), join(projectDir, 'apps/frontend')]);
+  run('node', [join(ROOT, 'scripts/verify-backend-gen.mjs'), join(projectDir, 'apps/backend')]);
   console.log('scaffold-and-verify: passed.');
 } finally {
   rmSync(tmpDir, { recursive: true, force: true });

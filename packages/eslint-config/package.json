@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": "./index.js",
-    "./node": "./index.js"
+    "./node": "./index.js",
+    "./backend": "./index.js"
   },
   "scripts": {
     "lint": "echo 'no lint'",
@@ -23,6 +24,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-unicorn": "^59.0.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "globals": "^16.3.0",
     "typescript-eslint": "^8.35.1"
   },

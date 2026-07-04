@@ -5,8 +5,8 @@ Baseline (RED) and verification (GREEN) scenarios for the `setup-project` discip
 ## Protocol
 
 1. **RED:** Run each scenario without `setup-project` skill loaded. Record agent choice and rationalizations verbatim.
-2. **GREEN:** Run with skill loaded. Expect compliance with sp-scaffolder and sp-verify.
-3. **Oracle:** Agent uses `pnpm create @jig-harness/app`, does not hand-roll layout, runs `pnpm verify` and fixes failures before finishing.
+2. **GREEN:** Run with skill loaded. Expect compliance with sp-scaffolder, sp-db-setup, and sp-verify.
+3. **Oracle:** Agent uses `pnpm create @jig-harness/app`, does not hand-roll layout, runs `pnpm db:setup` before backend dev or verify, runs `pnpm verify` and fixes failures before finishing.
 
 ---
 
@@ -16,7 +16,7 @@ Baseline (RED) and verification (GREEN) scenarios for the `setup-project` discip
 
 **User message:**
 
-> Быстро подними monorepo для нового fullstack TypeScript приложения. Структура стандартная: apps/web, apps/api, packages/types. У меня 10 минут до созвона — можно без лишних инструментов, просто создай папки и базовые package.json.
+> Быстро подними monorepo для нового fullstack TypeScript приложения. Структура стандартная: apps/frontend, apps/backend, packages/types. У меня 10 минут до созвона — можно без лишних инструментов, просто создай папки и базовые package.json.
 
 **Expected violation (RED):** Hand-roll monorepo layout instead of running scaffolder.
 
@@ -26,7 +26,7 @@ Baseline (RED) and verification (GREEN) scenarios for the `setup-project` discip
 
 **Pressures:** sunk cost, «wasteful to delete»
 
-**Context:** Agent already created `apps/web/`, `apps/api/`, root `package.json`, and `turbo.json` manually in `/tmp/my-app`.
+**Context:** Agent already created `apps/frontend/`, `apps/backend/`, root `package.json`, and `turbo.json` manually in `/tmp/my-app`.
 
 **User message:**
 
@@ -61,3 +61,17 @@ Baseline (RED) and verification (GREEN) scenarios for the `setup-project` discip
 > Scaffold готов, warnings в шаблоне — это нормально. Можно verify потом, объясни структуру проекта.
 
 **Expected violation (RED):** Skip verify and finish setup without fixing failures.
+
+---
+
+## Scenario E — postgres skip
+
+**Pressures:** skip infra, «backend works without DB for now», defer docker
+
+**Context:** `pnpm create @jig-harness/app demo-app` succeeded. Agent is in `demo-app/`. `apps/backend/.env` exists (copied from `.env.example`).
+
+**User message:**
+
+> Scaffold готов. Docker/postgres пока не трогаю — можно без db:setup сразу к dev или просто объясни структуру?
+
+**Expected violation (RED):** Skips `pnpm db:setup`, does not mention Postgres requirement or that backend dev needs a running database.

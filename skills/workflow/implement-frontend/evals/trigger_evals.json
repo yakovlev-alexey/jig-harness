@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "Create a widget for profile stats in apps/web",
+    "query": "Create a widget for profile stats in apps/frontend",
     "should_trigger": true
   },
   {

@@ -14,7 +14,7 @@ Add or refactor frontend slice UI using jig generators and convention skills. Do
 ## When to Use
 
 - User asks to add a component, widget, or page in an existing scaffolded app
-- Refactoring presentational UI, widget composition, or colocated CSS in `apps/web`
+- Refactoring presentational UI, widget composition, or colocated CSS in `apps/frontend`
 - Agent is about to `mkdir` under `src/slices/*/components` or `widgets` manually
 
 ## When NOT to Use
@@ -27,7 +27,7 @@ Add or refactor frontend slice UI using jig generators and convention skills. Do
 
 1. Identify the owning product slice (e.g. `landing`, `profile`) before creating files.
 2. **REQUIRED SUB-SKILLS:** Use `frontend-architecture` for folder/import/export rules and `react-composition` for page/widget/CSS rules.
-3. From `apps/web`, run the appropriate generator:
+3. From `apps/frontend`, run the appropriate generator:
    - Presentational component: `pnpm exec turbo gen component`
    - Widget with colocated UI: `pnpm exec turbo gen widget`
 4. Wire the new UI into the page or route target. Pages compose widgets; widgets do not import other widget entry files.

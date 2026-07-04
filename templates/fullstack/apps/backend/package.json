@@ -1,5 +1,5 @@
 {
-  "name": "@app/api",
+  "name": "@app/backend",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,18 +8,25 @@
     "start": "node dist/server.js",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "echo 'no tests yet'"
+    "test": "echo 'no tests yet'",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:push": "prisma db push"
   },
   "dependencies": {
     "@app/types": "workspace:*",
+    "@prisma/client": "catalog:",
     "fastify": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@jig-harness/eslint-config": "workspace:*",
+    "@jig-harness/generators": "workspace:*",
     "@jig-harness/tsconfig": "workspace:*",
+    "@turbo/gen": "^2.5.4",
     "@types/node": "catalog:",
     "eslint": "catalog:",
+    "prisma": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:"
   }

@@ -88,4 +88,105 @@ export function registerGenerators(plop, options = {}) {
       },
     ],
   });
+
+  plop.setGenerator('backend-slice', {
+    description: 'Create backend slice layer folders under src/slices/<slice>/',
+    prompts: [
+      {
+        type: 'input',
+        name: 'slice',
+        message: 'Slice name (e.g. users, billing)',
+        validate: (value) => (value ? true : 'Slice name is required'),
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/domain/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/usecases/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/commands/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/queries/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/endpoints/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/plugins/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/schemas/.gitkeep',
+        template: '',
+      },
+    ],
+  });
+
+  plop.setGenerator('endpoint', {
+    description: 'Create a Fastify endpoint file in a backend slice',
+    prompts: [
+      {
+        type: 'input',
+        name: 'slice',
+        message: 'Slice name (e.g. users)',
+        validate: (value) => (value ? true : 'Slice name is required'),
+      },
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Endpoint name in kebab-case (e.g. create-user)',
+        validate: (value) =>
+          /^[a-z][a-z0-9-]*$/.test(value) ? true : 'Use lowercase kebab-case (be-kebab-case)',
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/endpoints/{{name}}-endpoint.ts',
+        templateFile: join(templatesDir, 'backend/endpoint.ts.hbs'),
+      },
+    ],
+  });
+
+  plop.setGenerator('usecase', {
+    description: 'Create a usecase file in a backend slice',
+    prompts: [
+      {
+        type: 'input',
+        name: 'slice',
+        message: 'Slice name (e.g. users)',
+        validate: (value) => (value ? true : 'Slice name is required'),
+      },
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Usecase name in kebab-case (e.g. create-user)',
+        validate: (value) =>
+          /^[a-z][a-z0-9-]*$/.test(value) ? true : 'Use lowercase kebab-case (be-kebab-case)',
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/usecases/{{name}}-usecase.ts',
+        templateFile: join(templatesDir, 'backend/usecase.ts.hbs'),
+      },
+    ],
+  });
 }

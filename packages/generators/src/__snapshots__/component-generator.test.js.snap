@@ -1,15 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`generators L-gen > component output matches snapshot and passes eslint > component.css 1`] = `
-".demo-card {
-  display: block;
-}
-
-.demo-card__title {
-  margin: 0;
-}
-"
-`;
+exports[`generators L-gen > component output matches snapshot and passes eslint > component.css 1`] = `".demo-card { display: block; } .demo-card__title { margin: 0; }"`;
 
 exports[`generators L-gen > component output matches snapshot and passes eslint > component.tsx 1`] = `
 "import './demo-card.css';

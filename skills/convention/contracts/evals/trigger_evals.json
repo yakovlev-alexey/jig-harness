@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Where should shared Zod schemas for the users API live?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can the frontend import createUserUsecase from apps/backend?",
+    "should_trigger": true
+  },
+  {
+    "query": "Should the API return the raw Prisma User model?",
+    "should_trigger": true
+  },
+  {
+    "query": "Add packages/types/src/slices/billing/billing-contracts.ts",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix ESLint in a React widget",
+    "should_trigger": false
+  },
+  {
+    "query": "Where do I put a Fastify command file?",
+    "should_trigger": false
+  }
+]

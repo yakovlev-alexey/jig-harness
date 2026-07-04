@@ -1,0 +1,7 @@
+import type { FastifyPluginAsync } from 'fastify';
+
+export const {{camelCase name}}Endpoint: FastifyPluginAsync = async (app) => {
+  app.post('/{{slice}}/{{name}}', async (_request, reply) => {
+    return reply.code(501).send({ message: '{{pascalCase name}} not implemented yet' });
+  });
+};

@@ -119,7 +119,7 @@ jig-harness/                      (pnpm + turborepo, Changesets fixed/linked)
 │   ├─ generators                 turbo gen (component, widget, page, slice, endpoint…)
 │   └─ create-app                 @jig-harness/create-app — pnpm create scaffolder
 ├─ templates/
-│   └─ fullstack/                 apps/web + apps/api + packages/types; deps via workspace:* / catalog:
+│   └─ fullstack/                 apps/frontend + apps/backend + packages/types; deps via workspace:* / catalog:
 ├─ rules-catalogue.md             single source of truth (rule ↔ layer crosswalk)
 ├─ docs/                          this design doc's descendants, ADRs
 ├─ scripts/                       validation (extends validate-skills.sh) + coherence check
@@ -267,7 +267,7 @@ this establishes every package skeleton and the distribution pipeline.
   `web-app-project-defaults`, rule-ID'd).
 - **Capability:** `@jig-harness/create-app` scaffolder (with the
   `workspace:*`/`catalog:` → published-version rewrite) + `templates/fullstack`
-  (apps/web = Vite+React, apps/api = Fastify, packages/types = Zod contracts,
+  (apps/frontend = Vite+React, apps/backend = Fastify, packages/types = Zod contracts,
   turborepo wiring).
 - **Enforcement:** the config packages (`eslint-config`, `prettier-config`,
   `stylelint-config`, `tsconfig`) composed from off-the-shelf rules, wired into the
@@ -322,6 +322,6 @@ recorded, stop and gather feedback before scaling.
    (`@usejig` / `@jigkit`).
 2. Final workflow use-case list — is `refactor-to-conventions` in v1 or deferred to
    P4?
-3. Template composition specifics for `apps/web` routing/state defaults (React
+3. Template composition specifics for `apps/frontend` routing/state defaults (React
    Router + TanStack Query assumed from the existing skills).
 4. Repository visibility — created private; flip to public when ready to publish.

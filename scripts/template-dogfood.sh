@@ -6,10 +6,24 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 echo "Running template dogfood verify from monorepo root..."
 cd "$ROOT"
 
-pnpm --filter @app/web --filter @app/api --filter @app/types run lint
-pnpm --filter @app/web --filter @app/api --filter @app/types run typecheck
-pnpm --filter @app/web --filter @app/api --filter @app/types run test
-pnpm --filter @app/web run build
-pnpm --filter @app/api run build
+export DATABASE_URL="${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/jig_test?schema=public}"
+
+if [ "${CI:-}" != "true" ]; then
+  bash templates/fullstack/scripts/db-up.sh 2>/dev/null || true
+  export DATABASE_URL="${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/jig_dev?schema=public}"
+fi
+
+if ! pnpm --filter @app/backend exec prisma migrate deploy; then
+  if [ "${CI:-}" = "true" ]; then
+    exit 1
+  fi
+  echo "WARN: Postgres unavailable — skipping migrate; static checks only"
+fi
+
+pnpm --filter @app/frontend --filter @app/backend --filter @app/types run lint
+pnpm --filter @app/frontend --filter @app/backend --filter @app/types run typecheck
+pnpm --filter @app/frontend --filter @app/backend --filter @app/types run test
+pnpm --filter @app/frontend run build
+pnpm --filter @app/backend run build
 
 echo "template-dogfood: passed."

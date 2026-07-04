@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Verify turbo gen works in a scaffolded apps/web workspace.
- * Usage: node scripts/verify-turbo-gen.mjs <apps/web-path>
+ * Verify turbo gen works in a scaffolded apps/frontend workspace.
+ * Usage: node scripts/verify-turbo-gen.mjs <apps/frontend-path>
  */
 import { mkdtempSync, rmSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -11,7 +11,7 @@ import nodePlop from 'node-plop';
 
 const webRoot = process.argv[2];
 if (!webRoot) {
-  console.error('Usage: verify-turbo-gen.mjs <apps/web-path>');
+  console.error('Usage: verify-turbo-gen.mjs <apps/frontend-path>');
   process.exit(1);
 }
 

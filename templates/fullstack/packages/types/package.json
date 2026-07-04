@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./health": "./src/health.ts"
+    "./slices/health/health-contracts": "./src/slices/health/health-contracts.ts",
+    "./slices/users/user-contracts": "./src/slices/users/user-contracts.ts"
   },
   "scripts": {
     "lint": "eslint .",

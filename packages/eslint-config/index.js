@@ -10,7 +10,7 @@ import globals from 'globals';
 import jigPlugin from '@jig-harness/eslint-plugin';
 
 /** @type {import('eslint').Linter.Config[]} */
-const baseConfig = [
+const sharedConfig = [
   {
     ignores: ['**/dist/**', '**/node_modules/**', '**/.turbo/**'],
   },
@@ -24,33 +24,9 @@ const baseConfig = [
       boundaries,
       '@jig-harness': jigPlugin,
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-      'boundaries/elements': [
-        { type: 'app', pattern: 'src/App.tsx' },
-        { type: 'common', pattern: 'src/common/**' },
-        { type: 'slice', pattern: 'src/slices/*/**', mode: 'folder' },
-        { type: 'page', pattern: 'src/slices/*/pages/**' },
-        { type: 'widget', pattern: 'src/slices/*/widgets/**/*.widget.tsx' },
-        { type: 'component', pattern: 'src/slices/*/components/**' },
-        { type: 'widget-ui', pattern: 'src/slices/*/widgets/**/!(*.widget).tsx' },
-        { type: 'entry', pattern: 'src/main.tsx' },
-      ],
-      'boundaries/include': ['src/**'],
-      'import-x/resolver': {
-        typescript: true,
-        node: true,
-      },
-    },
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
     },
     rules: {
       'import-x/no-default-export': 'error',
@@ -61,23 +37,9 @@ const baseConfig = [
           case: 'kebabCase',
         },
       ],
-      'boundaries/element-types': [
-        'warn',
-        {
-          default: 'disallow',
-          rules: [
-            { from: 'entry', allow: ['app', 'common', 'slice', 'page'] },
-            { from: 'app', allow: ['common', 'slice', 'page'] },
-            { from: 'common', allow: ['common'] },
-            { from: 'slice', allow: ['common', 'slice'] },
-            { from: 'page', allow: ['common', 'component', 'widget', 'widget-ui'] },
-            { from: 'widget', allow: ['common', 'component', 'widget-ui'] },
-            { from: 'widget-ui', allow: ['common', 'component'] },
-            { from: 'component', allow: ['common', 'component'] },
-          ],
-        },
-      ],
       '@jig-harness/no-reexport-only': 'error',
+      '@jig-harness/no-command-query-cross-calls': 'error',
+      '@jig-harness/domain-no-io': 'error',
     },
   },
   {
@@ -110,19 +72,138 @@ const baseConfig = [
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
+const frontendBoundariesConfig = [
+  {
+    settings: {
+      react: {
+        version: 'detect',
+      },
+      'boundaries/elements': [
+        { type: 'app', pattern: 'src/App.tsx' },
+        { type: 'common', pattern: 'src/common/**' },
+        { type: 'slice', pattern: 'src/slices/*/**', mode: 'folder' },
+        { type: 'page', pattern: 'src/slices/*/pages/**' },
+        { type: 'widget', pattern: 'src/slices/*/widgets/**/*.widget.tsx' },
+        { type: 'component', pattern: 'src/slices/*/components/**' },
+        { type: 'widget-ui', pattern: 'src/slices/*/widgets/**/!(*.widget).tsx' },
+        { type: 'entry', pattern: 'src/main.tsx' },
+      ],
+      'boundaries/include': ['src/**'],
+      'import-x/resolver': {
+        typescript: true,
+        node: true,
+      },
+    },
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    rules: {
+      'import-x/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            {
+              target: './src/**',
+              from: '../backend/src/**',
+              message:
+                'Frontend must not import backend implementation (ct-no-frontend-backend-impl-imports).',
+            },
+          ],
+        },
+      ],
+      'boundaries/element-types': [
+        'warn',
+        {
+          default: 'disallow',
+          rules: [
+            { from: 'entry', allow: ['app', 'common', 'slice', 'page'] },
+            { from: 'app', allow: ['common', 'slice', 'page'] },
+            { from: 'common', allow: ['common'] },
+            { from: 'slice', allow: ['common', 'slice'] },
+            { from: 'page', allow: ['common', 'component', 'widget', 'widget-ui'] },
+            { from: 'widget', allow: ['common', 'component', 'widget-ui'] },
+            { from: 'widget-ui', allow: ['common', 'component'] },
+            { from: 'component', allow: ['common', 'component'] },
+          ],
+        },
+      ],
+    },
+  },
+];
+
+/** @type {import('eslint').Linter.Config[]} */
+const backendBoundariesConfig = [
+  {
+    settings: {
+      'boundaries/elements': [
+        { type: 'backend-common', pattern: 'src/common/**' },
+        { type: 'backend-slice', pattern: 'src/slices/*', mode: 'folder' },
+        { type: 'backend-domain', pattern: 'src/slices/*/domain/**' },
+        { type: 'backend-usecase', pattern: 'src/slices/*/usecases/**' },
+        { type: 'backend-command', pattern: 'src/slices/*/commands/**' },
+        { type: 'backend-query', pattern: 'src/slices/*/queries/**' },
+        { type: 'backend-endpoint', pattern: 'src/slices/*/endpoints/**' },
+        { type: 'backend-plugin', pattern: 'src/slices/*/plugins/**' },
+        { type: 'backend-schema', pattern: 'src/slices/*/schemas/**' },
+      ],
+      'boundaries/include': ['src/**'],
+      'import-x/resolver': {
+        typescript: true,
+        node: true,
+      },
+    },
+    languageOptions: {
+      globals: globals.node,
+    },
+    rules: {
+      'boundaries/element-types': [
+        'error',
+        {
+          default: 'disallow',
+          rules: [
+            { from: 'backend-common', allow: ['backend-common'] },
+            { from: 'backend-plugin', allow: ['backend-endpoint', 'backend-common'] },
+            {
+              from: 'backend-endpoint',
+              allow: ['backend-usecase', 'backend-schema', 'backend-common'],
+            },
+            {
+              from: 'backend-usecase',
+              allow: ['backend-domain', 'backend-command', 'backend-query', 'backend-common'],
+            },
+            { from: 'backend-command', allow: ['backend-common'] },
+            { from: 'backend-query', allow: ['backend-common'] },
+            { from: 'backend-domain', allow: ['backend-domain'] },
+            { from: 'backend-schema', allow: ['backend-schema', 'backend-common'] },
+          ],
+        },
+      ],
+    },
+  },
+];
+
+/** @type {import('eslint').Linter.Config[]} */
 export const nodeConfig = [
-  ...baseConfig,
+  ...sharedConfig,
   {
     files: ['**/*.{js,mjs,cjs,ts}'],
     languageOptions: {
       globals: globals.node,
+    },
+    rules: {
+      '@jig-harness/no-command-query-cross-calls': 'off',
+      '@jig-harness/domain-no-io': 'off',
     },
   },
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
 export const reactConfig = [
-  ...baseConfig,
+  ...sharedConfig,
+  ...frontendBoundariesConfig,
   react.configs.flat.recommended,
   react.configs.flat['jsx-runtime'],
   {
@@ -133,8 +214,13 @@ export const reactConfig = [
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react/prop-types': 'off',
+      '@jig-harness/no-command-query-cross-calls': 'off',
+      '@jig-harness/domain-no-io': 'off',
     },
   },
 ];
+
+/** @type {import('eslint').Linter.Config[]} */
+export const backendConfig = [...sharedConfig, ...backendBoundariesConfig];
 
 export default reactConfig;

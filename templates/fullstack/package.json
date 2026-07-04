@@ -10,7 +10,11 @@
     "test": "turbo run test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build",
+    "db:up": "bash scripts/db-up.sh",
+    "db:down": "bash scripts/db-down.sh",
+    "db:migrate": "pnpm --filter @app/backend db:migrate",
+    "db:setup": "pnpm db:up && pnpm db:migrate"
   },
   "devDependencies": {
     "@jig-harness/prettier-config": "workspace:*",

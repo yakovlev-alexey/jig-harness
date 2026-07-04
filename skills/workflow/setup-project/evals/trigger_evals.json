@@ -1,0 +1,30 @@
+[
+  {
+    "query": "Start a new fullstack TypeScript web app",
+    "should_trigger": true
+  },
+  {
+    "query": "Bootstrap a greenfield monorepo with React and Fastify",
+    "should_trigger": true
+  },
+  {
+    "query": "Быстро подними monorepo, создай apps/web и apps/api вручную",
+    "should_trigger": true
+  },
+  {
+    "query": "pnpm create failed — сделай такую же структуру руками",
+    "should_trigger": true
+  },
+  {
+    "query": "Scaffold готов, verify потом — объясни структуру",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix a lint error in an existing component",
+    "should_trigger": false
+  },
+  {
+    "query": "Add a new page to an existing scaffolded app",
+    "should_trigger": false
+  }
+]

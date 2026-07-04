@@ -86,7 +86,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm exec playwright install chromium --with-deps
+      - run: pnpm --filter @app/frontend exec playwright install chromium --with-deps
 
       - run: pnpm run template:dogfood
 
@@ -120,7 +120,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm exec playwright install chromium --with-deps
+      - run: pnpm --filter @app/frontend exec playwright install chromium --with-deps
 
       - run: pnpm run scaffold:verify
 
@@ -158,7 +158,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm exec playwright install chromium --with-deps
+      - run: pnpm --filter @app/e2e exec playwright install chromium --with-deps
 
       - run: pnpm --filter @app/backend exec prisma migrate deploy
         working-directory: templates/fullstack

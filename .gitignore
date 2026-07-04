@@ -12,3 +12,4 @@ coverage/
 .jig-tarballs/
 *.log
 .pnpm-store/
+.venv-skills-ref/

@@ -8,7 +8,19 @@
     "should_trigger": true
   },
   {
+    "query": "Explain packages/types after scaffold",
+    "should_trigger": true
+  },
+  {
+    "query": "Should I use shadcn in this jig project?",
+    "should_trigger": true
+  },
+  {
     "query": "Refactor this React component to use hooks",
+    "should_trigger": false
+  },
+  {
+    "query": "Add Prisma to the existing API",
     "should_trigger": false
   }
 ]

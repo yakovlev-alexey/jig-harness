@@ -1,0 +1,14 @@
+[
+  {
+    "query": "What stack should I use for a new fullstack app?",
+    "should_trigger": true
+  },
+  {
+    "query": "Where do shared Zod schemas go?",
+    "should_trigger": true
+  },
+  {
+    "query": "Refactor this React component to use hooks",
+    "should_trigger": false
+  }
+]

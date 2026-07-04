@@ -1,0 +1,12 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: '*.{js,jsx,ts,tsx,json,css,md,yml,yaml}'
+      run: pnpm exec prettier --write {staged_files} && git add {staged_files}
+    lint:
+      glob: '*.{js,jsx,ts,tsx}'
+      run: pnpm run lint
+    stylelint:
+      glob: '*.css'
+      run: pnpm exec stylelint {staged_files}

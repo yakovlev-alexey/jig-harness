@@ -5,7 +5,11 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "create-jig-harness-app": "./bin/create-app.js"
+    "create-jig-harness-app": "./bin/create-app.js",
+    "create-app": "./bin/create-app.js"
+  },
+  "dependencies": {
+    "yaml": "^2.8.0"
   },
   "scripts": {
     "lint": "echo 'no lint'",

@@ -1,0 +1,14 @@
+[
+  {
+    "query": "Start a new fullstack TypeScript web app",
+    "should_trigger": true
+  },
+  {
+    "query": "Bootstrap a greenfield monorepo with React and Fastify",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix a lint error in an existing component",
+    "should_trigger": false
+  }
+]

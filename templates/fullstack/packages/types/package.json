@@ -1,0 +1,23 @@
+{
+  "name": "@app/types",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./health": "./src/health.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'no tests yet'",
+    "build": "echo 'types package — no build step'"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@jig-harness/eslint-config": "workspace:*",
+    "@jig-harness/tsconfig": "workspace:*",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

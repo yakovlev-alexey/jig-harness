@@ -12,6 +12,8 @@
     "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build",
     "coherence": "node scripts/coherence-check.mjs",
     "validate-skills": "bash scripts/validate-skills.sh",
+    "template:dogfood": "bash scripts/template-dogfood.sh",
+    "scaffold:verify": "node scripts/scaffold-and-verify.mjs",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm run build && changeset publish"

@@ -13,6 +13,9 @@
     "test": "echo 'no tests'",
     "build": "echo 'no build'"
   },
+  "dependencies": {
+    "stylelint-config-standard": "^38.0.0"
+  },
   "peerDependencies": {
     "stylelint": "^16.0.0"
   }

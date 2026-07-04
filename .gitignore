@@ -8,5 +8,7 @@ dist/
 !.env.example
 coverage/
 .verdaccio/
+.scaffold-tarballs/
+.jig-tarballs/
 *.log
 .pnpm-store/

@@ -1,0 +1,4 @@
+{
+  "extends": "@jig-harness/tsconfig/base.json",
+  "include": ["src"]
+}

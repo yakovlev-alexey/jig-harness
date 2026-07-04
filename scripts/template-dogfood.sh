@@ -20,10 +20,6 @@ if ! pnpm --filter @app/backend exec prisma migrate deploy; then
   echo "WARN: Postgres unavailable — skipping migrate; static checks only"
 fi
 
-pnpm --filter @app/frontend --filter @app/backend --filter @app/types run lint
-pnpm --filter @app/frontend --filter @app/backend --filter @app/types run typecheck
-pnpm --filter @app/frontend --filter @app/backend --filter @app/types run test
-pnpm --filter @app/frontend run build
-pnpm --filter @app/backend run build
+pnpm --dir templates/fullstack verify
 
 echo "template-dogfood: passed."

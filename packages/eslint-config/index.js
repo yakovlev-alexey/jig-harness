@@ -12,7 +12,13 @@ import jigPlugin from '@jig-harness/eslint-plugin';
 /** @type {import('eslint').Linter.Config[]} */
 const sharedConfig = [
   {
-    ignores: ['**/dist/**', '**/node_modules/**', '**/.turbo/**'],
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/.turbo/**',
+      '**/playwright-report/**',
+      '**/test-results/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -186,8 +192,28 @@ const backendBoundariesConfig = [
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
+const testFilesConfig = [
+  {
+    files: [
+      '**/*.test.{ts,tsx}',
+      '**/*.spec.{ts,tsx}',
+      '**/integration/**',
+      '**/e2e/**',
+      '**/fixtures.ts',
+      '**/fixtures/**',
+    ],
+    rules: {
+      'boundaries/element-types': 'off',
+      '@jig-harness/no-command-query-cross-calls': 'off',
+      '@jig-harness/domain-no-io': 'off',
+    },
+  },
+];
+
+/** @type {import('eslint').Linter.Config[]} */
 export const nodeConfig = [
   ...sharedConfig,
+  ...testFilesConfig,
   {
     files: ['**/*.{js,mjs,cjs,ts}'],
     languageOptions: {
@@ -204,6 +230,7 @@ export const nodeConfig = [
 export const reactConfig = [
   ...sharedConfig,
   ...frontendBoundariesConfig,
+  ...testFilesConfig,
   react.configs.flat.recommended,
   react.configs.flat['jsx-runtime'],
   {
@@ -221,6 +248,6 @@ export const reactConfig = [
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
-export const backendConfig = [...sharedConfig, ...backendBoundariesConfig];
+export const backendConfig = [...sharedConfig, ...backendBoundariesConfig, ...testFilesConfig];
 
 export default reactConfig;

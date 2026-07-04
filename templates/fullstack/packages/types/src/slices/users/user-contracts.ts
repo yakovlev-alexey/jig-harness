@@ -13,5 +13,18 @@ export const userResponseSchema = z.object({
   updatedAt: z.string(),
 });
 
+export const usersListResponseSchema = z.array(userResponseSchema);
+
+export const testSeedSchema = z.object({
+  users: z.array(createUserBodySchema),
+});
+
+export const testCleanupSchema = z.object({
+  namespace: z.string().min(1),
+});
+
 export type CreateUserBody = z.infer<typeof createUserBodySchema>;
 export type UserResponse = z.infer<typeof userResponseSchema>;
+export type UsersListResponse = z.infer<typeof usersListResponseSchema>;
+export type TestSeedBody = z.infer<typeof testSeedSchema>;
+export type TestCleanupBody = z.infer<typeof testCleanupSchema>;

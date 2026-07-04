@@ -96,15 +96,7 @@ try {
   if (isCI) {
     run(
       'pnpm',
-      [
-        '--filter',
-        '@app/frontend',
-        'exec',
-        'playwright',
-        'install',
-        'chromium',
-        '--with-deps',
-      ],
+      ['--filter', '@app/frontend', 'exec', 'playwright', 'install', 'chromium', '--with-deps'],
       projectDir,
       scaffoldEnv,
     );

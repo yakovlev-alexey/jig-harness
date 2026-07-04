@@ -7,7 +7,7 @@
     "build": "vite build",
     "lint": "eslint . && stylelint 'src/**/*.css'",
     "typecheck": "tsc --noEmit",
-    "test": "echo 'no tests yet'",
+    "test": "vitest run",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,9 +19,11 @@
   },
   "devDependencies": {
     "@jig-harness/eslint-config": "workspace:*",
+    "@jig-harness/generators": "workspace:*",
     "@jig-harness/prettier-config": "workspace:*",
     "@jig-harness/stylelint-config": "workspace:*",
     "@jig-harness/tsconfig": "workspace:*",
+    "@turbo/gen": "^2.5.4",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
@@ -29,6 +31,7 @@
     "prettier": "catalog:",
     "stylelint": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "^3.2.4"
   }
 }

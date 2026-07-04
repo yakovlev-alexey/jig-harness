@@ -3,18 +3,30 @@
 Single source of truth for jig rules across guidance, capability, and enforcement layers.
 See [DESIGN.md](DESIGN.md) §6.4.
 
-| id               | rule                                                | guidance         | capability | enforcement                      | tests               | status        |
-| ---------------- | --------------------------------------------------- | ---------------- | ---------- | -------------------------------- | ------------------- | ------------- |
-| pd-pnpm          | Use pnpm for package management                     | project-defaults | —          | —                                | —                   | guidance-only |
-| pd-typescript    | Use TypeScript for app code, config, tests, scripts | project-defaults | —          | —                                | —                   | guidance-only |
-| pd-turborepo     | Use Turborepo for fullstack monorepos               | project-defaults | —          | —                                | —                   | guidance-only |
-| pd-react-vite    | React + Vite for interactive web apps               | project-defaults | create-app | —                                | —                   | generated     |
-| pd-fastify       | Fastify + Zod for API services                      | project-defaults | create-app | —                                | —                   | generated     |
-| pd-contracts     | Shared Zod contracts in packages/types              | project-defaults | create-app | —                                | —                   | generated     |
-| pd-query         | TanStack Query client in src/common/query-client.ts | project-defaults | create-app | —                                | —                   | generated     |
-| pd-bem-css       | Colocated plain CSS with BEM class names            | project-defaults | create-app | stylelint/selector-class-pattern | template-dogfood    | enforced      |
-| fe-named-exports | Named exports only (Storybook meta exempt)          | —                | —          | import-x/no-default-export       | template-dogfood    | enforced      |
-| fe-no-index      | No index.ts barrel files                            | —                | —          | check-file/no-index              | template-dogfood    | enforced      |
-| fe-kebab-case    | kebab-case file and folder names                    | —                | —          | unicorn/filename-case            | template-dogfood    | enforced      |
-| sp-scaffolder    | Use pnpm create @jig-harness/app scaffolder         | setup-project    | create-app | —                                | l2-setup-scaffolder | generated     |
-| sp-verify        | Run pnpm verify before finishing setup              | setup-project    | —          | —                                | l2-setup-scaffolder | guidance-only |
+| id                          | rule                                                                        | guidance              | capability        | enforcement                      | tests                    | status        |
+| --------------------------- | --------------------------------------------------------------------------- | --------------------- | ----------------- | -------------------------------- | ------------------------ | ------------- |
+| pd-pnpm                     | Use pnpm for package management                                             | project-defaults      | —                 | —                                | —                        | guidance-only |
+| pd-typescript               | Use TypeScript for app code, config, tests, scripts                         | project-defaults      | —                 | —                                | —                        | guidance-only |
+| pd-turborepo                | Use Turborepo for fullstack monorepos                                       | project-defaults      | —                 | —                                | —                        | guidance-only |
+| pd-react-vite               | React + Vite for interactive web apps                                       | project-defaults      | create-app        | —                                | —                        | generated     |
+| pd-fastify                  | Fastify + Zod for API services                                              | project-defaults      | create-app        | —                                | —                        | generated     |
+| pd-contracts                | Shared Zod contracts in packages/types                                      | project-defaults      | create-app        | —                                | —                        | generated     |
+| pd-query                    | TanStack Query client in src/common/query-client.ts                         | project-defaults      | create-app        | —                                | —                        | generated     |
+| pd-bem-css                  | Colocated plain CSS with BEM class names                                    | project-defaults      | create-app        | stylelint/selector-class-pattern | template-dogfood         | enforced      |
+| fe-named-exports            | Named exports only (Storybook meta exempt)                                  | frontend-architecture | component, widget | import-x/no-default-export       | template-dogfood, l-gen  | enforced      |
+| fe-no-index                 | No index.ts barrel files                                                    | frontend-architecture | component, widget | check-file/no-index              | template-dogfood, l-gen  | enforced      |
+| fe-no-reexport              | No re-export-only modules (barrel aliases)                                  | frontend-architecture | component, widget | @jig-harness/no-reexport-only    | l-enf-no-reexport, l-gen | enforced      |
+| fe-kebab-case               | kebab-case file and folder names                                            | frontend-architecture | component, widget | unicorn/filename-case            | template-dogfood, l-gen  | enforced      |
+| fe-slices-layout            | Product slices under src/slices/<name>/ with src/common/                    | frontend-architecture | component, widget | —                                | template-dogfood         | generated     |
+| fe-allowed-segments         | Allowed slice segments: components, pages, widgets, store, utils, constants | frontend-architecture | component, widget | —                                | template-dogfood         | generated     |
+| fe-one-entity-per-file      | One component, widget, page, or store artifact per file                     | frontend-architecture | component, widget | —                                | l-gen                    | generated     |
+| fe-no-cross-slice-imports   | Discourage cross-slice imports; prefer common/ for reuse                    | frontend-architecture | —                 | boundaries/element-types         | template-dogfood         | enforced      |
+| rc-no-page-imports-page     | Pages must not import or render other pages                                 | react-composition     | page              | boundaries/element-types         | template-dogfood         | enforced      |
+| rc-no-widget-imports-widget | Widget entry files must not import other widget entries                     | react-composition     | widget            | boundaries/element-types         | template-dogfood         | enforced      |
+| rc-bem-class-names          | BEM class names in colocated CSS                                            | react-composition     | component, widget | stylelint/selector-class-pattern | template-dogfood, l-gen  | enforced      |
+| rc-colocated-css            | Each page, component, or widget imports colocated CSS                       | react-composition     | component, widget | —                                | l-gen                    | generated     |
+| rc-widget-suffix            | Widget entry files use .widget.tsx suffix                                   | react-composition     | widget            | —                                | l-gen                    | generated     |
+| sp-scaffolder               | Use pnpm create @jig-harness/app scaffolder                                 | setup-project         | create-app        | —                                | l2-setup-scaffolder      | generated     |
+| sp-verify                   | Run pnpm verify before finishing setup                                      | setup-project         | —                 | —                                | l2-setup-scaffolder      | guidance-only |
+| if-use-generators           | Use turbo gen component or widget instead of hand-writing                   | implement-frontend    | component, widget | —                                | l2-implement-frontend    | generated     |
+| if-verify                   | Run pnpm verify before finishing frontend work                              | implement-frontend    | —                 | —                                | l2-implement-frontend    | guidance-only |

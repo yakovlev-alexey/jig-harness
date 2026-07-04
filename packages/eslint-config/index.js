@@ -32,6 +32,10 @@ const baseConfig = [
         { type: 'app', pattern: 'src/App.tsx' },
         { type: 'common', pattern: 'src/common/**' },
         { type: 'slice', pattern: 'src/slices/*/**', mode: 'folder' },
+        { type: 'page', pattern: 'src/slices/*/pages/**' },
+        { type: 'widget', pattern: 'src/slices/*/widgets/**/*.widget.tsx' },
+        { type: 'component', pattern: 'src/slices/*/components/**' },
+        { type: 'widget-ui', pattern: 'src/slices/*/widgets/**/!(*.widget).tsx' },
         { type: 'entry', pattern: 'src/main.tsx' },
       ],
       'boundaries/include': ['src/**'],
@@ -62,13 +66,18 @@ const baseConfig = [
         {
           default: 'disallow',
           rules: [
-            { from: 'entry', allow: ['app', 'common', 'slice'] },
-            { from: 'app', allow: ['common', 'slice'] },
+            { from: 'entry', allow: ['app', 'common', 'slice', 'page'] },
+            { from: 'app', allow: ['common', 'slice', 'page'] },
             { from: 'common', allow: ['common'] },
             { from: 'slice', allow: ['common', 'slice'] },
+            { from: 'page', allow: ['common', 'component', 'widget', 'widget-ui'] },
+            { from: 'widget', allow: ['common', 'component', 'widget-ui'] },
+            { from: 'widget-ui', allow: ['common', 'component'] },
+            { from: 'component', allow: ['common', 'component'] },
           ],
         },
       ],
+      '@jig-harness/no-reexport-only': 'error',
     },
   },
   {
@@ -87,6 +96,15 @@ const baseConfig = [
     files: ['**/*.config.{js,ts,mjs,cjs}', 'eslint.config.js'],
     rules: {
       'import-x/no-default-export': 'off',
+      '@jig-harness/no-reexport-only': 'off',
+    },
+  },
+  {
+    files: ['**/turbo/generators/config.ts', 'packages/generators/**'],
+    rules: {
+      'import-x/no-default-export': 'off',
+      'check-file/no-index': 'off',
+      '@jig-harness/no-reexport-only': 'off',
     },
   },
 ];

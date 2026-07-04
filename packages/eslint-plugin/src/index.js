@@ -1,4 +1,7 @@
-/** Custom eslint rules — populated in P2 (implement-frontend spine). */
-export const rules = {};
+import { noReexportOnly } from './rules/no-reexport-only.js';
+
+export const rules = {
+  'no-reexport-only': noReexportOnly,
+};
 
 export default { rules };

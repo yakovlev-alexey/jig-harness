@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Add a hero banner component to the landing slice",
+    "should_trigger": true
+  },
+  {
+    "query": "Create a widget for profile stats in apps/web",
+    "should_trigger": true
+  },
+  {
+    "query": "I'll mkdir the component folder myself — just write the TSX",
+    "should_trigger": true
+  },
+  {
+    "query": "Refactor landing page layout and colocated CSS",
+    "should_trigger": true
+  },
+  {
+    "query": "Start a new fullstack TypeScript monorepo",
+    "should_trigger": false
+  },
+  {
+    "query": "Add a Fastify health check endpoint",
+    "should_trigger": false
+  }
+]

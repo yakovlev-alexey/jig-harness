@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generators L-gen > component output matches snapshot and passes eslint > component.css 1`] = `
+".demo-card {
+  display: block;
+}
+
+.demo-card__title {
+  margin: 0;
+}
+"
+`;
+
+exports[`generators L-gen > component output matches snapshot and passes eslint > component.tsx 1`] = `
+"import './demo-card.css';
+
+type DemoCardProps = {
+  className?: string;
+};
+
+export function DemoCard({ className }: DemoCardProps) {
+  return (
+    <section className={['demo-card', className].filter(Boolean).join(' ')}>
+      <h2 className="demo-card__title">DemoCard</h2>
+    </section>
+  );
+}
+"
+`;
+
+exports[`generators L-gen > widget output matches snapshot and passes eslint > widget.tsx 1`] = `
+"import { StatsPanelUi } from './stats-panel';
+
+type StatsPanelWidgetProps = {
+  className?: string;
+};
+
+export function StatsPanelWidget({ className }: StatsPanelWidgetProps) {
+  return <StatsPanelUi className={className} />;
+}
+"
+`;

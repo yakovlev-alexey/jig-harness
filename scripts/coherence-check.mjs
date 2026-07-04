@@ -33,7 +33,12 @@ function listCustomRules() {
   const pluginDir = join(root, 'packages/eslint-plugin/src/rules');
   try {
     return readdirSync(pluginDir)
-      .filter((f) => f.endsWith('.ts') || f.endsWith('.js'))
+      .filter(
+        (f) =>
+          (f.endsWith('.ts') || f.endsWith('.js')) &&
+          !f.endsWith('.test.js') &&
+          !f.endsWith('.test.ts'),
+      )
       .map((f) => f.replace(/\.(ts|js)$/, ''));
   } catch {
     return [];

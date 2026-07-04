@@ -27,6 +27,7 @@ const packages = [
   '@jig-harness/eslint-plugin',
   '@jig-harness/eslint-config',
   '@jig-harness/stylelint-config',
+  '@jig-harness/generators',
 ];
 
 rmSync(TARBALLS_DIR, { recursive: true, force: true });
@@ -48,6 +49,7 @@ try {
     '--skip-git',
   ]);
   run('pnpm', ['verify'], projectDir);
+  run('node', [join(ROOT, 'scripts/verify-turbo-gen.mjs'), join(projectDir, 'apps/web')]);
   console.log('scaffold-and-verify: passed.');
 } finally {
   rmSync(tmpDir, { recursive: true, force: true });

@@ -1,0 +1,9 @@
+import { {{pascalCase name}}Ui } from './{{name}}';
+
+type {{pascalCase name}}WidgetProps = {
+  className?: string;
+};
+
+export function {{pascalCase name}}Widget({ className }: {{pascalCase name}}WidgetProps) {
+  return <{{pascalCase name}}Ui className={className} />;
+}

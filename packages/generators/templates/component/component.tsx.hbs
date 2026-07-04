@@ -1,0 +1,13 @@
+import './{{name}}.css';
+
+type {{pascalCase name}}Props = {
+  className?: string;
+};
+
+export function {{pascalCase name}}({ className }: {{pascalCase name}}Props) {
+  return (
+    <section className={['{{name}}', className].filter(Boolean).join(' ')}>
+      <h2 className="{{name}}__title">{{pascalCase name}}</h2>
+    </section>
+  );
+}

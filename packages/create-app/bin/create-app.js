@@ -24,6 +24,7 @@ const HARNESS_PACKAGES = [
   '@jig-harness/eslint-plugin',
   '@jig-harness/eslint-config',
   '@jig-harness/stylelint-config',
+  '@jig-harness/generators',
 ];
 
 function parseArgs(argv) {

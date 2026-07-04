@@ -4,10 +4,22 @@
   "private": false,
   "license": "MIT",
   "type": "module",
+  "exports": {
+    ".": "./src/register-generators.js",
+    "./register-generators": "./src/register-generators.js"
+  },
   "scripts": {
-    "lint": "echo 'no lint'",
-    "typecheck": "echo 'no typecheck'",
-    "test": "echo 'no tests'",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
     "build": "echo 'no build'"
+  },
+  "devDependencies": {
+    "@jig-harness/eslint-config": "workspace:*",
+    "@turbo/gen": "^2.5.4",
+    "eslint": "catalog:",
+    "node-plop": "^0.26.3",
+    "typescript": "catalog:",
+    "vitest": "^3.2.4"
   }
 }

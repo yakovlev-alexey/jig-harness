@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Add a widget to the landing page slice",
+    "should_trigger": true
+  },
+  {
+    "query": "Should this page import another page component?",
+    "should_trigger": true
+  },
+  {
+    "query": "Where does colocated CSS go for a widget?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can one widget import another widget?",
+    "should_trigger": true
+  },
+  {
+    "query": "Organize backend Fastify slice folders",
+    "should_trigger": false
+  },
+  {
+    "query": "Scaffold a new monorepo with create-app",
+    "should_trigger": false
+  }
+]

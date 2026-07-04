@@ -52,19 +52,19 @@ Bootstrap a new fullstack app using the jig harness scaffolder. Do not hand-roll
 
 ## Rationalizations
 
-| Excuse | Reality |
-| --- | --- |
-| «Structure is simple, faster to mkdir manually» | Scaffolder takes seconds; hand-roll drifts from enforced template. Delete and re-scaffold. |
-| «Create failed / offline — I'll replicate the template by hand» | Fix create or use offline scaffolder path. Hand-roll is not an equivalent. |
-| «Already half-built manually — deleting is wasteful» | Partial scaffold is invalid. Delete it. Sunk cost is smaller than verify/debug drift. |
-| «User is in a hurry / said skip tooling» | Speed ≠ skip scaffolder or verify. Urgency makes verify more important, not less. |
-| «Verify later — template warnings are normal» | Setup incomplete until verify passes green. Fix failures now. |
-| «Copying from templates/fullstack is the same as scaffolder» | Manual copy skips dep rewrite, tarball resolution, and git init. Use create-app. |
+| Excuse                                                          | Reality                                                                                    |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| «Structure is simple, faster to mkdir manually»                 | Scaffolder takes seconds; hand-roll drifts from enforced template. Delete and re-scaffold. |
+| «Create failed / offline — I'll replicate the template by hand» | Fix create or use offline scaffolder path. Hand-roll is not an equivalent.                 |
+| «Already half-built manually — deleting is wasteful»            | Partial scaffold is invalid. Delete it. Sunk cost is smaller than verify/debug drift.      |
+| «User is in a hurry / said skip tooling»                        | Speed ≠ skip scaffolder or verify. Urgency makes verify more important, not less.          |
+| «Verify later — template warnings are normal»                   | Setup incomplete until verify passes green. Fix failures now.                              |
+| «Copying from templates/fullstack is the same as scaffolder»    | Manual copy skips dep rewrite, tarball resolution, and git init. Use create-app.           |
 
 ## Common Mistakes
 
-| Mistake | Correction |
-| --- | --- |
-| Creating apps/api, apps/web manually | Delete hand-rolled layout; use the scaffolder |
-| Skipping verify after scaffold | Run `pnpm verify` and fix all failures before finishing |
-| Continuing partial hand-roll | Delete partial work; start over with scaffolder |
+| Mistake                              | Correction                                              |
+| ------------------------------------ | ------------------------------------------------------- |
+| Creating apps/api, apps/web manually | Delete hand-rolled layout; use the scaffolder           |
+| Skipping verify after scaffold       | Run `pnpm verify` and fix all failures before finishing |
+| Continuing partial hand-roll         | Delete partial work; start over with scaffolder         |

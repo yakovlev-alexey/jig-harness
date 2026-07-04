@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Where should I put a new React component in this app?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can I add an index.ts barrel for this slice?",
+    "should_trigger": true
+  },
+  {
+    "query": "What slice segments are allowed under src/slices?",
+    "should_trigger": true
+  },
+  {
+    "query": "Should this helper live in common/ or the slice?",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix a Fastify endpoint validation error",
+    "should_trigger": false
+  },
+  {
+    "query": "Bootstrap a new fullstack monorepo from scratch",
+    "should_trigger": false
+  }
+]

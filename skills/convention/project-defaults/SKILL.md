@@ -25,16 +25,16 @@ After scaffold, `setup-project` dispatches here for stack explanation.
 
 ## Stack Defaults
 
-| Rule ID | Convention | Enforced by |
-| --- | --- | --- |
-| **pd-pnpm** | Use `pnpm` for package management | guidance-only |
-| **pd-typescript** | Use TypeScript for app code, config, tests, and scripts | guidance-only |
-| **pd-turborepo** | Use Turborepo for fullstack monorepos | create-app (generated) |
-| **pd-react-vite** | Use React + Vite for interactive web apps | create-app (generated) |
-| **pd-fastify** | Use Fastify + Zod for API services | create-app (generated) |
-| **pd-contracts** | Shared frontend/backend contracts live in `packages/types` | create-app (generated) |
-| **pd-query** | Configure one TanStack Query client in `src/common/query-client.ts` | create-app (generated) |
-| **pd-bem-css** | Use colocated plain CSS with BEM class names (no Tailwind/shadcn in scaffold) | stylelint `selector-class-pattern` (template dogfood) |
+| Rule ID           | Convention                                                                    | Enforced by                                           |
+| ----------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- |
+| **pd-pnpm**       | Use `pnpm` for package management                                             | guidance-only                                         |
+| **pd-typescript** | Use TypeScript for app code, config, tests, and scripts                       | guidance-only                                         |
+| **pd-turborepo**  | Use Turborepo for fullstack monorepos                                         | create-app (generated)                                |
+| **pd-react-vite** | Use React + Vite for interactive web apps                                     | create-app (generated)                                |
+| **pd-fastify**    | Use Fastify + Zod for API services                                            | create-app (generated)                                |
+| **pd-contracts**  | Shared frontend/backend contracts live in `packages/types`                    | create-app (generated)                                |
+| **pd-query**      | Configure one TanStack Query client in `src/common/query-client.ts`           | create-app (generated)                                |
+| **pd-bem-css**    | Use colocated plain CSS with BEM class names (no Tailwind/shadcn in scaffold) | stylelint `selector-class-pattern` (template dogfood) |
 
 See `rules-catalogue.md` in jig-harness for the full rule ↔ enforcement crosswalk.
 
@@ -74,9 +74,9 @@ src/
 
 ## Common Mistakes
 
-| Mistake | Correction |
-| --- | --- |
-| Applying defaults to an existing project | Preserve existing conventions |
-| Broad shared domain package | Keep contracts in vertical `packages/types` slices |
-| shadcn/Tailwind in jig scaffold | Use BEM + colocated CSS per pd-bem-css |
-| Astro or Prisma in jig greenfield | Out of scope for jig scaffold; pick jig stack or a different harness |
+| Mistake                                  | Correction                                                           |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| Applying defaults to an existing project | Preserve existing conventions                                        |
+| Broad shared domain package              | Keep contracts in vertical `packages/types` slices                   |
+| shadcn/Tailwind in jig scaffold          | Use BEM + colocated CSS per pd-bem-css                               |
+| Astro or Prisma in jig greenfield        | Out of scope for jig scaffold; pick jig stack or a different harness |

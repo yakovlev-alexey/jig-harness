@@ -1,7 +1,14 @@
 .landing-page {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  gap: 1rem;
+}
+
+.landing-page__highlight {
+  max-width: 36rem;
+  width: 100%;
 }

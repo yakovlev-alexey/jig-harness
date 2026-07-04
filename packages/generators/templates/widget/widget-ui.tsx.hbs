@@ -1,0 +1,13 @@
+import './{{name}}.css';
+
+type {{pascalCase name}}UiProps = {
+  className?: string;
+};
+
+export function {{pascalCase name}}Ui({ className }: {{pascalCase name}}UiProps) {
+  return (
+    <div className={['{{name}}', className].filter(Boolean).join(' ')}>
+      <p className="{{name}}__text">{{pascalCase name}}</p>
+    </div>
+  );
+}

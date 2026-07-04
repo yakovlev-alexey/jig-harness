@@ -6,6 +6,8 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 compose_cmd() {
   if docker compose version >/dev/null 2>&1; then
     echo "docker compose"
+  elif docker-compose version >/dev/null 2>&1; then
+    echo "docker-compose"
   elif podman compose version >/dev/null 2>&1; then
     echo "podman compose"
   else

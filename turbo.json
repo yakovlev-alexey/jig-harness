@@ -1,5 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "ENABLE_TEST_ROUTES",
+    "TEST_ROUTES_TOKEN",
+    "INCLUDE_TEST_ROUTES",
+    "E2E_BASE_URL",
+    "E2E_API_URL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

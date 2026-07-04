@@ -82,20 +82,20 @@ all three layers (see §6.4).
 
 ## 5. Locked decisions
 
-| Decision | Choice |
-| --- | --- |
-| Delivery model | Shippable tooling product (published npm packages + template + skills) |
-| Repo topology | Single `jig-harness` monorepo (pnpm + turborepo) |
-| npm scope | `@jig-harness/*` (availability to confirm at reservation) |
-| Existing web-app skills | Move into `jig-harness/skills/`, rewritten sharper |
-| Enforcement ambition (v1) | Medium: off-the-shelf-first + few custom rules with fixtures; no Sonar |
-| Sequencing | Vertical spine first → gather feedback → fan out with subagents |
-| Rule coherence | Markdown `rules-catalogue.md` (structured toward a machine registry later) |
-| Skill taxonomy | Two tiers: workflow (use-case) skills + convention (reference) skills |
-| Convention skills | Separately installable skills (not embedded references) |
-| First spine | `setup-project` |
-| Scaffolder | `pnpm create @jig-harness/app` (not degit) |
-| Package versioning | Changesets, fixed/linked (one version across all packages + create CLI) |
+| Decision                  | Choice                                                                     |
+| ------------------------- | -------------------------------------------------------------------------- |
+| Delivery model            | Shippable tooling product (published npm packages + template + skills)     |
+| Repo topology             | Single `jig-harness` monorepo (pnpm + turborepo)                           |
+| npm scope                 | `@jig-harness/*` (availability to confirm at reservation)                  |
+| Existing web-app skills   | Move into `jig-harness/skills/`, rewritten sharper                         |
+| Enforcement ambition (v1) | Medium: off-the-shelf-first + few custom rules with fixtures; no Sonar     |
+| Sequencing                | Vertical spine first → gather feedback → fan out with subagents            |
+| Rule coherence            | Markdown `rules-catalogue.md` (structured toward a machine registry later) |
+| Skill taxonomy            | Two tiers: workflow (use-case) skills + convention (reference) skills      |
+| Convention skills         | Separately installable skills (not embedded references)                    |
+| First spine               | `setup-project`                                                            |
+| Scaffolder                | `pnpm create @jig-harness/app` (not degit)                                 |
+| Package versioning        | Changesets, fixed/linked (one version across all packages + create CLI)    |
 
 ## 6. Architecture
 
@@ -162,12 +162,12 @@ pin.
 
 **Template — one template, two resolution modes:**
 
-- *In-repo (dogfood):* `templates/fullstack/package.json` depends on harness
+- _In-repo (dogfood):_ `templates/fullstack/package.json` depends on harness
   packages via `workspace:*` and shared third-party versions via `catalog:`.
   These protocols link locally regardless of `linkWorkspacePackages` (whose
   default is now `false`). CI runs the full `verify` here — real integration
   proof, no publish needed.
-- *Scaffolded (end-user):* `pnpm create @jig-harness/app my-app`. The create CLI
+- _Scaffolded (end-user):_ `pnpm create @jig-harness/app my-app`. The create CLI
   copies the template and **rewrites `workspace:*` / `catalog:` specifiers to
   concrete published versions** — the exact transform `pnpm pack` / `pnpm publish`
   already performs — then runs `pnpm install` (pulling published packages) and
@@ -180,15 +180,15 @@ Net: no drift between the dogfood template and what end-users scaffold.
 Single source of truth; one row per rule. Columns are deliberately the future
 `rules.json` schema so the doc can upgrade to a machine-checked registry later.
 
-| Column | Meaning |
-| --- | --- |
-| `id` | Stable rule id (e.g. `fe-no-barrels`) |
-| `rule` | One-line statement |
-| `guidance` | Convention skill + anchor |
-| `capability` | Generator that emits it correctly (or `—`) |
-| `enforcement` | eslint/stylelint rule id (or `—`) |
-| `tests` | Fixture path / eval id(s) |
-| `status` | `guidance-only \| generated \| enforced \| full` |
+| Column        | Meaning                                          |
+| ------------- | ------------------------------------------------ |
+| `id`          | Stable rule id (e.g. `fe-no-barrels`)            |
+| `rule`        | One-line statement                               |
+| `guidance`    | Convention skill + anchor                        |
+| `capability`  | Generator that emits it correctly (or `—`)       |
+| `enforcement` | eslint/stylelint rule id (or `—`)                |
+| `tests`       | Fixture path / eval id(s)                        |
+| `status`      | `guidance-only \| generated \| enforced \| full` |
 
 CI coherence check: every **custom** eslint rule must have a catalogue row, and
 every row citing an enforcement id must reference a rule that exists.
@@ -198,17 +198,17 @@ every row citing an enforcement id must reference a rule that exists.
 Off-the-shelf first; custom only where nothing fits, each custom rule shipped with
 `RuleTester` RED/GREEN fixtures.
 
-| Skill rule | Enforced by | Custom? |
-| --- | --- | --- |
-| Named exports only | `import-x/no-default-export` (Storybook `meta` exempt via `files` override) | no |
-| No barrels / no `index.ts` | `check-file` filename-blocklist + small custom "no re-export-only module" rule | 1 custom |
-| kebab-case files/folders | `check-file` / `unicorn/filename-case` | no |
-| Allowed slice segments & folder shape | `eslint-plugin-project-structure` | no |
-| No cross-slice imports; page↛page; widget↛widget | `eslint-plugin-boundaries` | no |
-| BEM class names; colocated CSS | stylelint `selector-class-pattern` + project-structure | no |
-| One entity per file | generator + partial lint; else guidance | partial |
-| Formatting | prettier | no |
-| Types | `tsc --noEmit` | no |
+| Skill rule                                       | Enforced by                                                                    | Custom?  |
+| ------------------------------------------------ | ------------------------------------------------------------------------------ | -------- |
+| Named exports only                               | `import-x/no-default-export` (Storybook `meta` exempt via `files` override)    | no       |
+| No barrels / no `index.ts`                       | `check-file` filename-blocklist + small custom "no re-export-only module" rule | 1 custom |
+| kebab-case files/folders                         | `check-file` / `unicorn/filename-case`                                         | no       |
+| Allowed slice segments & folder shape            | `eslint-plugin-project-structure`                                              | no       |
+| No cross-slice imports; page↛page; widget↛widget | `eslint-plugin-boundaries`                                                     | no       |
+| BEM class names; colocated CSS                   | stylelint `selector-class-pattern` + project-structure                         | no       |
+| One entity per file                              | generator + partial lint; else guidance                                        | partial  |
+| Formatting                                       | prettier                                                                       | no       |
+| Types                                            | `tsc --noEmit`                                                                 | no       |
 
 Deferred: SonarQube, dependency-cruiser fitness functions, broad backend custom
 rules.
@@ -247,7 +247,7 @@ in CI, then `verify`" job validates the `create-app` transform.
 
 - Skills are plain `SKILL.md` (work across Claude / Codex / Cursor via skills.sh).
 - The real teeth — eslint / stylelint / tsc + a **lefthook** pre-commit hook + CI
-  — are agent-independent: they grade the *code*, not the agent.
+  — are agent-independent: they grade the _code_, not the agent.
 - The only agent-facing glue is a vendor-neutral `AGENTS.md` fragment the template
   ships ("prefer the generators; run `pnpm verify` before finishing"). Optional
   thin adapters (a Cursor rule, a Claude hook) can wrap it later without the core
@@ -256,7 +256,7 @@ in CI, then `verify`" job validates the `create-app` transform.
 ## 7. Vertical spine: `setup-project` (first deliverable)
 
 The spine proves the whole loop on one thin slice before scaling. `setup-project`
-is chosen first because everything else is built *inside* a scaffolded project, so
+is chosen first because everything else is built _inside_ a scaffolded project, so
 this establishes every package skeleton and the distribution pipeline.
 
 **What ships in the spine:**

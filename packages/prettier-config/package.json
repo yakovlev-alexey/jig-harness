@@ -1,0 +1,17 @@
+{
+  "name": "@jig-harness/prettier-config",
+  "version": "0.0.0",
+  "private": false,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "main": "./index.js",
+  "scripts": {
+    "lint": "echo 'no lint'",
+    "typecheck": "echo 'no typecheck'",
+    "test": "echo 'no tests'",
+    "build": "echo 'no build'"
+  }
+}

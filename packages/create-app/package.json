@@ -1,0 +1,16 @@
+{
+  "name": "@jig-harness/create-app",
+  "version": "0.0.0",
+  "private": false,
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-jig-harness-app": "./bin/create-app.js"
+  },
+  "scripts": {
+    "lint": "echo 'no lint'",
+    "typecheck": "echo 'no typecheck'",
+    "test": "echo 'no tests'",
+    "build": "echo 'no build'"
+  }
+}

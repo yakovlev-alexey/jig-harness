@@ -24,15 +24,15 @@ Pages compose workflows and own layout. Widgets connect state or behavior to sta
 
 ## Composition Rules
 
-| Rule ID                              | Convention                                                                                                                                   |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **rc-routing-at-app-root**           | Keep routing at the app/root boundary. `App.tsx` owns route setup, providers, and route-to-page wiring.                                      |
-| **rc-no-page-imports-page**          | Pages are route targets; pages must not import or render other pages.                                                                        |
-| **rc-no-widget-imports-widget**      | Widget entry files (`*.widget.tsx`) must not import or render other widget entry files. Compose widgets on the page via `children` or slots. |
-| **rc-components-are-presentational** | Components receive data, callbacks, and positioning class names via props; they do not own business state.                                   |
-| **rc-widget-suffix**                 | Widget entry files use the `.widget.tsx` suffix inside `widgets/<name>/`.                                                                    |
-| **rc-colocated-css**                 | Each page, component, and widget imports colocated CSS in the same folder.                                                                   |
-| **rc-bem-class-names**               | Use BEM-style classes: `block`, `block__element`, simple `--modifier` for state/variants.                                                    |
+| Rule ID                              | Convention                                                                                                                                                                                                           |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **rc-routing-at-app-root**           | Keep routing at the app/root boundary. `App.tsx` owns route setup, providers, and route-to-page wiring.                                                                                                              |
+| **rc-no-page-imports-page**          | Pages are route targets; pages must not import or render other pages.                                                                                                                                                |
+| **rc-no-widget-imports-widget**      | Widget entry files (`*.widget.tsx`) must not import or render other widget entry files. Compose widgets on the page via `children` or slots.                                                                         |
+| **rc-components-are-presentational** | Components and widget-ui files receive data and callbacks via props; they do not import store or data libraries. The `*.widget.tsx` container owns hooks — see `state-and-data` / **sd-no-store-in-presentational**. |
+| **rc-widget-suffix**                 | Widget entry files use the `.widget.tsx` suffix inside `widgets/<name>/`.                                                                                                                                            |
+| **rc-colocated-css**                 | Each page, component, and widget imports colocated CSS in the same folder.                                                                                                                                           |
+| **rc-bem-class-names**               | Use BEM-style classes: `block`, `block__element`, simple `--modifier` for state/variants.                                                                                                                            |
 
 ## CSS Ownership
 
@@ -71,11 +71,11 @@ Create stories for standalone components and widgets when Storybook exists, when
 
 ## Common Mistakes
 
-| Mistake                                        | Correction                       |
-| ---------------------------------------------- | -------------------------------- |
-| Widget imports sibling widget                  | Compose both widgets on the page |
-| Business state inside presentational component | Move behavior to widget or page  |
-| Missing colocated CSS import                   | Add `./<name>.css` beside TSX    |
-| Hand-written widget folder                     | Run `turbo gen widget`           |
+| Mistake                                                     | Correction                                             |
+| ----------------------------------------------------------- | ------------------------------------------------------ |
+| Widget imports sibling widget                               | Compose both widgets on the page                       |
+| Business state inside presentational component or widget-ui | Move orchestration to `*.widget.tsx` container or page |
+| Missing colocated CSS import                                | Add `./<name>.css` beside TSX                          |
+| Hand-written widget folder                                  | Run `turbo gen widget`                                 |
 
 See `references/composition-examples.md`. Full crosswalk: `rules-catalogue.md` in jig-harness.

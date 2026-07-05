@@ -86,3 +86,25 @@ test('shows an error when POST returns 409', async ({ network, page }) => {
 
   await expect(page.getByText('User with this email already exists')).toBeVisible();
 });
+
+test('filters users by search query', async ({ network, page }) => {
+  const users: UserResponse[] = [
+    createSampleUser({ id: 'user-1', email: 'alice@example.com', name: 'Alice' }),
+    createSampleUser({ id: 'user-2', email: 'bob@example.com', name: 'Bob' }),
+  ];
+
+  await network.use(
+    http.get('/api/users', () => {
+      return HttpResponse.json(usersListResponseSchema.parse(users));
+    }),
+  );
+
+  await page.goto('/users');
+  await expect(page.getByText('Alice', { exact: true })).toBeVisible();
+  await expect(page.getByText('Bob', { exact: true })).toBeVisible();
+
+  await page.getByLabel('Filter users').fill('alice');
+
+  await expect(page.getByText('Alice', { exact: true })).toBeVisible();
+  await expect(page.getByText('Bob', { exact: true })).not.toBeVisible();
+});

@@ -138,6 +138,45 @@ const frontendBoundariesConfig = [
       ],
     },
   },
+  {
+    files: [
+      'src/slices/*/components/**/*.{ts,tsx}',
+      'src/common/components/**/*.{ts,tsx}',
+      'src/slices/*/widgets/**/*.tsx',
+    ],
+    ignores: ['**/*.widget.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@tanstack/react-query',
+              message:
+                'Only widget entries (*.widget.tsx) and pages access data/state (sd-no-store-in-presentational).',
+            },
+            {
+              name: 'nanostores',
+              message:
+                'Only widget entries (*.widget.tsx) and pages access data/state (sd-no-store-in-presentational).',
+            },
+            {
+              name: '@nanostores/react',
+              message:
+                'Only widget entries (*.widget.tsx) and pages access data/state (sd-no-store-in-presentational).',
+            },
+          ],
+          patterns: [
+            {
+              group: ['**/store/**'],
+              message:
+                'Presentational files must not import store; do it in the widget entry (*.widget.tsx) or page (sd-no-store-in-presentational).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -206,6 +245,7 @@ const testFilesConfig = [
       'boundaries/element-types': 'off',
       '@jig-harness/no-command-query-cross-calls': 'off',
       '@jig-harness/domain-no-io': 'off',
+      'no-restricted-imports': 'off',
     },
   },
 ];

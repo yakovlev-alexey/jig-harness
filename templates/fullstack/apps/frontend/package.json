@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@app/types": "workspace:*",
+    "@nanostores/react": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "nanostores": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-router": "catalog:"

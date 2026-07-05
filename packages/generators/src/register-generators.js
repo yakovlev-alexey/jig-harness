@@ -89,6 +89,85 @@ export function registerGenerators(plop, options = {}) {
     ],
   });
 
+  plop.setGenerator('page', {
+    description: 'Create a TanStack Router route file in src/routes/',
+    prompts: [
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Route name in kebab-case (e.g. dashboard, settings)',
+        validate: (value) =>
+          /^[a-z][a-z0-9-]*$/.test(value) ? true : 'Use lowercase kebab-case (fe-kebab-case)',
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'src/routes/{{name}}.tsx',
+        templateFile: join(templatesDir, 'page/page.tsx.hbs'),
+      },
+      {
+        type: 'add',
+        path: 'src/routes/{{name}}.css',
+        templateFile: join(templatesDir, 'page/page.css.hbs'),
+      },
+    ],
+  });
+
+  plop.setGenerator('slice', {
+    description: 'Create frontend slice layer folders under src/slices/<slice>/',
+    prompts: [
+      {
+        type: 'input',
+        name: 'slice',
+        message: 'Slice name (e.g. landing, profile)',
+        validate: (value) => (value ? true : 'Slice name is required'),
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/components/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/widgets/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/store/model/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/store/selectors/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/store/queries/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/store/commands/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/utils/.gitkeep',
+        template: '',
+      },
+      {
+        type: 'add',
+        path: 'src/slices/{{slice}}/constants/.gitkeep',
+        template: '',
+      },
+    ],
+  });
+
   plop.setGenerator('backend-slice', {
     description: 'Create backend slice layer folders under src/slices/<slice>/',
     prompts: [

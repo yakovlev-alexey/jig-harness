@@ -28,11 +28,15 @@ Organize frontend code by vertical product behavior. Folder names reveal what th
 ```text
 src/
   App.tsx
+  routeTree.gen.ts
+  routes/
+    __root.tsx
+    index.tsx
+    users.tsx
   styles.css
   slices/
     <product-area>/
       components/
-      pages/
       widgets/
       store/
         model/
@@ -46,14 +50,15 @@ src/
     utils/
 ```
 
-Slice segments (`components/`, `pages/`, `widgets/`, etc.) are **flat**: one folder level under the segment, e.g. `components/hero-banner/`, not `components/ui/hero-banner/`.
+Route targets (pages) live in `src/routes/` as TanStack Router file-based route files — not inside slices. Slices hold feature modules only: components, widgets, store, utils, constants.
 
 ## Rules
 
 | Rule ID                       | Convention                                                                                                                                                                         |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **fe-slices-layout**          | Product slices live under `src/slices/<product-area>/`; shared code under `src/common/`.                                                                                           |
-| **fe-allowed-segments**       | Allowed slice segments: `components`, `pages`, `widgets`, `store`, `utils`, `constants`. Segments are flat — `components/<name>/`, not nested subcategories like `components/ui/`. |
+| **fe-slices-layout**          | Product slices live under `src/slices/<product-area>/`; shared code under `src/common/`. Route targets live in `src/routes/`.                                                      |
+| **fe-allowed-segments**       | Allowed slice segments: `components`, `widgets`, `store`, `utils`, `constants`. Segments are flat — `components/<name>/`, not nested subcategories like `components/ui/`.          |
+| **fe-routes-in-src**          | Route targets (pages) are TanStack route files under `src/routes/`. Pages compose from slices, common, components, and widgets — never from other pages.                           |
 | **fe-one-entity-per-file**    | One component, widget, page, story, selector, query, command, store, helper, or constants group per file.                                                                          |
 | **fe-kebab-case**             | Name folders and files in lowercase kebab-case.                                                                                                                                    |
 | **fe-named-exports**          | Always use named exports. Storybook CSF files may default-export their `meta` object only.                                                                                         |
@@ -81,7 +86,7 @@ Use `common/` only for code already reused by multiple slices or intentionally d
 
 ## Capability
 
-Prefer `turbo gen component` or `turbo gen widget` from `@app/frontend` instead of hand-writing boilerplate. Generator output must pass `pnpm verify`.
+Prefer `turbo gen component`, `turbo gen widget`, `turbo gen page`, or `turbo gen slice` from `@app/frontend` instead of hand-writing boilerplate. Generator output must pass `pnpm verify`.
 
 ## Red Flags — STOP
 
@@ -89,7 +94,7 @@ Prefer `turbo gen component` or `turbo gen widget` from `@app/frontend` instead 
 - Re-export files that alias slice exports
 - Nested segment subcategories like `components/ui/` — use flat `components/<name>/`
 - `common/query-client/query-client.ts` one-file folders — use `common/query-client.ts`
-- One-file folders for utilities or store files outside `components/`, `pages/`, `widgets/`
+- One-file folders for utilities or store files outside `components/` and `widgets/`
 - Hook exported from a non-`use-*.ts` file or multiple hooks in one file
 - File or function growing past decomposition budgets without splitting
 

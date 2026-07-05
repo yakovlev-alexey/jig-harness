@@ -19,7 +19,7 @@ See [DESIGN.md](DESIGN.md) for architecture and [rules-catalogue.md](rules-catal
 Opinionated and fixed for v1:
 
 - **Monorepo** — pnpm, Turborepo
-- **Frontend** — React, Vite, React Router, TanStack Query, BEM CSS
+- **Frontend** — React, Vite, TanStack Router, TanStack Query, BEM CSS
 - **Backend** — Fastify, Zod, Prisma, PostgreSQL
 - **Contracts** — shared Zod schemas in `packages/types`
 
@@ -90,6 +90,8 @@ In a scaffolded app, run from the frontend or backend package:
 ```bash
 turbo gen component   # presentational component in a product slice
 turbo gen widget      # widget with colocated UI
+turbo gen page        # TanStack route file in src/routes/
+turbo gen slice       # frontend slice segment folders
 turbo gen backend-slice
 turbo gen endpoint
 turbo gen usecase

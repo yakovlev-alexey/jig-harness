@@ -19,6 +19,40 @@ export function DemoCard({ className }: DemoCardProps) {
 "
 `;
 
+exports[`generators L-gen > page output matches snapshot and passes eslint > page.css 1`] = `
+".dashboard-page {
+  min-height: 100vh;
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.dashboard-page__title {
+  margin: 0;
+  font-size: 2rem;
+  color: #0f172a;
+}
+"
+`;
+
+exports[`generators L-gen > page output matches snapshot and passes eslint > page.tsx 1`] = `
+"import { createFileRoute } from '@tanstack/react-router';
+import './dashboard.css';
+
+export const Route = createFileRoute('/dashboard')({
+  component: DashboardPage,
+});
+
+function DashboardPage() {
+  return (
+    <main className="dashboard-page">
+      <h1 className="dashboard-page__title">Dashboard</h1>
+    </main>
+  );
+}
+"
+`;
+
 exports[`generators L-gen > widget output matches snapshot and passes eslint > widget.tsx 1`] = `
 "import { StatsPanelUi } from './stats-panel';
 

@@ -76,7 +76,7 @@ describe('sd-no-store-in-presentational', () => {
     const messages = await lintRestrictedImports(
       `import { useQuery } from '@tanstack/react-query';
        import { usersQuery } from '../store/queries/users-query';`,
-      'src/slices/users/pages/users-page/users-page.tsx',
+      'src/routes/users.tsx',
     );
 
     expect(messages).toEqual([]);

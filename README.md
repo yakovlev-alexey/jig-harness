@@ -67,7 +67,7 @@ pnpm dlx skills add yakovlev-alexey/jig-harness --skill implement-backend
 
 **Convention skills** (rulebooks referenced by workflow skills):
 
-`project-defaults`, `frontend-architecture`, `react-composition`, `backend-architecture`, `contracts`, `testing`
+`project-defaults`, `frontend-architecture`, `react-composition`, `state-and-data`, `backend-architecture`, `contracts`, `testing`
 
 ## Testing
 

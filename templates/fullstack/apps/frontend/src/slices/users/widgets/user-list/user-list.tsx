@@ -1,16 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
+import type { UserResponse } from '@app/types/slices/users/user-contracts';
 import { classNames } from '@/common/utils/class-names';
-import { usersQuery } from '../../store/queries/users-query';
 import { UserListItem } from './components/user-list-item/user-list-item';
 import './user-list.css';
 
 type UserListUiProps = {
   className?: string;
+  isError: boolean;
+  isPending: boolean;
+  users: UserResponse[];
 };
 
-export function UserListUi({ className }: UserListUiProps) {
-  const { data, isPending, isError } = useQuery(usersQuery());
-
+export function UserListUi({ className, isError, isPending, users }: UserListUiProps) {
   if (isPending) {
     return (
       <section className={classNames('user-list', className)}>
@@ -26,8 +26,6 @@ export function UserListUi({ className }: UserListUiProps) {
       </section>
     );
   }
-
-  const users = data;
 
   return (
     <section className={classNames('user-list', className)}>

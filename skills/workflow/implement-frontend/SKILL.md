@@ -22,15 +22,16 @@ Add or refactor frontend slice UI using jig generators and convention skills. Do
 - Bootstrapping a new monorepo (use `setup-project`)
 - Backend endpoints, usecases, or API slices (use `implement-backend` when available)
 - Greenfield stack choice (use `project-defaults`)
+- Server/client state wiring (use `state-and-data`)
 
 ## Procedure
 
 1. Identify the owning product slice (e.g. `landing`, `profile`) before creating files.
-2. **REQUIRED SUB-SKILLS:** Use `frontend-architecture` for folder/import/export rules and `react-composition` for page/widget/CSS rules.
+2. **REQUIRED SUB-SKILLS:** Use `frontend-architecture` for folder/import/export rules, `react-composition` for page/widget/CSS rules, and `state-and-data` when adding store files or wiring TanStack Query / Nano Stores.
 3. From `apps/frontend`, run the appropriate generator:
    - Presentational component: `pnpm exec turbo gen component`
    - Widget with colocated UI: `pnpm exec turbo gen widget`
-4. Wire the new UI into the page or route target. Pages compose widgets; widgets do not import other widget entry files.
+4. Wire the new UI into the page or route target. Pages compose widgets; widgets do not import other widget entry files. Put store/data hooks in `*.widget.tsx` containers — widget-ui and components are props-only (see `state-and-data` / **sd-no-store-in-presentational**).
 5. Run `pnpm verify` from the app or monorepo root. Fix every failure before finishing.
 
 ## Rules
@@ -42,6 +43,7 @@ Delegated enforcement (graded by lint):
 
 - **fe-named-exports**, **fe-no-index**, **fe-no-reexport**, **fe-kebab-case** — see `frontend-architecture`
 - **rc-no-page-imports-page**, **rc-no-widget-imports-widget**, **rc-bem-class-names**, **rc-colocated-css**, **rc-widget-suffix** — see `react-composition`
+- **sd-no-store-in-presentational** — see `state-and-data` (presentational files must not import store/data)
 
 ## Red Flags — STOP
 
@@ -49,6 +51,7 @@ Delegated enforcement (graded by lint):
 - Creating `index.ts` or re-export-only alias files
 - Default exports (except Storybook meta)
 - Page importing another page; widget entry importing another widget entry
+- `useQuery` / `useStore` in a component or widget-ui file (move to `*.widget.tsx`)
 - Skipping `pnpm verify` after adding UI
 
 ## Rationalizations

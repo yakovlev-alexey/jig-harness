@@ -14,4 +14,4 @@ Testing: follow the `testing` convention skill. `pnpm verify` runs unit + integr
 
 Test routes (`/__test__/*`) are for E2E seed/cleanup only — set `TEST_ROUTES_TOKEN`, `ENABLE_TEST_ROUTES`, and `INCLUDE_TEST_ROUTES` for staging/E2E; never enable in production.
 
-Follow convention skills: `project-defaults`, `frontend-architecture`, `react-composition`, `backend-architecture`, `contracts`, `testing`.
+Follow convention skills: `project-defaults`, `frontend-architecture`, `react-composition`, `state-and-data`, `backend-architecture`, `contracts`, `testing`.

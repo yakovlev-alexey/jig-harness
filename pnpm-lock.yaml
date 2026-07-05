@@ -9,6 +9,9 @@ catalogs:
     '@msw/playwright':
       specifier: ^0.6.7
       version: 0.6.7
+    '@nanostores/react':
+      specifier: ^0.8.4
+      version: 0.8.4
     '@playwright/test':
       specifier: ^1.61.1
       version: 1.61.1
@@ -39,6 +42,9 @@ catalogs:
     msw:
       specifier: ^2.14.6
       version: 2.14.6
+    nanostores:
+      specifier: ^0.11.4
+      version: 0.11.4
     prettier:
       specifier: ^3.6.2
       version: 3.9.4
@@ -262,9 +268,15 @@ importers:
       '@app/types':
         specifier: workspace:*
         version: link:../../packages/types
+      '@nanostores/react':
+        specifier: 'catalog:'
+        version: 0.8.4(nanostores@0.11.4)(react@19.2.7)
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.101.2(react@19.2.7)
+      nanostores:
+        specifier: 'catalog:'
+        version: 0.11.4
       react:
         specifier: 'catalog:'
         version: 19.2.7
@@ -1002,6 +1014,13 @@ packages:
   '@mswjs/interceptors@0.41.9':
     resolution: {integrity: sha512-VVPPgHyQ6ShqnrmDWuxjmUIsO9gWyOZFmuOfLd9LfBGQJwZfy0gvv9pbHSJuoFNIYC7ZDX9aoFwowjcdSC4E8w==}
     engines: {node: '>=18'}
+
+  '@nanostores/react@0.8.4':
+    resolution: {integrity: sha512-EciHSzDXg7GmGODjegGG1VldPEinbAK+12/Uz5+MAdHmxf082Rl6eXqKFxAAu4pZAcr5dNTpv6wMfEe7XacjkQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      nanostores: ^0.9.0 || ^0.10.0 || ^0.11.0
+      react: '>=18.0.0'
 
   '@napi-rs/wasm-runtime@1.1.6':
     resolution: {integrity: sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg==}
@@ -2832,6 +2851,10 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanostores@0.11.4:
+    resolution: {integrity: sha512-k1oiVNN4hDK8NcNERSZLQiMfRzEGtfnvZvdBvey3SQbgn8Dcrk0h1I6vpxApjb10PFUflZrgJ2WEZyJQ+5v7YQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+
   napi-postinstall@0.3.4:
     resolution: {integrity: sha512-PHI5f1O0EP5xJ9gQmFGMS6IZcrVvTjpXjz7Na41gTE7eE2hK11lg04CECCYEEjdc17EV4DO+fkGEtt7TpTaTiQ==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -4519,6 +4542,11 @@ snapshots:
       is-node-process: 1.2.0
       outvariant: 1.4.3
       strict-event-emitter: 0.5.1
+
+  '@nanostores/react@0.8.4(nanostores@0.11.4)(react@19.2.7)':
+    dependencies:
+      nanostores: 0.11.4
+      react: 19.2.7
 
   '@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
     dependencies:
@@ -6517,6 +6545,8 @@ snapshots:
   mute-stream@3.0.0: {}
 
   nanoid@3.3.15: {}
+
+  nanostores@0.11.4: {}
 
   napi-postinstall@0.3.4: {}
 

@@ -109,8 +109,7 @@ jig-harness/                      (pnpm + turborepo, Changesets fixed/linked)
 │   │   design-feature · implement-fullstack · refactor-to-conventions  (planned)
 │   └─ convention/                rulebooks (installable), each with references/ + evals/
 │       project-defaults · frontend-architecture · react-composition
-│       backend-architecture · contracts · testing
-│       state-and-data  (planned)
+│       backend-architecture · contracts · testing · state-and-data
 ├─ packages/                      (each published as @jig-harness/<dir>)
 │   ├─ eslint-plugin              custom rules + RED/GREEN fixtures
 │   ├─ eslint-config              flat preset (off-the-shelf plugins + custom plugin)
@@ -211,6 +210,7 @@ Off-the-shelf first; custom only where nothing fits, each custom rule shipped wi
 | Backend: command↛query; domain no I/O            | `@jig-harness/no-command-query-cross-calls`, `@jig-harness/domain-no-io`       | yes      |
 | Backend layer flow (endpoint→usecase→…)          | `eslint-plugin-boundaries` (`backendConfig`)                                   | no       |
 | Frontend↛backend implementation imports          | `import-x/no-restricted-paths`                                                 | no       |
+| Store/data only in widget entries + pages        | `no-restricted-imports` (scoped to presentational files)                       | no       |
 | One entity per file                              | generator + partial lint; else guidance                                        | partial  |
 | Formatting                                       | prettier                                                                       | no       |
 | Types                                            | `tsc --noEmit`                                                                 | no       |
@@ -363,30 +363,29 @@ Proves backend slice rails with real Prisma dogfood.
 
 ### Completed
 
-| Phase                               | Deliverable                                                                                                                                                                                                              | Status           |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| **P0 — Scaffold**                   | pnpm+turbo monorepo, Changesets, package skeletons, `rules-catalogue.md`, CI (`verify` + coherence + validate-skills)                                                                                                    | ✅               |
-| **P1 — `setup-project` spine**      | create-app scaffolder, `templates/fullstack`, config packages, lefthook, template dogfood, scaffold-then-verify, L1/L2 evals for setup                                                                                   | ✅               |
-| **P2 — `implement-frontend` spine** | component/widget generators, `no-reexport-only`, frontend convention skills, implement-frontend workflow, L-gen/L-enf                                                                                                    | ✅               |
-| **P2b — `implement-backend` spine** | Prisma template, backend generators, custom backend rules, backend/contracts/implement-backend skills, Postgres compose + `db:setup`, CI Postgres for dogfood                                                            | ✅ (PR)          |
-| **P2c — `testing` spine (partial)** | `testing` skill, Testing Trophy stack in template (vitest units, backend inject integration, Playwright+MSW frontend integration, `apps/e2e`), contract tests, test-route security, parallel namespacing, PR-only E2E CI | ✅ (in progress) |
+| Phase                               | Deliverable                                                                                                                                                                                                              | Status  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| **P0 — Scaffold**                   | pnpm+turbo monorepo, Changesets, package skeletons, `rules-catalogue.md`, CI (`verify` + coherence + validate-skills)                                                                                                    | ✅      |
+| **P1 — `setup-project` spine**      | create-app scaffolder, `templates/fullstack`, config packages, lefthook, template dogfood, scaffold-then-verify, L1/L2 evals for setup                                                                                   | ✅      |
+| **P2 — `implement-frontend` spine** | component/widget generators, `no-reexport-only`, frontend convention skills, implement-frontend workflow, L-gen/L-enf                                                                                                    | ✅      |
+| **P2b — `implement-backend` spine** | Prisma template, backend generators, custom backend rules, backend/contracts/implement-backend skills, Postgres compose + `db:setup`, CI Postgres for dogfood                                                            | ✅ (PR) |
+| **P2c — `testing` spine**           | `testing` skill, Testing Trophy stack in template (vitest units, backend inject integration, Playwright+MSW frontend integration, `apps/e2e`), contract tests, test-route security, parallel namespacing, PR-only E2E CI | ✅      |
+| **P2c — Remaining conventions**     | `state-and-data` skill, `sd-*` catalogue rows, scoped `no-restricted-imports` enforcement, Nano Stores dogfood in users slice (container/presenter)                                                                      | ✅      |
 
 ### Next (fan-out)
 
-| Phase                           | Focus                                                                                                                       | Outcome                                                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| **P2c — Remaining conventions** | `state-and-data` skill + rule rows                                                                                          | TanStack Query / Nano Stores guidance with catalogue rows  |
-| **P2d — Frontend generators**   | `page`, `slice` turbo gen + L-gen                                                                                           | Complete frontend capability layer beyond component/widget |
-| **P2e — Workflow expansion**    | `design-feature`, `implement-fullstack`                                                                                     | Cross-slice planning and fullstack change procedures       |
-| **P3 — Publish & polish**       | First npm publish (`@jig-harness/*`), sharpen all migrated skills, run recorded L2 RED/GREEN baselines in CI where feasible | Shippable product outside the monorepo                     |
-| **P4 — Deferred**               | Machine `rules.json` registry, Sonar / dependency-cruiser, OpenAPI codegen, `refactor-to-conventions`                       | Breadth without blocking core rails                        |
+| Phase                         | Focus                                                                                                                       | Outcome                                                    |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **P2d — Frontend generators** | `page`, `slice` turbo gen + L-gen                                                                                           | Complete frontend capability layer beyond component/widget |
+| **P2e — Workflow expansion**  | `design-feature`, `implement-fullstack`                                                                                     | Cross-slice planning and fullstack change procedures       |
+| **P3 — Publish & polish**     | First npm publish (`@jig-harness/*`), sharpen all migrated skills, run recorded L2 RED/GREEN baselines in CI where feasible | Shippable product outside the monorepo                     |
+| **P4 — Deferred**             | Machine `rules.json` registry, Sonar / dependency-cruiser, OpenAPI codegen, `refactor-to-conventions`                       | Breadth without blocking core rails                        |
 
 ### Sequencing note
 
 Vertical spines remain the contract: each spine ships guidance + capability +
 enforcement + tests for one use case before parallel fan-out. After P2b, prefer
-**convention skills that lack enforcement** (`state-and-data`, `testing`) or
-**generators still missing** (`page`, `slice`) as the next parallel workstreams —
+**convention skills that lack enforcement** or **generators still missing** (`page`, `slice`) as the next parallel workstreams —
 not broad refactors.
 
 ### Original phase map (reference)
@@ -417,8 +416,7 @@ not broad refactors.
    (`@usejig` / `@jigkit`) — confirm before P3 publish.
 2. Final workflow use-case list — `refactor-to-conventions` remains P4; add
    `design-feature` / `implement-fullstack` in P2e.
-3. Template routing/state defaults — React Router + TanStack Query in place;
-   Nano Stores patterns deferred to `state-and-data` skill.
+3. Template routing/state defaults — React Router + TanStack Query + Nano Stores patterns shipped in `state-and-data` skill and template users slice dogfood.
 4. Repository visibility — private until first npm publish (P3).
 5. Local Postgres without Docker — document only (compose required for `db:setup`);
    no in-process SQLite fallback planned.

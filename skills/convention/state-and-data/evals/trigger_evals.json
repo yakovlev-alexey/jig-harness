@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Should the users list from the API live in TanStack Query or a Nano Store?",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I invalidate the users cache after creating a user?",
+    "should_trigger": true
+  },
+  {
+    "query": "Where should a shared UI filter value live when two widgets on the same page need it?",
+    "should_trigger": true
+  },
+  {
+    "query": "What goes in store/queries vs store/commands vs store/model?",
+    "should_trigger": true
+  },
+  {
+    "query": "Where should I put a new Fastify command file?",
+    "should_trigger": false
+  },
+  {
+    "query": "Can I skip backend integration tests when DATABASE_URL is unset?",
+    "should_trigger": false
+  }
+]

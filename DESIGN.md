@@ -268,7 +268,7 @@ in CI, then `verify`" job validates the `create-app` transform.
 | Static               | harness + template              | ESLint, Stylelint, tsc, Zod contract tests in `packages/types`     |
 | Unit                 | `apps/frontend`, `apps/backend` | Vitest (node env; no jsdom/RTL)                                    |
 | Backend integration  | `apps/backend`                  | Vitest + `app.inject` against **real Postgres** (no DB-less skips) |
-| Frontend integration | `apps/frontend/integration`     | Playwright + `@msw/playwright`; included in `pnpm verify`          |
+| Frontend integration | `apps/frontend/tests`           | Playwright + `@msw/playwright`; included in `pnpm verify`          |
 | E2E                  | `apps/e2e`                      | Playwright happy-path specs; **PR-only CI** (not in `verify`)      |
 
 **Parallel isolation:** every test owns a namespace (`e2e-${runId}-${workerIndex}-${uuid}`);
@@ -279,7 +279,7 @@ No global DB reset — works for parallel workers and shared staging DBs.
 from prod builds (`INCLUDE_TEST_ROUTES`), runtime-gated (`ENABLE_TEST_ROUTES`), token-protected
 (`x-test-token` == `TEST_ROUTES_TOKEN`), and refused under `NODE_ENV=production`.
 
-**ESLint test-file override:** `*.test.*`, `*.spec.*`, `integration/`, `e2e/`, and fixtures
+**ESLint test-file override:** `*.test.*`, `*.spec.*`, `tests/`, `e2e/`, and fixtures
 relax `boundaries/element-types` and custom backend rules; filename-case and export rules stay on.
 
 ### 6.8 Agent-agnostic strategy

@@ -44,15 +44,16 @@ packages/types/src/
     *-contracts.test.ts          # Zod contract unit tests (vitest)
 
 apps/backend/src/
-  slices/<product-area>/domain/
-    *.test.ts                      # domain unit tests (vitest, node)
-  **/*.test.ts                     # inject integration (vitest + real DB)
+  slices/<product-area>/
+    domain/                        # domain rules (no *.test.ts here)
+    tests/
+      *.test.ts                    # unit + inject integration for this slice
   test-support/                    # env+token-gated seed/cleanup (not prod)
   test-server.ts                   # test entry (excluded from prod build)
 
 apps/frontend/
   src/**/*.test.ts                 # pure logic unit tests (vitest, node — no jsdom)
-  integration/
+  tests/
     mocks/handlers.ts              # contract-shaped MSW handlers
     fixtures.ts                    # Playwright + MSW fixtures
     *.spec.ts                      # frontend integration (Playwright + MSW)

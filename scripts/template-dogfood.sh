@@ -6,9 +6,9 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 echo "Running template dogfood verify from monorepo root..."
 cd "$ROOT"
 
-export DATABASE_URL="${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/jig_test?schema=public}"
-
-if [ "${CI:-}" != "true" ]; then
+if [ "${CI:-}" = "true" ]; then
+  export DATABASE_URL="${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/jig_test?schema=public}"
+else
   bash templates/fullstack/scripts/db-up.sh 2>/dev/null || true
   export DATABASE_URL="${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/jig_dev?schema=public}"
 fi

@@ -8,7 +8,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  testDir: './integration',
+  testDir: './tests',
   use: {
     baseURL: 'http://localhost:4173',
   },

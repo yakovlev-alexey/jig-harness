@@ -2,8 +2,8 @@ import { randomUUID } from 'node:crypto';
 
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
-import { buildApp } from './common/build-app.js';
-import { prisma } from './common/prisma.js';
+import { buildApp } from '../../../common/build-app.js';
+import { prisma } from '../../../common/prisma.js';
 
 function requireDatabaseUrl(): void {
   if (!process.env.DATABASE_URL) {

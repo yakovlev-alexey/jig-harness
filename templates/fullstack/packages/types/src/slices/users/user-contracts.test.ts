@@ -87,8 +87,15 @@ describe('testSeedSchema', () => {
 });
 
 describe('testCleanupSchema', () => {
-  it('accepts a non-empty namespace', () => {
+  it('accepts an e2e namespace', () => {
     expect(testCleanupSchema.safeParse({ namespace: 'e2e-run-0-abc' }).success).toBe(true);
+  });
+
+  it('accepts a vitest namespace', () => {
+    expect(
+      testCleanupSchema.safeParse({ namespace: 'vitest-550e8400-e29b-41d4-a716-446655440000' })
+        .success,
+    ).toBe(true);
   });
 
   it('rejects an empty namespace', () => {
@@ -97,5 +104,9 @@ describe('testCleanupSchema', () => {
 
   it('rejects a missing namespace', () => {
     expect(testCleanupSchema.safeParse({}).success).toBe(false);
+  });
+
+  it('rejects a namespace without the required prefix', () => {
+    expect(testCleanupSchema.safeParse({ namespace: 'a' }).success).toBe(false);
   });
 });

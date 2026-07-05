@@ -197,7 +197,7 @@ const testFilesConfig = [
     files: [
       '**/*.test.{ts,tsx}',
       '**/*.spec.{ts,tsx}',
-      '**/integration/**',
+      '**/tests/**',
       '**/e2e/**',
       '**/fixtures.ts',
       '**/fixtures/**',

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { assertUserCanBeCreated } from './assert-user-can-be-created.js';
-import { UserAlreadyExistsError } from './user-already-exists-error.js';
+import { assertUserCanBeCreated } from '../domain/assert-user-can-be-created.js';
+import { UserAlreadyExistsError } from '../domain/user-already-exists-error.js';
 
 describe('assertUserCanBeCreated', () => {
   it('does nothing when no user exists', () => {

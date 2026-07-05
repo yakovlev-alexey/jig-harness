@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { buildApp } from './common/build-app.js';
+import { buildApp } from '../../../common/build-app.js';
 
 describe('GET /health', () => {
   let app: Awaited<ReturnType<typeof buildApp>>;

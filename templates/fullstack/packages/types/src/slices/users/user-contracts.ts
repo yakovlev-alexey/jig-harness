@@ -20,7 +20,12 @@ export const testSeedSchema = z.object({
 });
 
 export const testCleanupSchema = z.object({
-  namespace: z.string().min(1),
+  namespace: z
+    .string()
+    .regex(
+      /^(e2e|vitest)-[\w-]+$/,
+      'namespace must start with e2e- or vitest- followed by a unique suffix',
+    ),
 });
 
 export type CreateUserBody = z.infer<typeof createUserBodySchema>;

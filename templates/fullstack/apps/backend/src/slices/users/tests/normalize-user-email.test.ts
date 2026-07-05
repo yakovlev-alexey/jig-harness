@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { normalizeUserEmail } from './normalize-user-email.js';
+import { normalizeUserEmail } from '../domain/normalize-user-email.js';
 
 describe('normalizeUserEmail', () => {
   it('trims and lowercases the email', () => {

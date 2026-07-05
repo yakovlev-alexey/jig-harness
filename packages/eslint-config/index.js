@@ -43,6 +43,7 @@ const sharedConfig = [
           case: 'kebabCase',
         },
       ],
+      complexity: ['error', { max: 12 }],
       '@jig-harness/no-reexport-only': 'error',
       '@jig-harness/no-command-query-cross-calls': 'error',
       '@jig-harness/domain-no-io': 'error',
@@ -73,6 +74,42 @@ const sharedConfig = [
       'import-x/no-default-export': 'off',
       'check-file/no-index': 'off',
       '@jig-harness/no-reexport-only': 'off',
+    },
+  },
+];
+
+/** @type {import('eslint').Linter.Config[]} */
+const decompositionExemptionsConfig = [
+  {
+    files: ['**/*.stories.ts', '**/*.stories.tsx'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      '@jig-harness/decomposition-budget': 'off',
+      '@jig-harness/hook-file-naming': 'off',
+      'react/jsx-max-depth': 'off',
+    },
+  },
+  {
+    files: ['**/*.config.{js,ts,mjs,cjs}', 'eslint.config.js'],
+    rules: {
+      complexity: 'off',
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      '@jig-harness/decomposition-budget': 'off',
+      '@jig-harness/hook-file-naming': 'off',
+      'react/jsx-max-depth': 'off',
+    },
+  },
+  {
+    files: ['**/turbo/generators/config.ts', 'packages/generators/**'],
+    rules: {
+      complexity: 'off',
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      '@jig-harness/decomposition-budget': 'off',
+      '@jig-harness/hook-file-naming': 'off',
+      'react/jsx-max-depth': 'off',
     },
   },
 ];
@@ -246,6 +283,12 @@ const testFilesConfig = [
       '@jig-harness/no-command-query-cross-calls': 'off',
       '@jig-harness/domain-no-io': 'off',
       'no-restricted-imports': 'off',
+      complexity: 'off',
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'react/jsx-max-depth': 'off',
+      '@jig-harness/decomposition-budget': 'off',
+      '@jig-harness/hook-file-naming': 'off',
     },
   },
 ];
@@ -264,13 +307,13 @@ export const nodeConfig = [
       '@jig-harness/domain-no-io': 'off',
     },
   },
+  ...decompositionExemptionsConfig,
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
 export const reactConfig = [
   ...sharedConfig,
   ...frontendBoundariesConfig,
-  ...testFilesConfig,
   react.configs.flat.recommended,
   react.configs.flat['jsx-runtime'],
   {
@@ -283,11 +326,36 @@ export const reactConfig = [
       'react/prop-types': 'off',
       '@jig-harness/no-command-query-cross-calls': 'off',
       '@jig-harness/domain-no-io': 'off',
+      'react/jsx-max-depth': ['error', { max: 6 }],
     },
   },
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'max-lines': ['warn', { max: 150, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['warn', { max: 60, skipBlankLines: true, skipComments: true }],
+      '@jig-harness/decomposition-budget': ['error', { file: 250, function: 100 }],
+      '@jig-harness/hook-file-naming': 'error',
+    },
+  },
+  ...testFilesConfig,
+  ...decompositionExemptionsConfig,
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
-export const backendConfig = [...sharedConfig, ...backendBoundariesConfig, ...testFilesConfig];
+export const backendConfig = [
+  ...sharedConfig,
+  ...backendBoundariesConfig,
+  {
+    files: ['**/*.{js,ts}'],
+    rules: {
+      'max-lines': ['warn', { max: 200, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['warn', { max: 50, skipBlankLines: true, skipComments: true }],
+      '@jig-harness/decomposition-budget': ['error', { file: 300, function: 80 }],
+    },
+  },
+  ...testFilesConfig,
+  ...decompositionExemptionsConfig,
+];
 
 export default reactConfig;

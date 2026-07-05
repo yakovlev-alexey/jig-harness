@@ -122,16 +122,18 @@ pnpm install
 pnpm verify
 ```
 
+Git hooks (via [lefthook](https://github.com/evilmartians/lefthook)) install on `pnpm install`. **pre-push** runs `pnpm verify` so broken commits cannot be pushed; **pre-commit** auto-formats staged files with Prettier.
+
 ### Scripts
 
-| Script                  | Description                                                                      |
-| ----------------------- | -------------------------------------------------------------------------------- |
-| `pnpm verify`           | lint → typecheck → test → build (harness); template verify also runs integration |
-| `pnpm coherence`        | Rule catalogue ↔ custom ESLint rule consistency                                  |
-| `pnpm validate-skills`  | L0 structural validation of skill files                                          |
-| `pnpm template:dogfood` | Run full verify on `templates/fullstack`                                         |
-| `pnpm scaffold:verify`  | Scaffold a fresh app in CI and verify it                                         |
-| `pnpm release`          | Build and publish `@jig-harness/*` via Changesets                                |
+| Script                  | Description                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `pnpm verify`           | format:check → coherence → validate-skills → lint → typecheck → test → build |
+| `pnpm coherence`        | Rule catalogue ↔ custom ESLint rule consistency                              |
+| `pnpm validate-skills`  | L0 structural validation of skill files                                      |
+| `pnpm template:dogfood` | Run full verify on `templates/fullstack`                                     |
+| `pnpm scaffold:verify`  | Scaffold a fresh app in CI and verify it                                     |
+| `pnpm release`          | Build and publish `@jig-harness/*` via Changesets                            |
 
 ### Repository layout
 

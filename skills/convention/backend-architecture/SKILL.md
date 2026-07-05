@@ -50,14 +50,27 @@ endpoint -> usecase -> commands / queries -> Prisma
 
 ## Rules
 
-| Rule ID                             | Convention                                                                                                                               |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **be-slices-layout**                | Product slices live under `src/slices/<product-area>/`; shared infra under `src/common/`.                                                |
-| **be-layer-segments**               | Allowed layer segments: `domain`, `usecases`, `commands`, `queries`, `endpoints`, `plugins`, `schemas`.                                  |
-| **be-kebab-case**                   | Name folders and files in lowercase kebab-case (`create-user-endpoint.ts`, `create-user-usecase.ts`).                                    |
-| **be-no-command-query-cross-calls** | Commands and queries must not import each other. Compose them in usecases.                                                               |
-| **be-domain-no-io**                 | Domain may use Prisma generated types (`import type`), but must not import Prisma Client, Fastify, HTTP, `process.env`, or external I/O. |
-| **be-layer-flow**                   | Endpoints call usecases; usecases compose domain + commands + queries; commands/queries hide Prisma mutations/reads.                     |
+| Rule ID                             | Convention                                                                                                                                |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **be-slices-layout**                | Product slices live under `src/slices/<product-area>/`; shared infra under `src/common/`.                                                 |
+| **be-layer-segments**               | Allowed layer segments: `domain`, `usecases`, `commands`, `queries`, `endpoints`, `plugins`, `schemas`.                                   |
+| **be-kebab-case**                   | Name folders and files in lowercase kebab-case (`create-user-endpoint.ts`, `create-user-usecase.ts`).                                     |
+| **be-no-command-query-cross-calls** | Commands and queries must not import each other. Compose them in usecases.                                                                |
+| **be-domain-no-io**                 | Domain may use Prisma generated types (`import type`), but must not import Prisma Client, Fastify, HTTP, `process.env`, or external I/O.  |
+| **be-layer-flow**                   | Endpoints call usecases; usecases compose domain + commands + queries; commands/queries hide Prisma mutations/reads.                      |
+| **be-file-budget**                  | Keep slice layer files under ~200 lines (warn) / 300 lines (error). Split oversized usecases or endpoints into helpers.                   |
+| **be-function-budget**              | Keep functions under ~50 lines (warn) / 80 lines (error). Extract validation, mapping, or branching into domain helpers or private funcs. |
+| **be-complexity**                   | Cyclomatic complexity ≤ 12. Reduce branching in usecases by pushing rules into domain functions.                                          |
+
+## Decomposition & size budgets
+
+Backend slice layers share graduated line budgets and a complexity cap:
+
+- **domain** — small pure functions; complexity stays low by design.
+- **usecases / endpoints** — orchestrate; when a file grows, extract domain rules or private helpers in the same layer folder.
+- **commands / queries** — one operation per file; split if a single read/write path accumulates too many branches.
+
+Tests, generators, and config files are exempt from line budgets.
 
 ## Layer Responsibilities
 
@@ -79,6 +92,8 @@ Prefer `turbo gen backend-slice`, `turbo gen endpoint`, or `turbo gen usecase` f
 - Usecase calling Prisma directly for normal reads/writes (move to command/query)
 - Command importing a query or query importing a command
 - Domain file with value imports from `@prisma/client`, Fastify, or env access
+- Usecase or endpoint file exceeding file/function line budget without extraction
+- High cyclomatic complexity in a single function — push branches into domain helpers
 
 ## Common Mistakes
 
@@ -88,5 +103,7 @@ Prefer `turbo gen backend-slice`, `turbo gen endpoint`, or `turbo gen usecase` f
 | Command calls query              | Compose both in the usecase                    |
 | Domain mirrors Prisma model      | Use generated types; put rules in domain funcs |
 | Hand-written slice layer folders | Run `turbo gen backend-slice`                  |
+| Monolithic usecase file          | Extract domain rules or private helpers        |
+| Branch-heavy endpoint handler    | Move validation/mapping into domain or schemas |
 
 See `references/backend-slice-examples.md`. Full rule ↔ enforcement crosswalk: `rules-catalogue.md` in jig-harness.

@@ -33,6 +33,18 @@ Pages compose workflows and own layout. Widgets connect state or behavior to sta
 | **rc-widget-suffix**                 | Widget entry files use the `.widget.tsx` suffix inside `widgets/<name>/`.                                                                                                                                            |
 | **rc-colocated-css**                 | Each page, component, and widget imports colocated CSS in the same folder.                                                                                                                                           |
 | **rc-bem-class-names**               | Use BEM-style classes: `block`, `block__element`, simple `--modifier` for state/variants.                                                                                                                            |
+| **fe-function-budget**               | Keep components and widget bodies under ~60 lines (warn) / 100 lines (error). Split JSX into presentational sub-components when markup grows.                                                                        |
+| **fe-jsx-depth**                     | JSX nesting depth ≤ 6. Deep trees signal a missing presentational sub-component.                                                                                                                                     |
+
+## Component length & JSX depth
+
+When a component or widget-ui file grows long or nests JSX deeply:
+
+- Extract a **presentational sub-component** in the same folder (or inside the widget folder for widget-only UI).
+- Keep orchestration in `*.widget.tsx` or the page; sub-components receive data via props.
+- Prefer flat JSX — if you need more than six levels of nesting, split the inner tree into its own component.
+
+Soft `warn` thresholds appear first; hard `error` caps enforce the limit.
 
 ## CSS Ownership
 
@@ -68,14 +80,18 @@ Create stories for standalone components and widgets when Storybook exists, when
 - Widget entry importing another widget entry
 - Tailwind/shadcn in jig scaffold (use BEM + colocated CSS per **rc-bem-class-names**)
 - Global CSS for slice-specific layout
+- Component or widget body exceeding function line budget without sub-component extraction
+- JSX nested deeper than six levels without splitting
 
 ## Common Mistakes
 
-| Mistake                                                     | Correction                                             |
-| ----------------------------------------------------------- | ------------------------------------------------------ |
-| Widget imports sibling widget                               | Compose both widgets on the page                       |
-| Business state inside presentational component or widget-ui | Move orchestration to `*.widget.tsx` container or page |
-| Missing colocated CSS import                                | Add `./<name>.css` beside TSX                          |
-| Hand-written widget folder                                  | Run `turbo gen widget`                                 |
+| Mistake                                                     | Correction                                              |
+| ----------------------------------------------------------- | ------------------------------------------------------- |
+| Widget imports sibling widget                               | Compose both widgets on the page                        |
+| Business state inside presentational component or widget-ui | Move orchestration to `*.widget.tsx` container or page  |
+| Missing colocated CSS import                                | Add `./<name>.css` beside TSX                           |
+| Hand-written widget folder                                  | Run `turbo gen widget`                                  |
+| Long JSX block in one component                             | Extract presentational sub-component in the same folder |
+| Deep JSX tree                                               | Split inner markup into a named sub-component           |
 
 See `references/composition-examples.md`. Full crosswalk: `rules-catalogue.md` in jig-harness.

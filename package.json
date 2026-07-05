@@ -9,7 +9,8 @@
     "test": "turbo run test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build",
+    "verify": "pnpm run format:check && pnpm run coherence && pnpm run validate-skills && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build",
+    "prepare": "lefthook install",
     "coherence": "node scripts/coherence-check.mjs",
     "validate-skills": "bash scripts/validate-skills.sh",
     "template:dogfood": "bash scripts/template-dogfood.sh",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
+    "lefthook": "catalog:",
     "node-plop": "^0.26.3",
     "prettier": "^3.6.2",
     "turbo": "^2.5.4",

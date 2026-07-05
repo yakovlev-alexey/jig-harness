@@ -19,10 +19,7 @@ function isCommentOnlyLine(sourceCode, lineNumber) {
   const { lineStart, lineEnd } = getLineRange(sourceCode, lineNumber);
   const commentsOnLine = sourceCode
     .getAllComments()
-    .filter(
-      (comment) =>
-        comment.loc.start.line <= lineNumber && comment.loc.end.line >= lineNumber,
-    )
+    .filter((comment) => comment.loc.start.line <= lineNumber && comment.loc.end.line >= lineNumber)
     .sort((left, right) => left.range[0] - right.range[0]);
 
   if (commentsOnLine.length === 0) {

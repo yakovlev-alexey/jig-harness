@@ -1,0 +1,14 @@
+import { createFileRoute } from '@tanstack/react-router';
+import './{{name}}.css';
+
+export const Route = createFileRoute('/{{name}}')({
+  component: {{pascalCase name}}Page,
+});
+
+function {{pascalCase name}}Page() {
+  return (
+    <main className="{{name}}-page">
+      <h1 className="{{name}}-page__title">{{pascalCase name}}</h1>
+    </main>
+  );
+}

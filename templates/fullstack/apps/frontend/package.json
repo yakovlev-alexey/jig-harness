@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "generate": "tsr generate",
     "lint": "eslint . && stylelint 'src/**/*.css'",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "pnpm generate && tsc --noEmit",
     "test": "vitest run",
     "test:integration": "playwright test -c playwright.integration.config.ts",
     "preview": "vite preview"
@@ -15,12 +16,14 @@
     "@app/types": "workspace:*",
     "@nanostores/react": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "@tanstack/react-router": "catalog:",
     "nanostores": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:",
-    "react-router": "catalog:"
+    "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@tanstack/router-cli": "catalog:",
+    "@tanstack/router-plugin": "catalog:",
     "@jig-harness/eslint-config": "workspace:*",
     "@jig-harness/generators": "workspace:*",
     "@jig-harness/prettier-config": "workspace:*",

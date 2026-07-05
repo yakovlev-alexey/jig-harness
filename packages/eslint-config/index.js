@@ -18,6 +18,7 @@ const sharedConfig = [
       '**/.turbo/**',
       '**/playwright-report/**',
       '**/test-results/**',
+      '**/routeTree.gen.ts',
     ],
   },
   js.configs.recommended,
@@ -125,7 +126,8 @@ const frontendBoundariesConfig = [
         { type: 'app', pattern: 'src/App.tsx' },
         { type: 'common', pattern: 'src/common/**' },
         { type: 'slice', pattern: 'src/slices/*/**', mode: 'folder' },
-        { type: 'page', pattern: 'src/slices/*/pages/**' },
+        { type: 'route-tree', pattern: 'src/routeTree.gen.ts' },
+        { type: 'page', pattern: 'src/routes/**/*.tsx' },
         { type: 'widget', pattern: 'src/slices/*/widgets/**/*.widget.tsx' },
         { type: 'component', pattern: 'src/slices/*/components/**' },
         { type: 'widget-ui', pattern: 'src/slices/*/widgets/**/!(*.widget).tsx' },
@@ -162,11 +164,11 @@ const frontendBoundariesConfig = [
         {
           default: 'disallow',
           rules: [
-            { from: 'entry', allow: ['app', 'common', 'slice', 'page'] },
-            { from: 'app', allow: ['common', 'slice', 'page'] },
+            { from: 'entry', allow: ['app', 'common'] },
+            { from: 'app', allow: ['route-tree', 'common'] },
             { from: 'common', allow: ['common'] },
             { from: 'slice', allow: ['common', 'slice'] },
-            { from: 'page', allow: ['common', 'component', 'widget', 'widget-ui'] },
+            { from: 'page', allow: ['common', 'slice', 'component', 'widget', 'widget-ui'] },
             { from: 'widget', allow: ['common', 'component', 'widget-ui'] },
             { from: 'widget-ui', allow: ['common', 'component'] },
             { from: 'component', allow: ['common', 'component'] },
@@ -212,6 +214,13 @@ const frontendBoundariesConfig = [
           ],
         },
       ],
+    },
+  },
+  {
+    files: ['src/routes/**'],
+    rules: {
+      'unicorn/filename-case': 'off',
+      'check-file/no-index': 'off',
     },
   },
 ];

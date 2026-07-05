@@ -31,6 +31,7 @@ After scaffold, `setup-project` dispatches here for stack explanation.
 | **pd-typescript**     | Use TypeScript for app code, config, tests, and scripts                       | guidance-only                                         |
 | **pd-turborepo**      | Use Turborepo for fullstack monorepos                                         | create-app (generated)                                |
 | **pd-react-vite**     | Use React + Vite for interactive web apps                                     | create-app (generated)                                |
+| **pd-router**         | Use TanStack Router file-based routing in `src/routes/`                       | create-app, page (generated)                          |
 | **pd-fastify**        | Use Fastify + Zod for API services                                            | create-app (generated)                                |
 | **pd-contracts**      | Shared frontend/backend contracts live in `packages/types`                    | create-app (generated)                                |
 | **pd-query**          | Configure one TanStack Query client in `src/common/query-client.ts`           | create-app (generated)                                |
@@ -55,12 +56,13 @@ packages/
 src/
   App.tsx
   main.tsx
+  routeTree.gen.ts
+  routes/
   styles.css
   common/
   slices/
     <slice-name>/
       components/
-      pages/
       widgets/
       store/
       utils/

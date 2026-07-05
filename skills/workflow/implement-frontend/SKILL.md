@@ -31,12 +31,14 @@ Add or refactor frontend slice UI using jig generators and convention skills. Do
 3. From `apps/frontend`, run the appropriate generator:
    - Presentational component: `pnpm exec turbo gen component`
    - Widget with colocated UI: `pnpm exec turbo gen widget`
-4. Wire the new UI into the page or route target. Pages compose widgets; widgets do not import other widget entry files. Put store/data hooks in `*.widget.tsx` containers — widget-ui and components are props-only (see `state-and-data` / **sd-no-store-in-presentational**).
+   - Route target (page): `pnpm exec turbo gen page`
+   - New product slice folders: `pnpm exec turbo gen slice`
+4. Wire new UI into a route file under `src/routes/` (TanStack file-based routing — no manual route table). Pages compose widgets; widgets do not import other widget entry files. Put store/data hooks in `*.widget.tsx` containers — widget-ui and components are props-only (see `state-and-data` / **sd-no-store-in-presentational**).
 5. Run `pnpm verify` from the app or monorepo root. Fix every failure before finishing.
 
 ## Rules
 
-- **if-use-generators** — Use `turbo gen component` or `turbo gen widget`. Never hand-roll slice folders when generators exist. Never create barrels or re-export-only modules.
+- **if-use-generators** — Use `turbo gen component`, `turbo gen widget`, `turbo gen page`, or `turbo gen slice`. Never hand-roll slice folders when generators exist. Never create barrels or re-export-only modules.
 - **if-verify** — Run `pnpm verify` before finishing. No deferral for deadlines or «lint can wait».
 
 Delegated enforcement (graded by lint):

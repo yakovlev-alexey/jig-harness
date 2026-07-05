@@ -1,10 +1,11 @@
 import react from '@vitejs/plugin-react';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import { defineConfig } from 'vite';
 
 const backendUrl = process.env.VITE_BACKEND_URL ?? 'http://localhost:3001';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [tanstackRouter({ target: 'react' }), react()],
   resolve: {
     alias: {
       '@': new URL('./src', import.meta.url).pathname,

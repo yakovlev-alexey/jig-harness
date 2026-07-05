@@ -28,27 +28,26 @@ Keep most business logic on the backend. Frontend orchestration submits intent, 
 ## Preferred Shape
 
 ```text
-src/slices/<product-area>/
-  store/
-    model/           # Nano Store atoms/maps
-    selectors/       # pure derived helpers
-    queries/         # TanStack Query options + keys
-    commands/        # mutation functions (fetch + parse)
-  widgets/
-    <name>/
-      <name>.widget.tsx   # container — owns store/data hooks
-      <name>.tsx          # presenter — props only
-  components/
-    <name>/
-      <name>.tsx          # presenter — props only
-  pages/
-    <name>-page/
-      <name>-page.tsx     # may also orchestrate store/data
+src/
+  routes/
+    users.tsx              # route target (page) — composes widgets
+    users.css
+  slices/<product-area>/
+    store/
+      model/               # Nano Store atoms/maps
+      selectors/           # pure derived helpers
+      queries/             # TanStack Query options + keys
+      commands/            # mutation functions (fetch + parse)
+    widgets/
+      <name>/
+        <name>.widget.tsx  # container — owns store/data hooks
+        <name>.tsx         # presenter — props only
+    components/
+      <name>/
+        <name>.tsx         # presenter — props only
 ```
 
-## Container / Presenter
-
-Widget entry files (`*.widget.tsx`) and pages are **containers**: they read store/data, run hooks, and pass plain props to presentational UI. Widget-ui files (`widgets/**/*.tsx` that are not `*.widget.tsx`) and components are **presenters**: they receive data and callbacks via props and must not import store files or data libraries.
+Route files under `src/routes/` and widget entry files (`*.widget.tsx`) are **containers**: they read store/data, run hooks, and pass plain props to presentational UI. Widget-ui files (`widgets/**/*.tsx` that are not `*.widget.tsx`) and components are **presenters**.
 
 ## Rules
 

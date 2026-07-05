@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -74,6 +74,52 @@ describe('generators L-gen', () => {
       expect(readFileSync(widgetPath, 'utf8')).toMatchSnapshot('widget.tsx');
 
       expect(await lintGeneratedFiles(tempDir)).toBe(0);
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('page output matches snapshot and passes eslint', async () => {
+    const tempDir = mkdtempSync(join(tmpdir(), 'jig-page-gen-'));
+
+    try {
+      const result = await runGenerator('page', { name: 'dashboard' }, tempDir);
+
+      expect(result.failures).toHaveLength(0);
+
+      const tsxPath = join(tempDir, 'src/routes/dashboard.tsx');
+      const cssPath = join(tempDir, 'src/routes/dashboard.css');
+
+      expect(readFileSync(tsxPath, 'utf8')).toMatchSnapshot('page.tsx');
+      expect(readFileSync(cssPath, 'utf8')).toMatchSnapshot('page.css');
+
+      expect(await lintGeneratedFiles(tempDir)).toBe(0);
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('slice creates all frontend segment folders', async () => {
+    const tempDir = mkdtempSync(join(tmpdir(), 'jig-slice-gen-'));
+    const frontendSliceSegments = [
+      'components',
+      'widgets',
+      'store/model',
+      'store/selectors',
+      'store/queries',
+      'store/commands',
+      'utils',
+      'constants',
+    ];
+
+    try {
+      const result = await runGenerator('slice', { slice: 'profile' }, tempDir);
+
+      expect(result.failures).toHaveLength(0);
+
+      for (const segment of frontendSliceSegments) {
+        expect(existsSync(join(tempDir, 'src/slices/profile', segment, '.gitkeep'))).toBe(true);
+      }
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }

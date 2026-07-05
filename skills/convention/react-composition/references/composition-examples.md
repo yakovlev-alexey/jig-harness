@@ -1,18 +1,23 @@
 # React composition examples
 
-## Page composes widgets and components (rc-no-page-imports-page)
+## Route file composes widgets and components (rc-no-page-imports-page, rc-fs-routing)
 
 ```tsx
-// landing-page.tsx
-import { HeroBanner } from '../../components/hero-banner/hero-banner';
-import { FeatureHighlightWidget } from '../../widgets/feature-highlight/feature-highlight.widget';
-import './landing-page.css';
+// src/routes/index.tsx
+import { createFileRoute } from '@tanstack/react-router';
+import { HeroBanner } from '@/slices/landing/components/hero-banner/hero-banner';
+import { FeatureHighlightWidget } from '@/slices/landing/widgets/feature-highlight/feature-highlight.widget';
+import './index.css';
 
-export function LandingPage() {
+export const Route = createFileRoute('/')({
+  component: HomePage,
+});
+
+function HomePage() {
   return (
-    <main className="landing-page">
+    <main className="home-page">
       <HeroBanner />
-      <FeatureHighlightWidget className="landing-page__highlight" />
+      <FeatureHighlightWidget className="home-page__highlight" />
     </main>
   );
 }
@@ -39,7 +44,7 @@ export function FeatureHighlightWidget({ className }: { className?: string }) {
 ## BEM (rc-bem-class-names)
 
 ```css
-.landing-page__highlight {
+.home-page__highlight {
   max-width: 36rem;
 }
 ```

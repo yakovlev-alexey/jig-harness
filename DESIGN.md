@@ -204,7 +204,9 @@ Off-the-shelf first; custom only where nothing fits, each custom rule shipped wi
 | Named exports only                               | `import-x/no-default-export` (Storybook `meta` exempt via `files` override)    | no       |
 | No barrels / no `index.ts`                       | `check-file` filename-blocklist + small custom "no re-export-only module" rule | 1 custom |
 | kebab-case files/folders                         | `check-file` / `unicorn/filename-case`                                         | no       |
-| Allowed slice segments & folder shape            | `eslint-plugin-project-structure`                                              | no       |
+| Allowed slice segments & folder shape            | `eslint-plugin-project-structure` + guidance (no `pages/` in slices)           | no       |
+| Route targets in `src/routes/`                   | `eslint-plugin-boundaries` (`page` element) + TanStack conventions             | no       |
+| Generated route tree                             | `@tanstack/router-plugin` + `tsr generate`; lint/prettier ignore               | no       |
 | No cross-slice imports; page↛page; widget↛widget | `eslint-plugin-boundaries`                                                     | no       |
 | BEM class names; colocated CSS                   | stylelint `selector-class-pattern` + project-structure                         | no       |
 | Backend: command↛query; domain no I/O            | `@jig-harness/no-command-query-cross-calls`, `@jig-harness/domain-no-io`       | yes      |
@@ -226,15 +228,17 @@ Deferred: SonarQube, dependency-cruiser fitness functions, broad OpenAPI/codegen
 
 **Shipped:**
 
-| Generator       | Spine       | L-gen |
-| --------------- | ----------- | ----- |
-| `component`     | P2 frontend | yes   |
-| `widget`        | P2 frontend | yes   |
-| `backend-slice` | P2 backend  | yes   |
-| `endpoint`      | P2 backend  | yes   |
-| `usecase`       | P2 backend  | yes   |
+| Generator       | Spine        | L-gen |
+| --------------- | ------------ | ----- |
+| `component`     | P2 frontend  | yes   |
+| `widget`        | P2 frontend  | yes   |
+| `page`          | P2d frontend | yes   |
+| `slice`         | P2d frontend | yes   |
+| `backend-slice` | P2 backend   | yes   |
+| `endpoint`      | P2 backend   | yes   |
+| `usecase`       | P2 backend   | yes   |
 
-**Planned:** `page`, `slice` (frontend).
+**Planned:** none for frontend capability layer (P2d shipped `page`, `slice`).
 
 **Contract:** every generator's output passes the enforcement suite — snapshot-tested
 (L-gen). Generators live in `@jig-harness/generators`; each app wires them via
@@ -359,6 +363,18 @@ Proves backend slice rails with real Prisma dogfood.
 **Template rename:** `apps/web` → `apps/frontend`, `apps/api` → `apps/backend`
 (`@app/frontend`, `@app/backend`).
 
+## 7d. Vertical spine: `implement-frontend` page/slice generators (P2d)
+
+Completes the frontend capability layer and moves route targets out of slices.
+
+**Shipped:**
+
+- **Guidance:** updated `frontend-architecture`, `react-composition`, `state-and-data`, `project-defaults`, `implement-frontend`; new catalogue rows `fe-routes-in-src`, `rc-fs-routing`, `pd-router`.
+- **Capability:** `turbo gen page` (TanStack route file + colocated CSS in `src/routes/`), `turbo gen slice` (frontend segment folders without `pages/`).
+- **Enforcement:** boundaries `page` → `src/routes/**/*.tsx`; `route-tree` element; routes-dir filename-case/no-index exemptions; `routeTree.gen.ts` lint/prettier ignored.
+- **Template:** TanStack Router file-based routing replaces React Router; `src/routes/__root.tsx`, `index.tsx`, `users.tsx`; committed `routeTree.gen.ts` + `pnpm generate`.
+- **Tests:** L-gen for `page` and `slice` generators.
+
 ## 8. Phased plan & implementation status
 
 ### Completed
@@ -371,15 +387,15 @@ Proves backend slice rails with real Prisma dogfood.
 | **P2b — `implement-backend` spine** | Prisma template, backend generators, custom backend rules, backend/contracts/implement-backend skills, Postgres compose + `db:setup`, CI Postgres for dogfood                                                            | ✅ (PR) |
 | **P2c — `testing` spine**           | `testing` skill, Testing Trophy stack in template (vitest units, backend inject integration, Playwright+MSW frontend integration, `apps/e2e`), contract tests, test-route security, parallel namespacing, PR-only E2E CI | ✅      |
 | **P2c — Remaining conventions**     | `state-and-data` skill, `sd-*` catalogue rows, scoped `no-restricted-imports` enforcement, Nano Stores dogfood in users slice (container/presenter)                                                                      | ✅      |
+| **P2d — Frontend generators**       | `page`, `slice` turbo gen + L-gen; pages moved to `src/routes/` with TanStack Router file-based routing; route-tree boundaries + routes-dir lint exemptions                                                              | ✅      |
 
 ### Next (fan-out)
 
-| Phase                         | Focus                                                                                                                       | Outcome                                                    |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| **P2d — Frontend generators** | `page`, `slice` turbo gen + L-gen                                                                                           | Complete frontend capability layer beyond component/widget |
-| **P2e — Workflow expansion**  | `design-feature`, `implement-fullstack`                                                                                     | Cross-slice planning and fullstack change procedures       |
-| **P3 — Publish & polish**     | First npm publish (`@jig-harness/*`), sharpen all migrated skills, run recorded L2 RED/GREEN baselines in CI where feasible | Shippable product outside the monorepo                     |
-| **P4 — Deferred**             | Machine `rules.json` registry, Sonar / dependency-cruiser, OpenAPI codegen, `refactor-to-conventions`                       | Breadth without blocking core rails                        |
+| Phase                        | Focus                                                                                                                       | Outcome                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| **P2e — Workflow expansion** | `design-feature`, `implement-fullstack`                                                                                     | Cross-slice planning and fullstack change procedures |
+| **P3 — Publish & polish**    | First npm publish (`@jig-harness/*`), sharpen all migrated skills, run recorded L2 RED/GREEN baselines in CI where feasible | Shippable product outside the monorepo               |
+| **P4 — Deferred**            | Machine `rules.json` registry, Sonar / dependency-cruiser, OpenAPI codegen, `refactor-to-conventions`                       | Breadth without blocking core rails                  |
 
 ### Sequencing note
 
@@ -416,7 +432,7 @@ not broad refactors.
    (`@usejig` / `@jigkit`) — confirm before P3 publish.
 2. Final workflow use-case list — `refactor-to-conventions` remains P4; add
    `design-feature` / `implement-fullstack` in P2e.
-3. Template routing/state defaults — React Router + TanStack Query + Nano Stores patterns shipped in `state-and-data` skill and template users slice dogfood.
+3. Template routing/state defaults — TanStack Router file-based routing in `src/routes/` + TanStack Query + Nano Stores patterns shipped in `state-and-data` skill and template users slice dogfood.
 4. Repository visibility — private until first npm publish (P3).
 5. Local Postgres without Docker — document only (compose required for `db:setup`);
    no in-process SQLite fallback planned.

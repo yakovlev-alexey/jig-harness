@@ -1,0 +1,4 @@
+{
+  "extends": "@jig-harness/tsconfig/node.json",
+  "include": ["src", "tests", "playwright.config.ts", "global-setup.ts"]
+}

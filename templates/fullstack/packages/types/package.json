@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "echo 'no tests yet'",
+    "test": "vitest run",
     "build": "echo 'types package — no build step'"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "@jig-harness/eslint-config": "workspace:*",
     "@jig-harness/tsconfig": "workspace:*",
     "eslint": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

@@ -1,0 +1,21 @@
+{
+  "name": "@app/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:echo": "echo 'e2e package — run test:e2e for Playwright'",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "build:echo": "echo 'e2e package — no build step'"
+  },
+  "devDependencies": {
+    "@app/types": "workspace:*",
+    "@jig-harness/eslint-config": "workspace:*",
+    "@jig-harness/tsconfig": "workspace:*",
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

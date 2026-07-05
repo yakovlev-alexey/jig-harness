@@ -93,6 +93,15 @@ try {
     console.warn('WARN: Postgres unavailable — skipping migrate; static verify only');
   }
 
+  if (isCI) {
+    run(
+      'pnpm',
+      ['--filter', '@app/frontend', 'exec', 'playwright', 'install', 'chromium', '--with-deps'],
+      projectDir,
+      scaffoldEnv,
+    );
+  }
+
   run('pnpm', ['verify'], projectDir, scaffoldEnv);
   run('node', [join(ROOT, 'scripts/verify-turbo-gen.mjs'), join(projectDir, 'apps/frontend')]);
   run('node', [join(ROOT, 'scripts/verify-backend-gen.mjs'), join(projectDir, 'apps/backend')]);

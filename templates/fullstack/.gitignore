@@ -4,3 +4,11 @@ dist
 *.tsbuildinfo
 .jig-tarballs
 apps/backend/.env
+test-results
+playwright-report
+.playwright
+playwright/.cache
+test-results
+playwright-report
+.playwright
+playwright/.cache

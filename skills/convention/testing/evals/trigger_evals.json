@@ -1,0 +1,26 @@
+[
+  {
+    "query": "How should frontend integration tests run in the jig template — Playwright or React Testing Library?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can I skip backend integration tests when DATABASE_URL is unset?",
+    "should_trigger": true
+  },
+  {
+    "query": "How do parallel E2E tests isolate data without a global DB reset?",
+    "should_trigger": true
+  },
+  {
+    "query": "What is the difference between pnpm verify and pnpm test:e2e?",
+    "should_trigger": true
+  },
+  {
+    "query": "Where should I put a new Fastify command file?",
+    "should_trigger": false
+  },
+  {
+    "query": "Add a hero banner component to the landing slice",
+    "should_trigger": false
+  }
+]

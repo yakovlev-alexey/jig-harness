@@ -8,6 +8,7 @@
     "lint": "eslint . && stylelint 'src/**/*.css'",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:integration": "playwright test -c playwright.integration.config.ts",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -23,15 +24,18 @@
     "@jig-harness/prettier-config": "workspace:*",
     "@jig-harness/stylelint-config": "workspace:*",
     "@jig-harness/tsconfig": "workspace:*",
+    "@msw/playwright": "catalog:",
+    "@playwright/test": "catalog:",
     "@turbo/gen": "^2.5.4",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "eslint": "catalog:",
+    "msw": "catalog:",
     "prettier": "catalog:",
     "stylelint": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "^3.2.4"
+    "vitest": "catalog:"
   }
 }

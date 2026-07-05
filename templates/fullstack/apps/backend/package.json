@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc --noEmit false --outDir dist",
+    "build": "node scripts/build.mjs",
     "start": "node dist/server.js",
+    "start:test": "tsx src/test-server.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "echo 'no tests yet'",
+    "test": "vitest run",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push"
@@ -28,6 +29,7 @@
     "eslint": "catalog:",
     "prisma": "catalog:",
     "tsx": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

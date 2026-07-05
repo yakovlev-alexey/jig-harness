@@ -1,19 +1,62 @@
 /** @param {import('eslint').SourceCode} sourceCode */
-function countLines(sourceCode, startLine, endLine) {
-  const lines = sourceCode.lines;
-  const commentLines = new Set();
+function getLineRange(sourceCode, lineNumber) {
+  const lineStart = sourceCode.getIndexFromLoc({ line: lineNumber, column: 0 });
+  const lineEnd =
+    lineNumber < sourceCode.lines.length
+      ? sourceCode.getIndexFromLoc({ line: lineNumber + 1, column: 0 })
+      : sourceCode.text.length;
 
-  for (const comment of sourceCode.getAllComments()) {
-    for (let line = comment.loc.start.line; line <= comment.loc.end.line; line++) {
-      commentLines.add(line);
-    }
+  return { lineStart, lineEnd };
+}
+
+/** @param {import('eslint').SourceCode} sourceCode */
+function isCommentOnlyLine(sourceCode, lineNumber) {
+  const lineText = sourceCode.lines[lineNumber - 1] ?? '';
+  if (lineText.trim() === '') {
+    return true;
   }
 
+  const { lineStart, lineEnd } = getLineRange(sourceCode, lineNumber);
+  const commentsOnLine = sourceCode
+    .getAllComments()
+    .filter(
+      (comment) =>
+        comment.loc.start.line <= lineNumber && comment.loc.end.line >= lineNumber,
+    )
+    .sort((left, right) => left.range[0] - right.range[0]);
+
+  if (commentsOnLine.length === 0) {
+    return false;
+  }
+
+  let nonCommentText = '';
+  let lastIndex = lineStart;
+
+  for (const comment of commentsOnLine) {
+    const commentStart = Math.max(comment.range[0], lineStart);
+    const commentEnd = Math.min(comment.range[1], lineEnd);
+
+    if (commentStart > lastIndex) {
+      nonCommentText += sourceCode.text.slice(lastIndex, commentStart);
+    }
+
+    lastIndex = Math.max(lastIndex, commentEnd);
+  }
+
+  if (lastIndex < lineEnd) {
+    nonCommentText += sourceCode.text.slice(lastIndex, lineEnd);
+  }
+
+  return nonCommentText.trim() === '';
+}
+
+/** @param {import('eslint').SourceCode} sourceCode */
+function countLines(sourceCode, startLine, endLine) {
   let count = 0;
   for (let line = startLine; line <= endLine; line++) {
-    const text = lines[line - 1] ?? '';
-    if (text.trim() === '') continue;
-    if (commentLines.has(line)) continue;
+    if (isCommentOnlyLine(sourceCode, line)) {
+      continue;
+    }
     count++;
   }
   return count;

@@ -53,8 +53,6 @@ const sharedConfig = [
     files: ['**/*.stories.ts', '**/*.stories.tsx'],
     rules: {
       'import-x/no-default-export': 'off',
-      'max-lines': 'off',
-      '@jig-harness/decomposition-budget': 'off',
     },
   },
   {
@@ -68,11 +66,6 @@ const sharedConfig = [
     rules: {
       'import-x/no-default-export': 'off',
       '@jig-harness/no-reexport-only': 'off',
-      complexity: 'off',
-      'max-lines': 'off',
-      'max-lines-per-function': 'off',
-      '@jig-harness/decomposition-budget': 'off',
-      '@jig-harness/hook-file-naming': 'off',
     },
   },
   {
@@ -81,11 +74,42 @@ const sharedConfig = [
       'import-x/no-default-export': 'off',
       'check-file/no-index': 'off',
       '@jig-harness/no-reexport-only': 'off',
+    },
+  },
+];
+
+/** @type {import('eslint').Linter.Config[]} */
+const decompositionExemptionsConfig = [
+  {
+    files: ['**/*.stories.ts', '**/*.stories.tsx'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      '@jig-harness/decomposition-budget': 'off',
+      '@jig-harness/hook-file-naming': 'off',
+      'react/jsx-max-depth': 'off',
+    },
+  },
+  {
+    files: ['**/*.config.{js,ts,mjs,cjs}', 'eslint.config.js'],
+    rules: {
       complexity: 'off',
       'max-lines': 'off',
       'max-lines-per-function': 'off',
       '@jig-harness/decomposition-budget': 'off',
       '@jig-harness/hook-file-naming': 'off',
+      'react/jsx-max-depth': 'off',
+    },
+  },
+  {
+    files: ['**/turbo/generators/config.ts', 'packages/generators/**'],
+    rules: {
+      complexity: 'off',
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      '@jig-harness/decomposition-budget': 'off',
+      '@jig-harness/hook-file-naming': 'off',
+      'react/jsx-max-depth': 'off',
     },
   },
 ];
@@ -283,6 +307,7 @@ export const nodeConfig = [
       '@jig-harness/domain-no-io': 'off',
     },
   },
+  ...decompositionExemptionsConfig,
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -314,6 +339,7 @@ export const reactConfig = [
     },
   },
   ...testFilesConfig,
+  ...decompositionExemptionsConfig,
 ];
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -329,6 +355,7 @@ export const backendConfig = [
     },
   },
   ...testFilesConfig,
+  ...decompositionExemptionsConfig,
 ];
 
 export default reactConfig;

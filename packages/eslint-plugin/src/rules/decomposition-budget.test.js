@@ -57,6 +57,21 @@ describe('decomposition-budget', () => {
           options: [{ file: 100, function: 3 }],
           errors: [{ messageId: 'functionBudget' }],
         },
+        {
+          code: `
+            export function tooLongWithTrailingComments() {
+              const a = 1; // one
+              const b = 2; // two
+              const c = 3; // three
+              const d = 4; // four
+              const e = 5; // five
+              const f = 6; // six
+              return a + b + c + d + e + f; // result
+            }
+          `,
+          options: [{ file: 100, function: 3 }],
+          errors: [{ messageId: 'functionBudget' }],
+        },
       ],
     });
   });

@@ -126,6 +126,21 @@ pnpm verify
 
 Git hooks (via [lefthook](https://github.com/evilmartians/lefthook)) install on `pnpm install`. **pre-push** runs `pnpm verify` so broken commits cannot be pushed; **pre-commit** auto-formats staged files with Prettier.
 
+### Running the fullstack template
+
+The template under `templates/fullstack/` is wired into this monorepo. Install from the **repo root** — `pnpm install` inside `templates/fullstack/` fails because that folder's workspace does not include `@jig-harness/*` packages.
+
+```bash
+pnpm --dir templates/fullstack db:setup   # Postgres (Docker/Podman) + Prisma migrate
+pnpm --filter @app/frontend exec playwright install chromium   # once, for integration tests
+pnpm template:dogfood                     # lint + typecheck + test + integration + build
+
+# Interactive dev — backend :3001, frontend SSR :5174
+pnpm exec turbo run dev --filter=@app/backend --filter=@app/frontend
+```
+
+Postgres is required for backend dev and for `template:dogfood`. E2E (`pnpm --dir templates/fullstack test:e2e`) is separate from verify; see `templates/fullstack/AGENTS.md` for test-route env vars.
+
 ### Scripts
 
 | Script                  | Description                                                                  |

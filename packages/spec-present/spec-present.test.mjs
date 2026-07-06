@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { evaluate } from './src/index.mjs';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const binPath = join(__dirname, 'bin/spec-present.mjs');
 
 test('GREEN: app source + spec both changed', () => {
   const { ok } = evaluate([
@@ -42,4 +48,17 @@ test('RED: scaffolded-app source changed, no spec', () => {
   ]);
   assert.equal(ok, false);
   assert.ok(offenders.length > 0);
+});
+
+test('CLI bin runs and exits 0 when no app source changed', () => {
+  const result = spawnSync(process.execPath, [binPath], {
+    encoding: 'utf8',
+    env: { ...process.env, SPEC_PRESENT_BASE: process.env.SPEC_PRESENT_BASE ?? 'HEAD' },
+  });
+  assert.equal(
+    result.status,
+    0,
+    `bin should exit 0; stderr: ${result.stderr}\nstdout: ${result.stdout}`,
+  );
+  assert.match(result.stdout, /spec-present: OK/);
 });

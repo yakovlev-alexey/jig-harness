@@ -23,6 +23,36 @@ guide to where the behavior lives, not a contract.
 - Contracts `packages/types/src/slices/users/user-contracts.ts` — request/response
   schemas shared by both apps.
 
+## Interface layout
+
+`/users` page — vertical stack inside `<main>`:
+
+```
+┌─────────────────────────────────────────────┐
+│ Users                                       │  ← page title (h1)
+├─────────────────────────────────────────────┤
+│ Create user                                 │  ← form section (h2)
+│  Email    [________________________]        │
+│  Name     [________________________]        │
+│  [error message when POST fails]            │  ← role="alert" on 409 or other errors
+│  [ Create user ]                            │  ← submit; disabled while pending
+├─────────────────────────────────────────────┤
+│ Filter users                                │
+│  [ Search by name or email___________ ]     │  ← type="search"
+├─────────────────────────────────────────────┤
+│ Users                                       │  ← list section (h2)
+│  • Ada Lovelace  ada@example.com            │  ← user-list-item rows
+│  • Grace Hopper  grace@example.com          │
+│                                             │
+│  (empty: "No users yet")                    │
+│  (loading: "Loading users…")                  │
+│  (error: "Failed to load users.")           │
+└─────────────────────────────────────────────┘
+```
+
+Filter narrows visible list items client-side (R6). Form clears email/name on
+successful create and shows the server error message on duplicate email (R2).
+
 ## Requirements
 
 ### R1 — Creating a user with a unique, valid email SHALL succeed

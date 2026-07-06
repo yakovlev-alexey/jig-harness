@@ -32,22 +32,24 @@ Capture the durable **what** of a change in a feature-scoped spec before any cod
 2. **REQUIRED SUB-SKILL:** Use `specs` for spec.md / decisions.md / ADR format, naming, and the SHALL/GWT rules.
 3. Locate the feature spec: read the existing `docs/specs/<feature>/spec.md`, or create the feature folder if the feature is new.
 4. Write or update requirements as numbered `SHALL`/`MUST` statements, each with one or more `GIVEN`/`WHEN`/`THEN` acceptance scenarios. List the slices/paths touched as a reader reference (no mapping is enforced).
-5. If a real decision with alternatives/tradeoffs was made: append it to `docs/specs/<feature>/decisions.md` when it only affects this feature, or add a `docs/adr/NNNN-*.md` when it is cross-cutting. Use the content trigger, not a size threshold. Never edit an accepted decision/ADR — supersede it.
-6. **STOP at the user-verify gate.** Present the spec (and any decision/ADR) to the user for explicit approval. Do not proceed to `write-plan` or any code until the user approves.
+5. When the change adds or changes UI (pages, widgets, forms, layouts): add a compact **ASCII layout sketch** to the spec showing the intended interface structure — regions, headings, inputs, actions, and key states (empty, loading, error). Place it in a `## Interface layout` section before or alongside the requirements it supports.
+6. If a real decision with alternatives/tradeoffs was made: append it to `docs/specs/<feature>/decisions.md` when it only affects this feature, or add a `docs/adr/NNNN-*.md` when it is cross-cutting. Use the content trigger, not a size threshold. Never edit an accepted decision/ADR — supersede it.
+7. **STOP at the user-verify gate.** Present the spec (and any decision/ADR) to the user for explicit approval. Do not proceed to `write-plan` or any code until the user approves.
 
 ## Rules
 
 - **ws-spec-before-code** — Write or update the feature spec before planning or writing code. Reference **wf-spec-required**: every app-source change must add or update a spec under `docs/specs/**`.
 - **ws-feature-scoped** — Name and scope the spec by feature intent, not 1:1 to a slice. Reference **wf-spec-feature-scoped**: a feature may span slices; a slice may host many features.
 - **ws-gwt** — Every requirement is a `SHALL`/`MUST` statement with `GIVEN`/`WHEN`/`THEN` scenarios. Reference **wf-spec-gwt**. No vague requirements.
+- **ws-ui-layout** — When UI is added or changed, include a compact ASCII layout sketch in the spec (`## Interface layout`). Show structure and key states; the sketch is part of the user-verify gate.
 - **ws-decisions-colocated** — Record the **why** in `docs/specs/<feature>/decisions.md` (feature-scoped) or `docs/adr/` (cross-cutting), never duplicated inside spec.md. Reference **wf-decisions-colocated** and **wf-adr-append-only** (supersede, never edit accepted entries).
 - **ws-user-gate** — Stop after writing the spec and get explicit user approval before proceeding to `write-plan`. The spec is a shared contract, not a private draft.
 
 ## Red Flags — STOP
 
 - Writing code or scaffolding files before the spec exists
-- Naming the spec after a slice/folder and mapping it 1:1 to one slice
 - Requirements with no `GIVEN`/`WHEN`/`THEN` — vague "it should work" prose
+- UI change with no ASCII layout sketch in the spec
 - Editing an already-accepted ADR or decision entry instead of superseding it
 - Skipping the user-verify gate and jumping straight to planning or coding
 - Duplicating rationale inside spec.md instead of recording it in decisions.md / ADR
@@ -65,10 +67,11 @@ Capture the durable **what** of a change in a feature-scoped spec before any cod
 
 ## Common Mistakes
 
-| Mistake                             | Correction                                                    |
-| ----------------------------------- | ------------------------------------------------------------- |
-| Coding before any spec exists       | Write/update `docs/specs/<feature>/spec.md` first             |
-| Spec named/scoped per slice         | Name by feature intent; list slices touched as reference only |
-| Requirement without GWT scenario    | Add `SHALL`/`MUST` + `GIVEN`/`WHEN`/`THEN`                    |
-| Rationale pasted into spec.md       | Record it in `decisions.md` or a `docs/adr/` ADR              |
-| Proceeding to plan without approval | Stop at the user-verify gate; wait for explicit approval      |
+| Mistake                             | Correction                                                     |
+| ----------------------------------- | -------------------------------------------------------------- |
+| Coding before any spec exists       | Write/update `docs/specs/<feature>/spec.md` first              |
+| Spec named/scoped per slice         | Name by feature intent; list slices touched as reference only  |
+| Requirement without GWT scenario    | Add `SHALL`/`MUST` + `GIVEN`/`WHEN`/`THEN`                     |
+| UI change without layout sketch     | Add `## Interface layout` ASCII sketch before user-verify gate |
+| Rationale pasted into spec.md       | Record it in `decisions.md` or a `docs/adr/` ADR               |
+| Proceeding to plan without approval | Stop at the user-verify gate; wait for explicit approval       |

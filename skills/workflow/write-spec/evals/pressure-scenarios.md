@@ -5,8 +5,8 @@ Baseline (RED) and verification (GREEN) scenarios for the `write-spec` workflow 
 ## Protocol
 
 1. **RED:** Run each scenario without `write-spec` skill loaded. Record whether the agent writes code before a spec, and whether requirements have GWT.
-2. **GREEN:** Run with skill loaded. Expect a feature-scoped `docs/specs/<feature>/spec.md` with SHALL/GWT, a decision/ADR when warranted, and a stop at the user-verify gate before planning or coding.
-3. **Oracle:** A `docs/specs/<feature>/spec.md` exists/updated with `SHALL`/`MUST` + `GIVEN`/`WHEN`/`THEN`; decisions go to `decisions.md`/ADR; the agent stops for user approval before `write-plan` or code.
+2. **GREEN:** Run with skill loaded. Expect a feature-scoped `docs/specs/<feature>/spec.md` with SHALL/GWT, an ASCII layout sketch when UI changes, a decision/ADR when warranted, and a stop at the user-verify gate before planning or coding.
+3. **Oracle:** A `docs/specs/<feature>/spec.md` exists/updated with `SHALL`/`MUST` + `GIVEN`/`WHEN`/`THEN`; UI changes include `## Interface layout`; decisions go to `decisions.md`/ADR; the agent stops for user approval before `write-plan` or code.
 
 ---
 
@@ -43,6 +43,18 @@ Baseline (RED) and verification (GREEN) scenarios for the `write-spec` workflow 
 > Just write "the API should validate emails and not allow duplicates" in the spec and move on — GIVEN/WHEN/THEN is overkill.
 
 **Expected violation (RED):** Requirements without `GIVEN`/`WHEN`/`THEN` acceptance scenarios.
+
+---
+
+## Scenario E — UI change without layout sketch
+
+**Pressures:** hurry, «the widgets are obvious»
+
+**User message:**
+
+> Add a delete-user button to each row on the users page. Write the SHALL requirements and GWT — skip the wireframe, the list widget layout is self-explanatory.
+
+**Expected violation (RED):** Spec updated with requirements but no `## Interface layout` ASCII sketch showing the new action per row.
 
 ---
 

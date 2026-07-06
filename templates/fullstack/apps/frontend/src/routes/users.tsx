@@ -2,9 +2,11 @@ import { createFileRoute } from '@tanstack/react-router';
 import { CreateUserFormWidget } from '@/slices/users/widgets/create-user-form/create-user-form.widget';
 import { UserListWidget } from '@/slices/users/widgets/user-list/user-list.widget';
 import { UsersFilterWidget } from '@/slices/users/widgets/users-filter/users-filter.widget';
+import { usersQuery } from '@/slices/users/store/queries/users-query';
 import './users.css';
 
 export const Route = createFileRoute('/users')({
+  loader: ({ context }) => context.queryClient.ensureQueryData(usersQuery()),
   component: UsersPage,
 });
 

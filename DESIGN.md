@@ -375,6 +375,18 @@ Completes the frontend capability layer and moves route targets out of slices.
 - **Template:** TanStack Router file-based routing replaces React Router; `src/routes/__root.tsx`, `index.tsx`, `users.tsx`; committed `routeTree.gen.ts` + `pnpm generate`.
 - **Tests:** L-gen for `page` and `slice` generators.
 
+## 7e. Vertical spine: Vite SSR (P2f)
+
+Classic Vite SSR as a fullstack harness spine: frontend owns SSR entries and data prefetch; prod serves HTML from the backend.
+
+**Shipped:**
+
+- **Guidance:** `pd-ssr`, `sd-ssr-loader-prefetch`; updated `project-defaults`, `frontend-architecture`, `state-and-data`.
+- **Capability:** `entry-client.tsx`, `entry-server.tsx`, `router.tsx`, `createQueryClient()` factory; frontend dev SSR server (`server.ts`); backend `ssr-plugin.ts` importing `@app/frontend/server-entry`.
+- **Enforcement:** frontend entry boundaries; backend `import-x/no-restricted-paths` blocking `frontend/src/**` (`ss-backend-frontend-entry-only`).
+- **Template topology:** dev = frontend Vite middleware server (SSR + `/api` proxy to backend); prod/E2E = single backend process (`/api` + static assets + SSR HTML).
+- **Tests:** backend SSR integration (`GET /`, `GET /users` HTML + dehydrated state); frontend integration via SSR dev server + MSW node; E2E collapsed to prod-like backend server.
+
 ## 8. Phased plan & implementation status
 
 ### Completed
@@ -388,6 +400,7 @@ Completes the frontend capability layer and moves route targets out of slices.
 | **P2c — `testing` spine**           | `testing` skill, Testing Trophy stack in template (vitest units, backend inject integration, Playwright+MSW frontend integration, `apps/e2e`), contract tests, test-route security, parallel namespacing, PR-only E2E CI | ✅      |
 | **P2c — Remaining conventions**     | `state-and-data` skill, `sd-*` catalogue rows, scoped `no-restricted-imports` enforcement, Nano Stores dogfood in users slice (container/presenter)                                                                      | ✅      |
 | **P2d — Frontend generators**       | `page`, `slice` turbo gen + L-gen; pages moved to `src/routes/` with TanStack Router file-based routing; route-tree boundaries + routes-dir lint exemptions                                                              | ✅      |
+| **P2f — Vite SSR spine**            | Classic Vite SSR; TanStack Router loaders + Query dehydrate/hydrate; backend `/api` prefix + prod SSR plugin; entry boundaries + backend frontend-src import guard; SSR integration + collapsed E2E server               | ✅      |
 
 ### Next (fan-out)
 

@@ -51,17 +51,35 @@ Route files under `src/routes/` and widget entry files (`*.widget.tsx`) are **co
 
 ## Rules
 
-| Rule ID                           | Convention                                                                                                                                                   |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **sd-server-state-tanstack**      | Server state, async reads, caching, retries, and background refresh via TanStack Query.                                                                      |
-| **sd-mutations-usemutation**      | Writes via `useMutation({ mutationFn: <command> })`; invalidate affected query keys `onSuccess` (reuse exported keys, e.g. `usersQueryKey`).                 |
-| **sd-client-state-nanostores**    | Frontend-only shared UI state (filters, selected entities, drafts, wizard progress) via Nano Stores.                                                         |
-| **sd-no-server-data-in-stores**   | Never mirror server data into Nano Stores; keep it in TanStack Query. Stores may feed query keys or mutation inputs.                                         |
-| **sd-store-file-roles**           | `store/model/` atoms/maps; `store/selectors/` pure derived; `store/queries/` query options + keys; `store/commands/` mutation fns or state changes.          |
-| **sd-small-named-store-files**    | Prefer small named files over repository/service/grouped store objects (see also **fe-one-entity-per-file**).                                                |
-| **sd-no-store-in-presentational** | Presentational files (`components/**` and widget-ui `widgets/**/*.tsx` except `*.widget.tsx`) must not import store or data libraries. **ENFORCED** by lint. |
+| Rule ID                           | Convention                                                                                                                                                                          |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **sd-server-state-tanstack**      | Server state, async reads, caching, retries, and background refresh via TanStack Query.                                                                                             |
+| **sd-mutations-usemutation**      | Writes via `useMutation({ mutationFn: <command> })`; invalidate affected query keys `onSuccess` (reuse exported keys, e.g. `usersQueryKey`).                                        |
+| **sd-client-state-nanostores**    | Frontend-only shared UI state (filters, selected entities, drafts, wizard progress) via Nano Stores.                                                                                |
+| **sd-no-server-data-in-stores**   | Never mirror server data into Nano Stores; keep it in TanStack Query. Stores may feed query keys or mutation inputs.                                                                |
+| **sd-store-file-roles**           | `store/model/` atoms/maps; `store/selectors/` pure derived; `store/queries/` query options + keys; `store/commands/` mutation fns or state changes.                                 |
+| **sd-small-named-store-files**    | Prefer small named files over repository/service/grouped store objects (see also **fe-one-entity-per-file**).                                                                       |
+| **sd-no-store-in-presentational** | Presentational files (`components/**` and widget-ui `widgets/**/*.tsx` except `*.widget.tsx`) must not import store or data libraries. **ENFORCED** by lint.                        |
+| **sd-ssr-loader-prefetch**        | Route loaders call `context.queryClient.ensureQueryData(...)` for SSR prefetch; widget entries keep `useQuery` (warm cache, no flash). Dehydrate/hydrate is handled by entry files. |
 
-## Layer Examples
+## SSR loader prefetch
+
+For SSR, seed TanStack Query in the **route loader**, not in widgets:
+
+```typescript
+// src/routes/users.tsx — container page
+export const Route = createFileRoute('/users')({
+  loader: ({ context }) => context.queryClient.ensureQueryData(usersQuery()),
+  component: UsersPage,
+});
+
+// widget entry — unchanged; reads warm cache via useQuery
+export function UserListWidget() {
+  const { data } = useQuery(usersQuery());
+}
+```
+
+Root route uses `createRootRouteWithContext<{ queryClient: QueryClient }>()`. `entry-server.tsx` dehydrates; `entry-client.tsx` hydrates before `hydrateRoot`.
 
 ```typescript
 // Good — container (*.widget.tsx) reads store and passes props

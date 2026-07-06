@@ -45,19 +45,19 @@ describe('GET /users', () => {
 
     await app.inject({
       method: 'POST',
-      url: '/users',
+      url: '/api/users',
       payload: { email: emailOne, name: 'One' },
     });
 
     await app.inject({
       method: 'POST',
-      url: '/users',
+      url: '/api/users',
       payload: { email: emailTwo, name: 'Two' },
     });
 
     const response = await app.inject({
       method: 'GET',
-      url: '/users',
+      url: '/api/users',
     });
 
     expect(response.statusCode).toBe(200);

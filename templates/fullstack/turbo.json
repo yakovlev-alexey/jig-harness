@@ -6,12 +6,13 @@
     "TEST_ROUTES_TOKEN",
     "INCLUDE_TEST_ROUTES",
     "E2E_BASE_URL",
-    "E2E_API_URL"
+    "E2E_API_URL",
+    "SSR_API_ORIGIN"
   ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", "dist/client/**", "dist/server/**"]
     },
     "lint": {
       "dependsOn": ["^build"]

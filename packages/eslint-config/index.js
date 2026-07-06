@@ -57,7 +57,7 @@ const sharedConfig = [
     },
   },
   {
-    files: ['**/App.tsx', '**/main.tsx'],
+    files: ['**/App.tsx', '**/entry-client.tsx', '**/entry-server.tsx', '**/router.tsx'],
     rules: {
       'unicorn/filename-case': 'off',
     },
@@ -124,6 +124,7 @@ const frontendBoundariesConfig = [
       },
       'boundaries/elements': [
         { type: 'app', pattern: 'src/App.tsx' },
+        { type: 'router-factory', pattern: 'src/router.tsx' },
         { type: 'common', pattern: 'src/common/**' },
         { type: 'slice', pattern: 'src/slices/*/**', mode: 'folder' },
         { type: 'route-tree', pattern: 'src/routeTree.gen.ts' },
@@ -131,7 +132,7 @@ const frontendBoundariesConfig = [
         { type: 'widget', pattern: 'src/slices/*/widgets/**/*.widget.tsx' },
         { type: 'component', pattern: 'src/slices/*/components/**' },
         { type: 'widget-ui', pattern: 'src/slices/*/widgets/**/!(*.widget).tsx' },
-        { type: 'entry', pattern: 'src/main.tsx' },
+        { type: 'entry', pattern: 'src/entry-{client,server}.tsx' },
       ],
       'boundaries/include': ['src/**'],
       'import-x/resolver': {
@@ -164,8 +165,9 @@ const frontendBoundariesConfig = [
         {
           default: 'disallow',
           rules: [
-            { from: 'entry', allow: ['app', 'common'] },
-            { from: 'app', allow: ['route-tree', 'common'] },
+            { from: 'entry', allow: ['app', 'common', 'route-tree'] },
+            { from: 'app', allow: ['route-tree', 'common', 'router-factory'] },
+            { from: 'router-factory', allow: ['route-tree', 'common'] },
             { from: 'common', allow: ['common'] },
             { from: 'slice', allow: ['common', 'slice'] },
             { from: 'page', allow: ['common', 'slice', 'component', 'widget', 'widget-ui'] },
@@ -250,6 +252,19 @@ const backendBoundariesConfig = [
       globals: globals.node,
     },
     rules: {
+      'import-x/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            {
+              target: './src/**',
+              from: '../frontend/src/**',
+              message:
+                'Backend must import the built @app/frontend/server-entry export only, never frontend source (ss-backend-frontend-entry-only).',
+            },
+          ],
+        },
+      ],
       'boundaries/element-types': [
         'error',
         {

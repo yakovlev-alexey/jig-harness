@@ -44,7 +44,7 @@ describe('POST /users', () => {
 
     const response = await app.inject({
       method: 'POST',
-      url: '/users',
+      url: '/api/users',
       payload: {
         email,
         name: 'Alice',
@@ -64,13 +64,13 @@ describe('POST /users', () => {
 
     await app.inject({
       method: 'POST',
-      url: '/users',
+      url: '/api/users',
       payload: { email },
     });
 
     const response = await app.inject({
       method: 'POST',
-      url: '/users',
+      url: '/api/users',
       payload: { email },
     });
 

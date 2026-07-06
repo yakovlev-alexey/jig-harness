@@ -1,4 +1,9 @@
 .cursor
+**/.cursor/skills
+**/.codex/skills
+**/.claude/skills
+**/.agents/skills
+**/.jig-skills-linked.json
 **/routeTree.gen.ts
 node_modules
 dist

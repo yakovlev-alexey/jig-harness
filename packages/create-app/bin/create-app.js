@@ -26,6 +26,7 @@ const HARNESS_PACKAGES = [
   '@jig-harness/stylelint-config',
   '@jig-harness/generators',
   '@jig-harness/spec-present',
+  '@jig-harness/skills',
 ];
 
 function parseArgs(argv) {
@@ -210,6 +211,8 @@ function main() {
   if (!args.skipInstall) {
     console.log('Installing dependencies...');
     run('pnpm', ['install'], args.targetDir);
+    console.log('Linking jig skills...');
+    run('pnpm', ['exec', 'jig-link-skills'], args.targetDir);
   }
 
   if (!args.skipGit) {

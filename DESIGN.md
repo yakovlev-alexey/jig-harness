@@ -82,20 +82,20 @@ all three layers (see §6.4).
 
 ## 5. Locked decisions
 
-| Decision                  | Choice                                                                     |
-| ------------------------- | -------------------------------------------------------------------------- |
-| Delivery model            | Shippable tooling product (published npm packages + template + skills)     |
-| Repo topology             | Single `jig-harness` monorepo (pnpm + turborepo)                           |
-| npm scope                 | `@jig-harness/*` (availability to confirm at reservation)                  |
-| Existing web-app skills   | Move into `jig-harness/skills/`, rewritten sharper                         |
-| Enforcement ambition (v1) | Medium: off-the-shelf-first + few custom rules with fixtures; no Sonar     |
-| Sequencing                | Vertical spine first → gather feedback → fan out with subagents            |
-| Rule coherence            | Markdown `rules-catalogue.md` (structured toward a machine registry later) |
-| Skill taxonomy            | Two tiers: workflow (use-case) skills + convention (reference) skills      |
-| Convention skills         | Separately installable skills (not embedded references)                    |
-| First spine               | `setup-project`                                                            |
-| Scaffolder                | `pnpm create @jig-harness/app` (not degit)                                 |
-| Package versioning        | Changesets, fixed/linked (one version across all packages + create CLI)    |
+| Decision                  | Choice                                                                       |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| Delivery model            | Shippable tooling product (published npm packages + template + skills)       |
+| Repo topology             | Single `jig-harness` monorepo (pnpm + turborepo)                             |
+| npm scope                 | `@jig-harness/*` (availability to confirm at reservation)                    |
+| Existing web-app skills   | Move into `jig-harness/skills/`, rewritten sharper                           |
+| Enforcement ambition (v1) | Medium: off-the-shelf-first + few custom rules with fixtures; no Sonar       |
+| Sequencing                | Vertical spine first → gather feedback → fan out with subagents              |
+| Rule coherence            | Markdown `rules-catalogue.md` (structured toward a machine registry later)   |
+| Skill taxonomy            | Two tiers: workflow (use-case) skills + convention (reference) skills        |
+| Convention skills         | Dual channel: `@jig-harness/skills` npm (project-local) + skills.sh (global) |
+| First spine               | `setup-project`                                                              |
+| Scaffolder                | `pnpm create @jig-harness/app` (not degit)                                   |
+| Package versioning        | Changesets, fixed/linked (one version across all packages + create CLI)      |
 
 ## 6. Architecture
 
@@ -119,6 +119,7 @@ jig-harness/                      (pnpm + turborepo, Changesets fixed/linked)
 │   ├─ tsconfig
 │   ├─ generators                 turbo gen (component, widget, page, slice, endpoint…)
 │   ├─ spec-present               @jig-harness/spec-present — spec-present gate CLI
+│   ├─ skills                     @jig-harness/skills — bundled skills + postinstall linker
 │   └─ create-app                 @jig-harness/create-app — pnpm create scaffolder
 ├─ templates/
 │   └─ fullstack/                 apps/frontend + apps/backend + apps/e2e + packages/types;
@@ -172,14 +173,27 @@ change must also touch `docs/specs/**`.
 
 ### 6.3 Distribution & dependency resolution (grounded)
 
-**Skills** — the skills.sh CLI reads a `skills/` subdirectory (walked one level
-deep for `skills/<name>/SKILL.md`, one extra for catalog layouts), so
-monorepo-hosted skills install directly, no separate repo or sync step:
+**Skills — dual channel:**
+
+1. **Project-local (primary for scaffolded apps):** `@jig-harness/skills` bundles
+   repo-root `skills/` at `prepack`, ships as a devDependency of the fullstack
+   template, and runs a `postinstall` linker that creates gitignored symlinks in
+   `.cursor/skills`, `.codex/skills`, `.claude/skills`, and `.agents/skills`.
+   Version-locked with other `@jig-harness/*` packages via Changesets fixed group.
+   See [ADR 0002](docs/adr/0002-skills-via-npm-package.md).
+
+2. **Global (secondary):** the skills.sh CLI reads a `skills/` subdirectory
+   (walked one level deep for `skills/<name>/SKILL.md`, one extra for catalog
+   layouts), so monorepo-hosted skills install directly for harness contributors
+   or non-jig repos:
 
 ```
 pnpm dlx skills add yakovlev-alexey/jig-harness --skill setup-project
 pnpm dlx skills add yakovlev-alexey/jig-harness/skills/workflow/setup-project
 ```
+
+Repo-root `skills/` remains the single source of truth; the npm package is a
+published projection, not a second authoring location.
 
 **Packages** — published to npm, one version across all via Changesets
 fixed/linked mode, so the `create-app` CLI always knows exactly which versions to

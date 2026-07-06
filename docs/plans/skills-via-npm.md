@@ -16,12 +16,12 @@ Cross-cutting rationale: [ADR 0002](../adr/0002-skills-via-npm-package.md).
 
 Create [packages/skills/](../../packages/skills/) with:
 
-| File | Purpose |
-| ---- | ------- |
-| `package.json` | `name: @jig-harness/skills`; `prepack` → sync; `postinstall` → link; bin `jig-link-skills` |
-| `scripts/sync-skills.mjs` | Copy `skills/` → `bundled/`; strip `evals/`; validate manifest ↔ source |
-| `scripts/link-skills.mjs` | Postinstall/linker entry (shared by bin) |
-| `skills.manifest.json` | All skills: `{ "name", "tier", "path" }` derived from frontmatter |
+| File                      | Purpose                                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| `package.json`            | `name: @jig-harness/skills`; `prepack` → sync; `postinstall` → link; bin `jig-link-skills` |
+| `scripts/sync-skills.mjs` | Copy `skills/` → `bundled/`; strip `evals/`; validate manifest ↔ source                    |
+| `scripts/link-skills.mjs` | Postinstall/linker entry (shared by bin)                                                   |
+| `skills.manifest.json`    | All skills: `{ "name", "tier", "path" }` derived from frontmatter                          |
 
 Implementation notes:
 
@@ -72,9 +72,9 @@ Export linker so bin and postinstall share one module.
 
 Add in `packages/skills/`:
 
-| File | Cases |
-| ---- | ----- |
-| `sync-skills.test.mjs` | Copies SKILL.md + references; excludes evals; fails on orphan skill |
+| File                   | Cases                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `sync-skills.test.mjs` | Copies SKILL.md + references; excludes evals; fails on orphan skill                                                |
 | `link-skills.test.mjs` | Creates symlinks; idempotent re-run; skips user dir; respects `JIG_SKIP_SKILLS_LINK`; respects `JIG_SKILLS_AGENTS` |
 
 Use `node:test` + temp directories (same pattern as `@jig-harness/spec-present`).
@@ -155,14 +155,14 @@ Extend [scripts/coherence-check.mjs](../../scripts/coherence-check.mjs) or [scri
 
 **Satisfies:** R11 (harness-side); supports R5 user experience
 
-| File | Change |
-| ---- | ------ |
+| File                                                                                   | Change                                                                                                                                |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | [skills/workflow/setup-project/SKILL.md](../../skills/workflow/setup-project/SKILL.md) | After scaffold step: skills auto-link on install; remove implicit manual `skills add` for project work; add rule **sp-skills-linked** |
-| [DESIGN.md](../../DESIGN.md) §5 locked table | Refine "Convention skills" row to dual channel |
-| [DESIGN.md](../../DESIGN.md) §6.3 | Document `@jig-harness/skills` npm channel alongside skills.sh |
-| [DESIGN.md](../../DESIGN.md) §6.1 topology | Add `packages/skills` |
-| [rules-catalogue.md](../../rules-catalogue.md) | Add row `sp-skills-linked` → guidance: setup-project, capability: `@jig-harness/skills` |
-| [docs/adr/README.md](../adr/README.md) | Index ADR 0002 (done in this docs pass) |
+| [DESIGN.md](../../DESIGN.md) §5 locked table                                           | Refine "Convention skills" row to dual channel                                                                                        |
+| [DESIGN.md](../../DESIGN.md) §6.3                                                      | Document `@jig-harness/skills` npm channel alongside skills.sh                                                                        |
+| [DESIGN.md](../../DESIGN.md) §6.1 topology                                             | Add `packages/skills`                                                                                                                 |
+| [rules-catalogue.md](../../rules-catalogue.md)                                         | Add row `sp-skills-linked` → guidance: setup-project, capability: `@jig-harness/skills`                                               |
+| [docs/adr/README.md](../adr/README.md)                                                 | Index ADR 0002 (done in this docs pass)                                                                                               |
 
 ---
 
@@ -178,21 +178,21 @@ If template dogfood runs from harness root without installing template deps sepa
 
 ## Requirement coverage matrix
 
-| Requirement | Task(s) |
-| ----------- | ------- |
-| R1 | 1, 2 |
-| R2 | 2 |
-| R3 | 3 |
-| R4 | 5 |
-| R5 | 5, 6, 10 |
-| R6 | 6, 7 |
-| R7 | 3, 4 |
-| R8 | 3, 4 |
-| R9 | 1, 3, 5 |
-| R10 | 3, 4, 7 |
-| R11 | 5, 9 |
-| R12 | 4, 7, 8 |
-| R13 | 1 |
+| Requirement | Task(s)  |
+| ----------- | -------- |
+| R1          | 1, 2     |
+| R2          | 2        |
+| R3          | 3        |
+| R4          | 5        |
+| R5          | 5, 6, 10 |
+| R6          | 6, 7     |
+| R7          | 3, 4     |
+| R8          | 3, 4     |
+| R9          | 1, 3, 5  |
+| R10         | 3, 4, 7  |
+| R11         | 5, 9     |
+| R12         | 4, 7, 8  |
+| R13         | 1        |
 
 All requirements covered. No orphan tasks.
 

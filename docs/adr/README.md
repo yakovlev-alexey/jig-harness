@@ -18,7 +18,7 @@ is not a decision.
 
 ## Index
 
-| ADR                                  | Status   | Title                |
-| ------------------------------------ | -------- | -------------------- |
-| [0001](0001-spec-driven-workflow.md) | Accepted | Spec-driven workflow |
+| ADR                                    | Status   | Title                  |
+| -------------------------------------- | -------- | ---------------------- |
+| [0001](0001-spec-driven-workflow.md)   | Accepted | Spec-driven workflow   |
 | [0002](0002-skills-via-npm-package.md) | Accepted | Skills via npm package |

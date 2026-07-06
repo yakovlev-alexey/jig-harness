@@ -17,10 +17,12 @@
     "db:up": "bash scripts/db-up.sh",
     "db:down": "bash scripts/db-down.sh",
     "db:migrate": "pnpm --filter @app/backend db:migrate",
-    "db:setup": "pnpm db:up && pnpm db:migrate"
+    "db:setup": "pnpm db:up && pnpm db:migrate",
+    "skills:link": "jig-link-skills"
   },
   "devDependencies": {
     "@jig-harness/prettier-config": "workspace:*",
+    "@jig-harness/skills": "workspace:*",
     "@jig-harness/spec-present": "workspace:*",
     "lefthook": "catalog:",
     "prettier": "catalog:",

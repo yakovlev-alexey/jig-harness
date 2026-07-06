@@ -204,6 +204,8 @@ importers:
 
   packages/prettier-config: {}
 
+  packages/skills: {}
+
   packages/spec-present: {}
 
   packages/stylelint-config:

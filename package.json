@@ -13,8 +13,8 @@
     "prepare": "lefthook install",
     "coherence": "node scripts/coherence-check.mjs",
     "validate-skills": "bash scripts/validate-skills.sh",
-    "spec-present": "node templates/fullstack/scripts/spec-present.mjs",
-    "spec-present:test": "node --test scripts/spec-present.test.mjs",
+    "spec-present": "spec-present",
+    "spec-present:test": "pnpm --filter @jig-harness/spec-present test",
     "template:dogfood": "bash scripts/template-dogfood.sh",
     "scaffold:verify": "node scripts/scaffold-and-verify.mjs",
     "changeset": "changeset",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
+    "@jig-harness/spec-present": "workspace:*",
     "lefthook": "catalog:",
     "node-plop": "^0.26.3",
     "prettier": "^3.6.2",

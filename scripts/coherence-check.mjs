@@ -50,6 +50,8 @@ function ruleExistsInPlugin(ruleName) {
   return rules.includes(ruleName);
 }
 
+const NON_ESLINT_ENFORCEMENT = new Set(['@jig-harness/spec-present']);
+
 const catalogue = parseCatalogue();
 const customRules = listCustomRules();
 const errors = [];
@@ -65,6 +67,9 @@ for (const rule of customRules) {
 
 for (const row of catalogue) {
   if (!row.enforcement || row.enforcement === '—' || row.enforcement === '-') continue;
+  if (row.enforcement.startsWith('scripts/') || NON_ESLINT_ENFORCEMENT.has(row.enforcement)) {
+    continue;
+  }
   const ruleName = row.enforcement.replace(/^@jig-harness\//, '');
   if (ruleName.startsWith('eslint:') || ruleName.includes('/')) continue;
   if (customRules.length > 0 && !ruleExistsInPlugin(ruleName)) {

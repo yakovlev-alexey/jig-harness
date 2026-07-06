@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify": "pnpm run spec-present && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:integration && pnpm run build",
-    "spec-present": "node scripts/spec-present.mjs",
+    "spec-present": "spec-present",
     "test:integration": "pnpm --filter @app/frontend test:integration",
     "test:e2e": "pnpm --filter @app/e2e test:e2e",
     "db:up": "bash scripts/db-up.sh",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@jig-harness/prettier-config": "workspace:*",
+    "@jig-harness/spec-present": "workspace:*",
     "lefthook": "catalog:",
     "prettier": "catalog:",
     "turbo": "catalog:"

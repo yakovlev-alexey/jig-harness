@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * spec-present gate: a change that touches app source (apps/<name>/src/**) must
  * also add or update at least one spec under docs/specs/**. Coarse by design:
@@ -7,8 +6,9 @@
  */
 import { execFileSync } from 'node:child_process';
 
-const APP_SOURCE_RE = /(^|\/)apps\/[^/]+\/src\//;
-const SPEC_RE = /(^|\/)docs\/specs\//;
+export const APP_SOURCE_RE = /(^|\/)apps\/[^/]+\/src\//;
+export const SPEC_RE = /(^|\/)docs\/specs\//;
+export const EMPTY_BEFORE = '0000000000000000000000000000000000000000';
 
 /**
  * Pure evaluation of a changed-file set.
@@ -22,6 +22,10 @@ export function evaluate(changedFiles) {
   const specChanged = files.some((f) => SPEC_RE.test(f));
   const ok = !appSourceChanged || specChanged;
   return { ok, appSourceChanged, specChanged, offenders };
+}
+
+function isSha(ref) {
+  return /^[0-9a-f]{4,40}$/i.test(ref);
 }
 
 function git(args) {
@@ -45,7 +49,10 @@ function toLines(output) {
 }
 
 function resolveBaseRef() {
-  if (process.env.SPEC_PRESENT_BASE) return process.env.SPEC_PRESENT_BASE;
+  if (process.env.SPEC_PRESENT_BASE) {
+    const base = process.env.SPEC_PRESENT_BASE.trim();
+    if (base && base !== EMPTY_BEFORE) return base;
+  }
   if (process.env.GITHUB_BASE_REF) return `origin/${process.env.GITHUB_BASE_REF}`;
   for (const candidate of ['origin/main', 'main']) {
     if (tryGit(['rev-parse', '--verify', '--quiet', candidate]) !== null) return candidate;
@@ -53,16 +60,27 @@ function resolveBaseRef() {
   return null;
 }
 
-function resolveChangedFiles() {
+function addCommittedChanges(set, base) {
+  if (isSha(base)) {
+    for (const line of toLines(tryGit(['diff', '--name-only', `${base}..HEAD`]))) {
+      set.add(line);
+    }
+    return;
+  }
+
+  const mergeBaseOut = tryGit(['merge-base', base, 'HEAD']);
+  const mergeBase = mergeBaseOut ? mergeBaseOut.trim() : base;
+  for (const line of toLines(tryGit(['diff', '--name-only', `${mergeBase}...HEAD`]))) {
+    set.add(line);
+  }
+}
+
+export function resolveChangedFiles() {
   const set = new Set();
   const base = resolveBaseRef();
 
   if (base) {
-    const mergeBaseOut = tryGit(['merge-base', base, 'HEAD']);
-    const mergeBase = mergeBaseOut ? mergeBaseOut.trim() : base;
-    for (const line of toLines(tryGit(['diff', '--name-only', `${mergeBase}...HEAD`]))) {
-      set.add(line);
-    }
+    addCommittedChanges(set, base);
   }
 
   for (const line of toLines(tryGit(['diff', '--name-only', 'HEAD']))) set.add(line);
@@ -72,7 +90,7 @@ function resolveChangedFiles() {
   return { base, files: [...set] };
 }
 
-function main() {
+export function runSpecPresent() {
   let base;
   let files;
   try {
@@ -84,7 +102,7 @@ function main() {
 
   if (!base && (!files || files.length === 0)) {
     console.warn('spec-present: could not resolve a git base; skipping (best-effort gate)');
-    process.exit(0);
+    return 0;
   }
 
   const { ok, offenders } = evaluate(files);
@@ -94,13 +112,9 @@ function main() {
     console.error('Offending app-source files:');
     for (const f of offenders) console.error(`  - ${f}`);
     console.error('\nFix: add or update a spec under docs/specs/**; see the `specs` skill.');
-    process.exit(1);
+    return 1;
   }
 
   console.log('spec-present: OK (no app source changed, or a spec was updated).');
-  process.exit(0);
-}
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+  return 0;
 }

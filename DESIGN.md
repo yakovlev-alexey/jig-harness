@@ -118,6 +118,7 @@ jig-harness/                      (pnpm + turborepo, Changesets fixed/linked)
 │   ├─ stylelint-config
 │   ├─ tsconfig
 │   ├─ generators                 turbo gen (component, widget, page, slice, endpoint…)
+│   ├─ spec-present               @jig-harness/spec-present — spec-present gate CLI
 │   └─ create-app                 @jig-harness/create-app — pnpm create scaffolder
 ├─ templates/
 │   └─ fullstack/                 apps/frontend + apps/backend + apps/e2e + packages/types;
@@ -237,7 +238,7 @@ Off-the-shelf first; custom only where nothing fits, each custom rule shipped wi
 | Frontend↛backend implementation imports          | `import-x/no-restricted-paths`                                                 | no       |
 | Store/data only in widget entries + pages        | `no-restricted-imports` (scoped to presentational files)                       | no       |
 | One entity per file                              | generator + partial lint; else guidance                                        | partial  |
-| Every app-source change updates a spec           | `scripts/spec-present` gate (coarse: `apps/*/src/**` ⇒ `docs/specs/**`)        | script   |
+| Every app-source change updates a spec           | `@jig-harness/spec-present` gate (coarse: `apps/*/src/**` ⇒ `docs/specs/**`)   | package  |
 | Formatting                                       | prettier                                                                       | no       |
 | Types                                            | `tsc --noEmit`                                                                 | no       |
 
@@ -426,11 +427,11 @@ durable truth, git is their history, and a coarse machine gate keeps them presen
 - **Artifacts:** `docs/specs/<feature>/spec.md` + `decisions.md`, `docs/adr/` (README +
   template + `0001-spec-driven-workflow`), `docs/plans/<name>.md`. Specs are decoupled
   from code slices — one feature may span slices; no spec↔slice mapping is enforced.
-- **Enforcement:** `templates/fullstack/scripts/spec-present.mjs` (ships with scaffolded apps) —
-  a change under `apps/*/src/**` must also touch `docs/specs/**`. Coarse by design (no
-  feature/slice mapping); wired into `pnpm verify` and CI with a RED/GREEN fixture. On push
-  to `main`, CI sets `SPEC_PRESENT_BASE` to `github.event.before` so the gate diffs the
-  pushed commits instead of an empty `origin/main`..`HEAD` range.
+- **Enforcement:** `@jig-harness/spec-present` — a change under `apps/*/src/**` must also
+  touch `docs/specs/**`. Coarse by design (no feature/slice mapping); wired into
+  `pnpm verify` and CI with a RED/GREEN fixture. On push to `main`, CI sets
+  `SPEC_PRESENT_BASE` to `github.event.before` so the gate diffs the pushed commits
+  instead of an empty `origin/main`..`HEAD` range.
 - **Dogfood:** `docs/specs` + `docs/adr` scaffolded in the repo and `templates/fullstack`;
   a `users` feature spec (spanning the frontend + backend `users` slices) backfilled in the
   template so the gate and the reference are real.

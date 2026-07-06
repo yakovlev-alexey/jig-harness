@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluate } from '../templates/fullstack/scripts/spec-present.mjs';
+import { evaluate } from './src/index.mjs';
 
 test('GREEN: app source + spec both changed', () => {
   const { ok } = evaluate([

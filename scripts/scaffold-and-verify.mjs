@@ -44,6 +44,7 @@ const packages = [
   '@jig-harness/eslint-config',
   '@jig-harness/stylelint-config',
   '@jig-harness/generators',
+  '@jig-harness/spec-present',
 ];
 
 rmSync(TARBALLS_DIR, { recursive: true, force: true });

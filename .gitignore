@@ -13,3 +13,8 @@ coverage/
 *.log
 .pnpm-store/
 .venv-skills-ref/
+.cursor/skills
+.codex/skills
+.claude/skills
+.agents/skills
+.jig-skills-linked.json

@@ -2,7 +2,7 @@
 /**
  * CI helper: pack @jig-harness packages, scaffold a fresh app, run verify.
  */
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, existsSync, lstatSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -37,6 +37,33 @@ function tryRun(cmd, args, cwd = ROOT, env = process.env) {
   return result.status === 0;
 }
 
+function assertSkillLinks(projectDir) {
+  const skillLink = join(projectDir, '.cursor', 'skills', 'setup-project');
+  const skillMd = join(skillLink, 'SKILL.md');
+
+  if (!existsSync(skillMd)) {
+    console.error(`scaffold-and-verify: missing linked skill at ${skillMd}`);
+    process.exit(1);
+  }
+
+  const stat = lstatSync(skillLink);
+  if (!stat.isSymbolicLink()) {
+    console.error(`scaffold-and-verify: ${skillLink} is not a symlink`);
+    process.exit(1);
+  }
+
+  const resolved = realpathSync(skillLink);
+  const resolvesIntoSkillsPackage =
+    resolved.includes('@jig-harness/skills') ||
+    resolved.includes(join('packages', 'skills', 'bundled'));
+  if (!resolvesIntoSkillsPackage) {
+    console.error(
+      `scaffold-and-verify: skill link does not resolve into @jig-harness/skills (${resolved})`,
+    );
+    process.exit(1);
+  }
+}
+
 const packages = [
   '@jig-harness/tsconfig',
   '@jig-harness/prettier-config',
@@ -45,6 +72,7 @@ const packages = [
   '@jig-harness/stylelint-config',
   '@jig-harness/generators',
   '@jig-harness/spec-present',
+  '@jig-harness/skills',
 ];
 
 rmSync(TARBALLS_DIR, { recursive: true, force: true });
@@ -75,6 +103,8 @@ try {
     ROOT,
     scaffoldEnv,
   );
+
+  assertSkillLinks(projectDir);
 
   if (!isCI) {
     tryRun('pnpm', ['db:up'], projectDir, scaffoldEnv);

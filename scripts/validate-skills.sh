@@ -118,6 +118,35 @@ validate_with_skills_ref() {
   fi
 }
 
+validate_unique_skill_names() {
+  node -e "
+    const fs = require('fs');
+    const path = require('path');
+    const { execSync } = require('child_process');
+    const root = '$ROOT';
+    const files = execSync(\"find skills -name SKILL.md\", { cwd: root, encoding: 'utf8' })
+      .trim()
+      .split('\\n')
+      .filter(Boolean);
+    const names = new Map();
+    for (const rel of files) {
+      const text = fs.readFileSync(path.join(root, rel), 'utf8');
+      const match = text.match(/^---\\r?\\n([\\s\\S]*?)\\r?\\n---/);
+      const nameLine = match && match[1].split('\\n').find((l) => l.startsWith('name:'));
+      const name = nameLine ? nameLine.slice('name:'.length).trim() : null;
+      if (!name) {
+        console.error('ERROR: ' + rel + ': missing name in frontmatter');
+        process.exit(1);
+      }
+      if (names.has(name)) {
+        console.error('ERROR: duplicate skill name \"' + name + '\" in ' + rel + ' and ' + names.get(name));
+        process.exit(1);
+      }
+      names.set(name, rel);
+    }
+  " 2>/dev/null || error "duplicate or missing skill names under skills/"
+}
+
 if [[ -d "$SKILLS_DIR" ]]; then
   skill_count=0
   while IFS= read -r -d '' skill; do
@@ -133,6 +162,8 @@ if [[ -d "$SKILLS_DIR" ]]; then
   if [[ "$skill_count" -eq 0 ]]; then
     error "no SKILL.md files found under skills/"
   fi
+
+  validate_unique_skill_names
 else
   echo "No skills/ directory yet — skipping skill validation."
 fi

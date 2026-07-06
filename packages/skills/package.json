@@ -1,0 +1,29 @@
+{
+  "name": "@jig-harness/skills",
+  "version": "0.0.0",
+  "private": false,
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "jig-link-skills": "./bin/jig-link-skills.mjs",
+    "jig-link-skills-dogfood": "./bin/jig-link-skills-dogfood.mjs"
+  },
+  "files": [
+    "bin",
+    "bundled",
+    "scripts",
+    "skills.manifest.json"
+  ],
+  "scripts": {
+    "prepack": "node scripts/sync-skills.mjs",
+    "postinstall": "node scripts/link-skills.mjs",
+    "sync": "node scripts/sync-skills.mjs",
+    "lint": "echo 'no lint'",
+    "typecheck": "echo 'no typecheck'",
+    "test": "node --test sync-skills.test.mjs link-skills.test.mjs",
+    "build": "node scripts/sync-skills.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

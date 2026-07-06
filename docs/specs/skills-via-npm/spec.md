@@ -40,20 +40,22 @@ MUST NOT include `evals/` or other harness-only CI artifacts.
 ### R2 — Source skills SHALL sync from repo SSOT at pack time
 
 The package MUST copy skills from the monorepo-root `skills/` directory into
-`packages/skills/bundled/` during `prepack`. The sync MUST fail if a skill listed
-in `skills.manifest.json` is missing from the source tree or if a source skill
-is not listed in the manifest.
+`packages/skills/bundled/` during `prepack`. Sync MUST **generate**
+`skills.manifest.json` from the source tree as a build artifact included in the
+npm tarball; the manifest is not committed to git. Sync MUST fail if duplicate
+skill names exist or if the source tree contains zero skills.
 
-#### Scenario: prepack sync succeeds when manifest matches repo
+#### Scenario: prepack sync generates manifest and bundled tree
 
-- **GIVEN** `skills.manifest.json` lists every skill under `skills/**/SKILL.md`
+- **GIVEN** skills exist under `skills/workflow/` and `skills/convention/`
 - **WHEN** `pnpm pack` runs on `@jig-harness/skills`
 - **THEN** `bundled/` is populated from `skills/` before the tarball is created
+- **THEN** `skills.manifest.json` is generated with one entry per discovered skill
 
-#### Scenario: prepack fails on manifest drift
+#### Scenario: prepack fails on duplicate skill names
 
-- **GIVEN** a new skill exists under `skills/` but is absent from `skills.manifest.json`
-- **WHEN** `prepack` runs
+- **GIVEN** two skills under `skills/` share the same frontmatter `name:`
+- **WHEN** prepack sync runs
 - **THEN** the sync script exits non-zero with a clear error
 
 ### R3 — Postinstall SHALL link skills into project-local agent directories
@@ -154,7 +156,9 @@ The postinstall linker MUST:
 Projects MAY override default agent roots via `.jig-skills.json` at the project
 root (`{ "agents": [".cursor", ".codex", ...] }`) or via the `JIG_SKILLS_AGENTS`
 environment variable (comma-separated list). When set, the linker MUST only create
-links under the configured roots.
+links under the configured roots. Agent roots MUST be relative paths that resolve
+inside `projectRoot`; absolute paths and roots that normalize outside the project
+MUST be rejected.
 
 #### Scenario: env override limits linking
 
@@ -162,6 +166,13 @@ links under the configured roots.
 - **WHEN** postinstall runs
 - **THEN** links exist under `.cursor/skills/` only
 - **THEN** no links are created under `.codex/skills/`, `.claude/skills/`, or `.agents/skills/`
+
+#### Scenario: traversal agent root is rejected
+
+- **GIVEN** `.jig-skills.json` contains `{ "agents": ["../outside"] }`
+- **WHEN** the linker runs
+- **THEN** linking fails with a clear error
+- **THEN** no symlinks are created outside `projectRoot`
 
 ### R9 — Projects SHALL be able to re-link skills explicitly
 
@@ -204,7 +215,8 @@ The harness MUST include automated checks that:
 
 - Unit-test sync and linker behavior in `packages/skills/`
 - Assert skill links exist after offline scaffold in `scripts/scaffold-and-verify.mjs`
-- Verify manifest coherence with repo skills (via coherence check or validate-skills extension)
+- Validate repo skills via `validate-skills.sh` (unique names, structure); manifest
+  coherence is enforced at pack time by generating the manifest from `skills/`
 
 #### Scenario: scaffold-and-verify proves end-to-end linking
 

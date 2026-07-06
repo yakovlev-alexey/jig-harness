@@ -10,7 +10,7 @@ import {
   symlinkSync,
   writeFileSync,
 } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { manifestFromSkillsRoot, syncSkills } from './sync-skills.mjs';
 
@@ -133,6 +133,31 @@ export function loadAgentRoots(projectRoot) {
   return DEFAULT_AGENTS;
 }
 
+export function validateAgentRoots(projectRoot, agentRoots) {
+  const resolvedProjectRoot = resolve(projectRoot);
+
+  for (const agentRoot of agentRoots) {
+    if (typeof agentRoot !== 'string' || agentRoot.length === 0) {
+      throw new Error(`@jig-harness/skills: invalid agent root: ${String(agentRoot)}`);
+    }
+
+    if (isAbsolute(agentRoot)) {
+      throw new Error(`@jig-harness/skills: agent root must be relative to project root: ${agentRoot}`);
+    }
+
+    const resolvedRoot = resolve(resolvedProjectRoot, agentRoot);
+    const relativeToProject = relative(resolvedProjectRoot, resolvedRoot);
+
+    if (relativeToProject.startsWith('..') || isAbsolute(relativeToProject)) {
+      throw new Error(
+        `@jig-harness/skills: agent root must stay within project root: ${agentRoot}`,
+      );
+    }
+  }
+
+  return agentRoots;
+}
+
 export function loadManifest(manifestPath = MANIFEST_PATH, bundledDir = BUNDLED_DIR) {
   if (existsSync(manifestPath)) {
     return JSON.parse(readFileSync(manifestPath, 'utf8'));
@@ -204,7 +229,10 @@ export function linkSkillsForProject(projectRoot, options = {}) {
   const bundledDir = options.bundledDir ?? BUNDLED_DIR;
   const manifestPath = options.manifestPath ?? MANIFEST_PATH;
   const source = options.source ?? 'bundled';
-  const agentRoots = options.agentRoots ?? loadAgentRoots(projectRoot);
+  const agentRoots = validateAgentRoots(
+    projectRoot,
+    options.agentRoots ?? loadAgentRoots(projectRoot),
+  );
   const manifest =
     options.manifest ??
     (source === 'canonical' && options.skillsRoot

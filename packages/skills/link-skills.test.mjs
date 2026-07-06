@@ -12,7 +12,7 @@ import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { test, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { linkSkills, linkSkillsForProject, loadAgentRoots } from './scripts/link-skills.mjs';
+import { linkSkills, linkSkillsForProject, loadAgentRoots, validateAgentRoots } from './scripts/link-skills.mjs';
 import { manifestFromSkillsRoot, syncSkills } from './scripts/sync-skills.mjs';
 
 const envBackup = { ...process.env };
@@ -140,6 +140,39 @@ test('loadAgentRoots reads .jig-skills.json', () => {
   const projectRoot = makeTemp('jig-link-config-');
   writeFileSync(join(projectRoot, '.jig-skills.json'), JSON.stringify({ agents: ['.agents'] }));
   assert.deepEqual(loadAgentRoots(projectRoot), ['.agents']);
+});
+
+test('validateAgentRoots rejects absolute paths', () => {
+  assert.throws(
+    () => validateAgentRoots('/tmp/project', ['/etc/passwd']),
+    /must be relative to project root/,
+  );
+});
+
+test('validateAgentRoots rejects paths outside project root', () => {
+  const projectRoot = makeTemp('jig-link-validate-');
+  assert.throws(
+    () => validateAgentRoots(projectRoot, ['../outside']),
+    /must stay within project root/,
+  );
+});
+
+test('linkSkillsForProject rejects traversal agent roots from config', () => {
+  const { projectRoot, packageRoot, bundledDir, manifestPath } = setupProjectWithSkills();
+  writeFileSync(
+    join(projectRoot, '.jig-skills.json'),
+    JSON.stringify({ agents: ['../outside'] }),
+  );
+
+  assert.throws(
+    () =>
+      linkSkillsForProject(projectRoot, {
+        packageRoot,
+        bundledDir,
+        manifestPath,
+      }),
+    /must stay within project root/,
+  );
 });
 
 test('linkSkillsForProject links canonical skills without bundled/', () => {

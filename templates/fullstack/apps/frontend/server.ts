@@ -53,7 +53,7 @@ async function createServer() {
         const { render } = await vite.ssrLoadModule('/src/entry-server.tsx');
         const { appHtml, dehydratedState } = await render(url);
 
-        const html = template
+        const html = (await vite.transformIndexHtml(url, template))
           .replace('<!--ssr-outlet-->', appHtml)
           .replace('<!--ssr-state-->', escapeStateScript(dehydratedState));
 

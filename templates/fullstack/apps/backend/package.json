@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "NODE_ENV=development tsx watch src/server.ts",
     "build": "node scripts/build.mjs",
-    "start": "node dist/server.js",
+    "start": "NODE_ENV=production node dist/server.js",
     "start:test": "tsx src/test-server.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

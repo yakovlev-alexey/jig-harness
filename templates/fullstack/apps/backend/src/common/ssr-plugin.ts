@@ -41,13 +41,23 @@ export const ssrPlugin: FastifyPluginAsync = async (app) => {
 
     process.env.SSR_API_ORIGIN ??= `http://127.0.0.1:${process.env.PORT ?? 3001}`;
 
-    const { render } = (await import('@app/frontend/server-entry')) as { render: RenderFn };
-    const { appHtml, dehydratedState } = await render(url);
+    try {
+      const { render } = (await import('@app/frontend/server-entry')) as { render: RenderFn };
+      const { appHtml, dehydratedState } = await render(url);
 
-    const html = indexHtml
-      .replace('<!--ssr-outlet-->', appHtml)
-      .replace('<!--ssr-state-->', escapeStateScript(dehydratedState));
+      const html = indexHtml
+        .replace('<!--ssr-outlet-->', appHtml)
+        .replace('<!--ssr-state-->', escapeStateScript(dehydratedState));
 
-    return reply.type('text/html').send(html);
+      return reply.type('text/html').send(html);
+    } catch (error) {
+      request.log.error(error);
+
+      const html = indexHtml
+        .replace('<!--ssr-outlet-->', '<h1>Something went wrong</h1>')
+        .replace('<!--ssr-state-->', '');
+
+      return reply.code(500).type('text/html').send(html);
+    }
   });
 };

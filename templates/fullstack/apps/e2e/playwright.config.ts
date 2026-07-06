@@ -7,7 +7,6 @@ const databaseUrl =
   process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@localhost:5432/jig_dev?schema=public';
 
 process.env.TEST_ROUTES_TOKEN ??= testRoutesToken;
-process.env.E2E_BASE_URL ??= baseURL;
 process.env.E2E_API_URL ??= baseURL;
 
 export default defineConfig({

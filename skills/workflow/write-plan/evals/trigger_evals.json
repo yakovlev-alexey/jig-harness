@@ -1,0 +1,26 @@
+[
+  {
+    "query": "The spec is approved — break it into an implementation plan",
+    "should_trigger": true
+  },
+  {
+    "query": "How are we going to build user-registration? Write the task breakdown.",
+    "should_trigger": true
+  },
+  {
+    "query": "Спека утверждена, распиши docs/plans с задачами под каждое требование",
+    "should_trigger": true
+  },
+  {
+    "query": "Turn docs/specs/password-reset/spec.md into steps a subagent can execute",
+    "should_trigger": true
+  },
+  {
+    "query": "Capture what the new feature should do before we design anything",
+    "should_trigger": false
+  },
+  {
+    "query": "Run pnpm verify and fix the failing tests",
+    "should_trigger": false
+  }
+]

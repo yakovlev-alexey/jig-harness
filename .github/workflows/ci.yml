@@ -28,8 +28,11 @@ jobs:
           --health-retries 5
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/jig_test?schema=public
+      SPEC_PRESENT_BASE: ${{ github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000' && github.event.before || '' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -45,6 +48,10 @@ jobs:
       - run: pnpm run coherence
 
       - run: pnpm run validate-skills
+
+      - run: pnpm run spec-present:test
+
+      - run: pnpm run spec-present
 
       - run: pnpm run lint
 

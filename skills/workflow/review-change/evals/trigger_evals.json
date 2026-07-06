@@ -1,0 +1,26 @@
+[
+  {
+    "query": "The feature is implemented — review it against the spec before I look",
+    "should_trigger": true
+  },
+  {
+    "query": "Do a two-stage review of this diff: spec compliance then pnpm verify",
+    "should_trigger": true
+  },
+  {
+    "query": "Check the change satisfies every SHALL and GIVEN/WHEN/THEN before handoff",
+    "should_trigger": true
+  },
+  {
+    "query": "Реализация готова — проверь соответствие спеке и прогони verify",
+    "should_trigger": true
+  },
+  {
+    "query": "Write the spec for the new checkout feature",
+    "should_trigger": false
+  },
+  {
+    "query": "Break the approved spec into an implementation plan",
+    "should_trigger": false
+  }
+]

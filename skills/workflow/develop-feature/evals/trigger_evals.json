@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Build user-registration end to end",
+    "should_trigger": true
+  },
+  {
+    "query": "Ship a password-reset feature — take it from idea to reviewed change",
+    "should_trigger": true
+  },
+  {
+    "query": "Build X for me: spec, plan, implement, review",
+    "should_trigger": true
+  },
+  {
+    "query": "Сделай фичу целиком — от спеки до ревью",
+    "should_trigger": true
+  },
+  {
+    "query": "Just write the spec for this change",
+    "should_trigger": false
+  },
+  {
+    "query": "Review the already-implemented change against the spec",
+    "should_trigger": false
+  }
+]

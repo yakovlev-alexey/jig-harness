@@ -1,7 +1,7 @@
 # Rules catalogue
 
 Single source of truth for jig rules across guidance, capability, and enforcement layers.
-See [DESIGN.md](DESIGN.md) §6.4.
+See [docs/specs/](docs/specs/README.md) for feature behavior and [docs/adr/0002-three-layer-rule-model.md](docs/adr/0002-three-layer-rule-model.md) for the three-layer rule model.
 
 | id                                       | rule                                                                              | guidance              | capability                       | enforcement                               | tests                                                 | status        |
 | ---------------------------------------- | --------------------------------------------------------------------------------- | --------------------- | -------------------------------- | ----------------------------------------- | ----------------------------------------------------- | ------------- |

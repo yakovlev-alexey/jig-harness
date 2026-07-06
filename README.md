@@ -12,7 +12,7 @@ Agent-agnostic harness for building TypeScript fullstack web apps on narrow, tes
 
 A rule the agent violates is caught automatically. Generator output is lint-clean. A scaffolded project starts green under `pnpm verify`.
 
-See [DESIGN.md](DESIGN.md) for architecture and [rules-catalogue.md](rules-catalogue.md) for the rule crosswalk across all three layers.
+See [docs/README.md](docs/README.md) for architecture and [rules-catalogue.md](rules-catalogue.md) for the rule crosswalk across all three layers.
 
 ## Stack
 
@@ -157,12 +157,12 @@ Postgres is required for backend dev and for `template:dogfood`. E2E (`pnpm --di
 ```
 jig-harness/
 ├── skills/
-│   ├── workflow/          # setup-project, implement-frontend, implement-backend
+│   ├── workflow/          # setup-project, implement-frontend, implement-backend, …
 │   └── convention/        # project-defaults, frontend-architecture, …
 ├── packages/              # published @jig-harness/* tooling
 ├── templates/fullstack/   # dogfood template (apps/frontend, apps/backend, apps/e2e, packages/types)
+├── docs/                  # specs, ADRs, STATUS hub
 ├── rules-catalogue.md     # rule ↔ layer crosswalk
-├── DESIGN.md              # architecture and decisions
 └── scripts/               # validation, coherence, dogfood
 ```
 

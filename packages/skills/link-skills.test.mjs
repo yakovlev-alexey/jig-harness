@@ -12,7 +12,12 @@ import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { test, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { linkSkills, linkSkillsForProject, loadAgentRoots, validateAgentRoots } from './scripts/link-skills.mjs';
+import {
+  linkSkills,
+  linkSkillsForProject,
+  loadAgentRoots,
+  validateAgentRoots,
+} from './scripts/link-skills.mjs';
 import { manifestFromSkillsRoot, syncSkills } from './scripts/sync-skills.mjs';
 
 const envBackup = { ...process.env };
@@ -159,10 +164,7 @@ test('validateAgentRoots rejects paths outside project root', () => {
 
 test('linkSkillsForProject rejects traversal agent roots from config', () => {
   const { projectRoot, packageRoot, bundledDir, manifestPath } = setupProjectWithSkills();
-  writeFileSync(
-    join(projectRoot, '.jig-skills.json'),
-    JSON.stringify({ agents: ['../outside'] }),
-  );
+  writeFileSync(join(projectRoot, '.jig-skills.json'), JSON.stringify({ agents: ['../outside'] }));
 
   assert.throws(
     () =>

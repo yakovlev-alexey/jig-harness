@@ -142,7 +142,9 @@ export function validateAgentRoots(projectRoot, agentRoots) {
     }
 
     if (isAbsolute(agentRoot)) {
-      throw new Error(`@jig-harness/skills: agent root must be relative to project root: ${agentRoot}`);
+      throw new Error(
+        `@jig-harness/skills: agent root must be relative to project root: ${agentRoot}`,
+      );
     }
 
     const resolvedRoot = resolve(resolvedProjectRoot, agentRoot);

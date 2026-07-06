@@ -37,4 +37,10 @@ export default async function globalSetup(): Promise<void> {
     stdio: 'inherit',
     env: process.env,
   });
+
+  execSync('pnpm --filter @app/backend build', {
+    cwd: pnpmRoot,
+    stdio: 'inherit',
+    env: process.env,
+  });
 }

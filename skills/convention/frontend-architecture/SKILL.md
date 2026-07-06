@@ -28,6 +28,9 @@ Organize frontend code by vertical product behavior. Folder names reveal what th
 ```text
 src/
   App.tsx
+  router.tsx
+  entry-client.tsx
+  entry-server.tsx
   routeTree.gen.ts
   routes/
     __root.tsx

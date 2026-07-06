@@ -15,7 +15,9 @@
     "db:push": "prisma db push"
   },
   "dependencies": {
+    "@app/frontend": "workspace:*",
     "@app/types": "workspace:*",
+    "@fastify/static": "catalog:",
     "@prisma/client": "catalog:",
     "fastify": "catalog:",
     "zod": "catalog:"

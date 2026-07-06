@@ -1,4 +1,5 @@
 import { buildApp } from './common/build-app.js';
+import { ssrPlugin } from './common/ssr-plugin.js';
 import { testSupportPlugin } from './test-support/test-support-plugin.js';
 
 if (process.env.ENABLE_TEST_ROUTES !== 'true') {
@@ -7,6 +8,7 @@ if (process.env.ENABLE_TEST_ROUTES !== 'true') {
 
 const app = await buildApp();
 await app.register(testSupportPlugin);
+await app.register(ssrPlugin);
 
 const port = Number(process.env.PORT ?? 3001);
 

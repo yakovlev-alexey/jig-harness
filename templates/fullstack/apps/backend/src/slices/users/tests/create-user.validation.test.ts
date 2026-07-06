@@ -16,7 +16,7 @@ describe('POST /users validation', () => {
   it('returns 400 for an invalid email', async () => {
     const response = await app.inject({
       method: 'POST',
-      url: '/users',
+      url: '/api/users',
       payload: {
         email: 'not-an-email',
       },

@@ -10,11 +10,11 @@ export default defineConfig({
   ],
   testDir: './tests',
   use: {
-    baseURL: 'http://localhost:4173',
+    baseURL: 'http://localhost:5174',
   },
   webServer: {
-    command: 'pnpm build && pnpm preview --port 4173 --strictPort',
+    command: 'pnpm build && vite preview --outDir dist/client --port 5174 --strictPort',
     reuseExistingServer: !process.env.CI,
-    url: 'http://localhost:4173',
+    url: 'http://localhost:5174',
   },
 });

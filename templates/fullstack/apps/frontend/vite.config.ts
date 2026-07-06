@@ -12,21 +12,10 @@ export default defineConfig({
     },
   },
   preview: {
-    port: 4173,
-    proxy: {
-      '/api': {
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        target: backendUrl,
-      },
-    },
-  },
-  server: {
     port: 5174,
     proxy: {
       '/api': {
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
         target: backendUrl,
       },
     },

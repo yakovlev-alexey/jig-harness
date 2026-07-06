@@ -12,7 +12,7 @@ import {
 } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { syncSkills } from './sync-skills.mjs';
+import { manifestFromSkillsRoot, syncSkills } from './sync-skills.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = resolve(__dirname, '..');
@@ -175,15 +175,20 @@ function resolveBundledPath(projectRoot, packageRoot, manifestEntry) {
   return localBundled;
 }
 
-function isManagedSymlink(linkPath, expectedTarget) {
-  try {
-    const stat = lstatSync(linkPath);
-    if (!stat.isSymbolicLink()) return false;
-    const linked = resolve(dirname(linkPath), readlinkSync(linkPath));
-    return linked === resolve(expectedTarget);
-  } catch {
-    return false;
+function resolveSkillPath(projectRoot, packageRoot, entry, source) {
+  if (source === 'canonical' && entry.sourcePath) {
+    return resolve(entry.sourcePath);
   }
+  return resolve(resolveBundledPath(projectRoot, packageRoot, entry));
+}
+
+function isManagedSkillTarget(resolvedPath) {
+  const normalized = resolve(resolvedPath).replace(/\\/g, '/');
+  return (
+    /\/bundled\/(workflow|convention)\//.test(normalized) ||
+    /\/skills\/(workflow|convention)\//.test(normalized) ||
+    normalized.includes('@jig-harness/skills/bundled')
+  );
 }
 
 function createDirSymlink(target, linkPath) {
@@ -198,8 +203,13 @@ export function linkSkillsForProject(projectRoot, options = {}) {
   const packageRoot = options.packageRoot ?? PACKAGE_ROOT;
   const bundledDir = options.bundledDir ?? BUNDLED_DIR;
   const manifestPath = options.manifestPath ?? MANIFEST_PATH;
+  const source = options.source ?? 'bundled';
   const agentRoots = options.agentRoots ?? loadAgentRoots(projectRoot);
-  const manifest = options.manifest ?? loadManifest(manifestPath, bundledDir);
+  const manifest =
+    options.manifest ??
+    (source === 'canonical' && options.skillsRoot
+      ? manifestFromSkillsRoot(options.skillsRoot)
+      : loadManifest(manifestPath, bundledDir));
 
   const links = [];
   const warnings = [];
@@ -207,22 +217,41 @@ export function linkSkillsForProject(projectRoot, options = {}) {
   for (const agentRoot of agentRoots) {
     for (const entry of manifest) {
       const linkPath = join(projectRoot, agentRoot, 'skills', entry.name);
-      const bundledPath = resolveBundledPath(projectRoot, packageRoot, entry);
+      const skillPath = resolveSkillPath(projectRoot, packageRoot, entry, source);
 
-      if (!existsSync(bundledPath)) {
-        warnings.push(`Missing bundled skill "${entry.name}" at ${bundledPath}`);
+      if (!existsSync(skillPath)) {
+        warnings.push(`Missing skill "${entry.name}" at ${skillPath}`);
         continue;
       }
 
       if (existsSync(linkPath)) {
-        if (isManagedSymlink(linkPath, bundledPath)) {
-          links.push({ agentRoot, skill: entry.name, linkPath, bundledPath, action: 'noop' });
-          continue;
-        }
-
         try {
           const stat = lstatSync(linkPath);
           if (stat.isSymbolicLink()) {
+            const currentTarget = resolve(dirname(linkPath), readlinkSync(linkPath));
+            if (currentTarget === skillPath) {
+              links.push({
+                agentRoot,
+                skill: entry.name,
+                linkPath,
+                skillPath,
+                source,
+                action: 'noop',
+              });
+              continue;
+            }
+            if (isManagedSkillTarget(currentTarget)) {
+              createDirSymlink(skillPath, linkPath);
+              links.push({
+                agentRoot,
+                skill: entry.name,
+                linkPath,
+                skillPath,
+                source,
+                action: 'relinked',
+              });
+              continue;
+            }
             warnings.push(`Skipping ${linkPath}: symlink not managed by @jig-harness/skills`);
             continue;
           }
@@ -234,8 +263,15 @@ export function linkSkillsForProject(projectRoot, options = {}) {
         }
       }
 
-      createDirSymlink(bundledPath, linkPath);
-      links.push({ agentRoot, skill: entry.name, linkPath, bundledPath, action: 'linked' });
+      createDirSymlink(skillPath, linkPath);
+      links.push({
+        agentRoot,
+        skill: entry.name,
+        linkPath,
+        skillPath,
+        source,
+        action: 'linked',
+      });
     }
   }
 
@@ -245,22 +281,26 @@ export function linkSkillsForProject(projectRoot, options = {}) {
     `${JSON.stringify(
       {
         version: options.version ?? readPackageVersion(packageRoot),
+        source,
         linkedAt: new Date().toISOString(),
         agentRoots,
-        links: links.map(({ agentRoot, skill, linkPath, bundledPath, action }) => ({
-          agentRoot,
-          skill,
-          linkPath,
-          bundledPath,
-          action,
-        })),
+        links: links.map(
+          ({ agentRoot, skill, linkPath, skillPath, source: linkSource, action }) => ({
+            agentRoot,
+            skill,
+            linkPath,
+            skillPath,
+            source: linkSource,
+            action,
+          }),
+        ),
       },
       null,
       2,
     )}\n`,
   );
 
-  return { links, warnings, statePath };
+  return { links, warnings, statePath, source, manifest };
 }
 
 function readPackageVersion(packageRoot) {
@@ -297,7 +337,11 @@ export function linkSkills(options = {}) {
 
   const results = [];
   for (const projectRoot of projects) {
-    const result = linkSkillsForProject(projectRoot, { packageRoot, bundledDir });
+    const result = linkSkillsForProject(projectRoot, {
+      packageRoot,
+      bundledDir,
+      source: 'bundled',
+    });
     for (const warning of result.warnings) {
       console.warn(`@jig-harness/skills: ${warning}`);
     }
@@ -305,6 +349,43 @@ export function linkSkills(options = {}) {
   }
 
   return { skipped: false, projects: results };
+}
+
+export function linkSkillsDogfood(options = {}) {
+  const packageRoot = options.packageRoot ?? PACKAGE_ROOT;
+  const repoRoot =
+    options.repoRoot ??
+    findRepoRoot(options.initCwd ?? process.env.INIT_CWD ?? process.cwd()) ??
+    findRepoRoot(packageRoot);
+
+  if (!repoRoot) {
+    throw new Error('@jig-harness/skills: dogfood link requires jig-harness monorepo');
+  }
+
+  const skillsRoot = join(repoRoot, 'skills');
+  if (!existsSync(skillsRoot)) {
+    throw new Error(`@jig-harness/skills: canonical skills/ not found at ${skillsRoot}`);
+  }
+
+  const manifest = manifestFromSkillsRoot(skillsRoot);
+  const projectRoot = options.projectRoot ?? repoRoot;
+
+  const result = linkSkillsForProject(projectRoot, {
+    packageRoot,
+    manifest,
+    source: 'canonical',
+    skillsRoot,
+  });
+
+  for (const warning of result.warnings) {
+    console.warn(`@jig-harness/skills: ${warning}`);
+  }
+
+  console.log(
+    `@jig-harness/skills: dogfood linked ${manifest.length} skills from ${skillsRoot} → ${projectRoot}`,
+  );
+
+  return { repoRoot, projectRoot, skillsRoot, ...result };
 }
 
 function isMain(moduleUrl) {

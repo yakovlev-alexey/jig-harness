@@ -60,9 +60,16 @@ harness development, use [skills.sh](https://skills.sh):
 
 ```bash
 pnpm dlx skills add yakovlev-alexey/jig-harness --skill setup-project
-pnpm dlx skills add yakovlev-alexey/jig-harness --skill implement-frontend
-pnpm dlx skills add yakovlev-alexey/jig-harness --skill implement-backend
 ```
+
+**Harness contributors:** link live repo skills (no prepack) into agent dirs:
+
+```bash
+pnpm skills:link:dogfood
+```
+
+This symlinks from canonical `skills/` instead of `bundled/`. Use `pnpm skills:link`
+for the published-package path (same as scaffolded apps).
 
 **Workflow skills** (use-case entry points):
 

@@ -124,6 +124,16 @@ export function syncSkills(options = {}) {
   return { skills, manifest, bundledDir, manifestPath };
 }
 
+export function manifestFromSkillsRoot(skillsRoot = DEFAULT_SKILLS_ROOT) {
+  return discoverSkills(skillsRoot).map((skill) => ({
+    name: skill.name,
+    tier: skill.tier,
+    folder: skill.folder,
+    path: skill.bundledRelative,
+    sourcePath: skill.sourcePath,
+  }));
+}
+
 function isMain(moduleUrl) {
   if (!process.argv[1]) return false;
   return resolve(process.argv[1]) === fileURLToPath(moduleUrl);

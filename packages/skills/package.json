@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "jig-link-skills": "./bin/jig-link-skills.mjs"
+    "jig-link-skills": "./bin/jig-link-skills.mjs",
+    "jig-link-skills-dogfood": "./bin/jig-link-skills-dogfood.mjs"
   },
   "files": [
     "bin",

@@ -4,15 +4,16 @@ import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  realpathSync,
   rmSync,
   writeFileSync,
 } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { test, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { linkSkills, linkSkillsForProject, loadAgentRoots } from './scripts/link-skills.mjs';
-import { syncSkills } from './scripts/sync-skills.mjs';
+import { manifestFromSkillsRoot, syncSkills } from './scripts/sync-skills.mjs';
 
 const envBackup = { ...process.env };
 const tempDirs = [];
@@ -139,4 +140,101 @@ test('loadAgentRoots reads .jig-skills.json', () => {
   const projectRoot = makeTemp('jig-link-config-');
   writeFileSync(join(projectRoot, '.jig-skills.json'), JSON.stringify({ agents: ['.agents'] }));
   assert.deepEqual(loadAgentRoots(projectRoot), ['.agents']);
+});
+
+test('linkSkillsForProject links canonical skills without bundled/', () => {
+  const skillsRoot = makeTemp('jig-link-canonical-src-');
+  const projectRoot = makeTemp('jig-link-canonical-proj-');
+  const packageRoot = makeTemp('jig-link-canonical-pkg-');
+
+  mkdirSync(join(skillsRoot, 'workflow', 'setup-project'), { recursive: true });
+  writeFileSync(
+    join(skillsRoot, 'workflow', 'setup-project', 'SKILL.md'),
+    `---
+name: setup-project
+description: Use when testing canonical link
+---
+
+# Setup
+`,
+  );
+
+  const manifest = manifestFromSkillsRoot(skillsRoot);
+  const result = linkSkillsForProject(projectRoot, {
+    packageRoot,
+    manifest,
+    source: 'canonical',
+    skillsRoot,
+    agentRoots: ['.cursor'],
+  });
+
+  const linkPath = join(projectRoot, '.cursor', 'skills', 'setup-project');
+  assert.ok(existsSync(join(linkPath, 'SKILL.md')));
+  assert.equal(result.source, 'canonical');
+  assert.ok(result.links.some((l) => l.action === 'linked'));
+  assert.equal(
+    resolve(realpathSync(linkPath)),
+    resolve(realpathSync(join(skillsRoot, 'workflow', 'setup-project'))),
+  );
+});
+
+test('linkSkillsForProject relinks bundled symlinks to canonical source', () => {
+  const repoRoot = makeTemp('jig-relink-repo-');
+  const skillsRoot = join(repoRoot, 'skills');
+  const projectRoot = repoRoot;
+  const packageRoot = makeTemp('jig-relink-pkg-');
+  const bundledDir = join(packageRoot, 'bundled');
+  const manifestPath = join(packageRoot, 'skills.manifest.json');
+
+  mkdirSync(join(skillsRoot, 'workflow', 'setup-project'), { recursive: true });
+  writeFileSync(
+    join(skillsRoot, 'workflow', 'setup-project', 'SKILL.md'),
+    `---
+name: setup-project
+description: Use when testing relink
+---
+
+# Canonical
+`,
+  );
+  writeFileSync(join(repoRoot, 'pnpm-workspace.yaml'), 'packages:\n  - packages/*\n');
+
+  syncSkills({ skillsRoot, bundledDir, manifestPath });
+
+  linkSkillsForProject(projectRoot, {
+    packageRoot,
+    bundledDir,
+    manifestPath,
+    agentRoots: ['.cursor'],
+    source: 'bundled',
+  });
+
+  const linkPath = join(projectRoot, '.cursor', 'skills', 'setup-project');
+  assert.ok(realpathSync(linkPath).includes('bundled'));
+
+  writeFileSync(
+    join(skillsRoot, 'workflow', 'setup-project', 'SKILL.md'),
+    `---
+name: setup-project
+description: Use when testing relink
+---
+
+# Canonical updated
+`,
+  );
+
+  const result = linkSkillsForProject(projectRoot, {
+    packageRoot,
+    manifest: manifestFromSkillsRoot(skillsRoot),
+    source: 'canonical',
+    skillsRoot,
+    agentRoots: ['.cursor'],
+  });
+
+  assert.ok(result.links.some((l) => l.action === 'relinked'));
+  assert.equal(
+    resolve(realpathSync(linkPath)),
+    resolve(realpathSync(join(skillsRoot, 'workflow', 'setup-project'))),
+  );
+  assert.match(readFileSync(join(linkPath, 'SKILL.md'), 'utf8'), /Canonical updated/);
 });

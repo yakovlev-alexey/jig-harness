@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 echo "Running template dogfood verify from monorepo root..."
 cd "$ROOT"
 
-node scripts/spec-present.mjs
+node templates/fullstack/scripts/spec-present.mjs
 
 if [ "${CI:-}" = "true" ]; then
   export DATABASE_URL="${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/jig_test?schema=public}"

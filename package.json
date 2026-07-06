@@ -13,7 +13,7 @@
     "prepare": "lefthook install",
     "coherence": "node scripts/coherence-check.mjs",
     "validate-skills": "bash scripts/validate-skills.sh",
-    "spec-present": "node scripts/spec-present.mjs",
+    "spec-present": "node templates/fullstack/scripts/spec-present.mjs",
     "spec-present:test": "node --test scripts/spec-present.test.mjs",
     "template:dogfood": "bash scripts/template-dogfood.sh",
     "scaffold:verify": "node scripts/scaffold-and-verify.mjs",

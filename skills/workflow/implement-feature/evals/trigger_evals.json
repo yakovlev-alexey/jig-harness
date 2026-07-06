@@ -1,0 +1,26 @@
+[
+  {
+    "query": "The plan is approved — implement the user-registration feature",
+    "should_trigger": true
+  },
+  {
+    "query": "Execute docs/plans/password-reset.md, one subagent per task",
+    "should_trigger": true
+  },
+  {
+    "query": "Build the feature from the approved plan and get pnpm verify green",
+    "should_trigger": true
+  },
+  {
+    "query": "План утверждён — реализуй фичу по задачам и прогони verify",
+    "should_trigger": true
+  },
+  {
+    "query": "Capture what this change should do before we build it",
+    "should_trigger": false
+  },
+  {
+    "query": "Review the implemented change against the spec before handoff",
+    "should_trigger": false
+  }
+]

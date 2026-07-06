@@ -106,10 +106,11 @@ jig-harness/                      (pnpm + turborepo, Changesets fixed/linked)
 ├─ skills/
 │   ├─ workflow/                  use-case entry points (installable)
 │   │   setup-project · implement-frontend · implement-backend
-│   │   design-feature · implement-fullstack · refactor-to-conventions  (planned)
+│   │   write-spec · write-plan · implement-feature · review-change · develop-feature
+│   │   refactor-to-conventions  (planned)
 │   └─ convention/                rulebooks (installable), each with references/ + evals/
 │       project-defaults · frontend-architecture · react-composition
-│       backend-architecture · contracts · testing · state-and-data
+│       backend-architecture · contracts · testing · state-and-data · specs
 ├─ packages/                      (each published as @jig-harness/<dir>)
 │   ├─ eslint-plugin              custom rules + RED/GREEN fixtures
 │   ├─ eslint-config              flat preset (off-the-shelf plugins + custom plugin)
@@ -134,9 +135,26 @@ dispatch to convention skills (as today's `web-app-design` dispatches), invoke
 generators, and end by telling the agent to run `pnpm verify`.
 
 - `setup-project` — bootstrap a new app from the template.
-- `design-feature` — plan a feature's implementation architecture across the slice.
-- `implement-frontend` / `implement-backend` / `implement-fullstack`.
+- `implement-frontend` / `implement-backend`.
 - `refactor-to-conventions` — align existing code and run enforcement (may be P3+).
+
+**Spec-driven workflow spine** (the "build X" loop) is a spine of four discrete
+phase skills plus a thin orchestrator, all dispatching to the `specs` convention:
+
+- `write-spec` — capture/update the feature's durable "what" in
+  `docs/specs/<feature>/spec.md` (SHALL/MUST + GIVEN/WHEN/THEN); record decisions in
+  `decisions.md` or a project-wide `docs/adr/`; stop at a user-verify gate.
+- `write-plan` — turn an approved spec into a transient `docs/plans/<name>.md`, with
+  tasks traced to spec requirements; user-verify gate.
+- `implement-feature` — plan-driven execution (single-agent or subagent-per-task),
+  invoking generators + `implement-frontend`/`implement-backend`; runs `pnpm verify`.
+- `review-change` — two-stage AI review (spec-compliance, then quality via
+  `pnpm verify` + conventions) with a fix loop.
+- `develop-feature` — thin orchestrator chaining the four phases with the gates.
+
+Reconciliation with the earlier plan: `write-spec` + `write-plan` supersede the
+planned `design-feature`; `implement-feature` fulfills the planned
+`implement-fullstack`.
 
 **Convention (reference) skills** hold the sharp, rule-ID'd conventions — the
 current vague topic skills rewritten — with deep-dives in `references/`. Shared
@@ -144,7 +162,12 @@ rules live in exactly one convention skill (DRY). Both tiers are separately
 installable via skills.sh; workflow skills reference conventions by name.
 
 - `project-defaults`, `frontend-architecture`, `react-composition`,
-  `state-and-data`, `backend-architecture`, `contracts`, `testing`.
+  `state-and-data`, `backend-architecture`, `contracts`, `testing`, `specs`.
+
+`specs` is the rulebook for feature-scoped, flat, living specs (decoupled from
+slices), the SHALL/GWT format, and the decisions/ADR conventions. The
+`spec-present` gate (§6.5) enforces its `wf-spec-required` rule: any app-source
+change must also touch `docs/specs/**`.
 
 ### 6.3 Distribution & dependency resolution (grounded)
 
@@ -214,6 +237,7 @@ Off-the-shelf first; custom only where nothing fits, each custom rule shipped wi
 | Frontend↛backend implementation imports          | `import-x/no-restricted-paths`                                                 | no       |
 | Store/data only in widget entries + pages        | `no-restricted-imports` (scoped to presentational files)                       | no       |
 | One entity per file                              | generator + partial lint; else guidance                                        | partial  |
+| Every app-source change updates a spec           | `scripts/spec-present` gate (coarse: `apps/*/src/**` ⇒ `docs/specs/**`)        | script   |
 | Formatting                                       | prettier                                                                       | no       |
 | Types                                            | `tsc --noEmit`                                                                 | no       |
 
@@ -387,6 +411,31 @@ Classic Vite SSR as a fullstack harness spine: frontend owns SSR entries and dat
 - **Template topology:** dev = frontend Vite middleware server (SSR + `/api` proxy to backend); prod/E2E = single backend process (`/api` + static assets + SSR HTML).
 - **Tests:** backend SSR integration (`GET /`, `GET /users` HTML + dehydrated state); frontend integration via SSR dev server + MSW node; E2E collapsed to prod-like backend server.
 
+## 7f. Vertical spine: spec-driven workflow (P2e)
+
+Turns the "build X" loop into jig skills, artifacts, and enforcement: specs are the
+durable truth, git is their history, and a coarse machine gate keeps them present.
+
+**Shipped:**
+
+- **Guidance:** `specs` convention (feature-scoped flat living specs, `SHALL/MUST` +
+  `GIVEN/WHEN/THEN`, decisions/ADR conventions) + workflow skills `write-spec`,
+  `write-plan`, `implement-feature`, `review-change`, and the `develop-feature`
+  orchestrator. New catalogue rows: `wf-spec-required` (enforced), `wf-spec-feature-scoped`,
+  `wf-spec-flat`, `wf-spec-gwt`, `wf-decisions-colocated`, `wf-adr-append-only`.
+- **Artifacts:** `docs/specs/<feature>/spec.md` + `decisions.md`, `docs/adr/` (README +
+  template + `0001-spec-driven-workflow`), `docs/plans/<name>.md`. Specs are decoupled
+  from code slices — one feature may span slices; no spec↔slice mapping is enforced.
+- **Enforcement:** `scripts/spec-present.mjs` — a change under `apps/*/src/**` must also
+  touch `docs/specs/**`. Coarse by design (no feature/slice mapping); wired into
+  `pnpm verify` and CI with a RED/GREEN fixture.
+- **Dogfood:** `docs/specs` + `docs/adr` scaffolded in the repo and `templates/fullstack`;
+  a `users` feature spec (spanning the frontend + backend `users` slices) backfilled in the
+  template so the gate and the reference are real.
+- **Tests:** L1 trigger evals (`write-spec` fires on "add a feature"; `develop-feature` on
+  "build X end to end"); L2 pressure (spec + GWT produced, ADR on a real decision, implement
+  stays plan-scoped, review catches a seeded spec violation); `spec-present` fixture.
+
 ## 8. Phased plan & implementation status
 
 ### Completed
@@ -404,11 +453,11 @@ Classic Vite SSR as a fullstack harness spine: frontend owns SSR entries and dat
 
 ### Next (fan-out)
 
-| Phase                        | Focus                                                                                                                       | Outcome                                              |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **P2e — Workflow expansion** | `design-feature`, `implement-fullstack`                                                                                     | Cross-slice planning and fullstack change procedures |
-| **P3 — Publish & polish**    | First npm publish (`@jig-harness/*`), sharpen all migrated skills, run recorded L2 RED/GREEN baselines in CI where feasible | Shippable product outside the monorepo               |
-| **P4 — Deferred**            | Machine `rules.json` registry, Sonar / dependency-cruiser, OpenAPI codegen, `refactor-to-conventions`                       | Breadth without blocking core rails                  |
+| Phase                                | Focus                                                                                                                                                                                                          | Outcome                                                                                                                                                                                |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **P2e — Spec-driven workflow spine** | `specs` convention + `write-spec`/`write-plan`/`implement-feature`/`review-change` phases + `develop-feature` orchestrator; `spec-present` gate; `docs/specs` + `docs/adr` scaffold and a `users` dogfood spec | Native spec-driven loop with a machine-enforced spec-present gate; supersedes planned `design-feature` (→ `write-spec`+`write-plan`) and `implement-fullstack` (→ `implement-feature`) |
+| **P3 — Publish & polish**            | First npm publish (`@jig-harness/*`), sharpen all migrated skills, run recorded L2 RED/GREEN baselines in CI where feasible                                                                                    | Shippable product outside the monorepo                                                                                                                                                 |
+| **P4 — Deferred**                    | Machine `rules.json` registry, Sonar / dependency-cruiser, OpenAPI codegen, `refactor-to-conventions`                                                                                                          | Breadth without blocking core rails                                                                                                                                                    |
 
 ### Sequencing note
 
@@ -443,8 +492,9 @@ not broad refactors.
 
 1. `@jig-harness` npm scope availability, and fallback if taken
    (`@usejig` / `@jigkit`) — confirm before P3 publish.
-2. Final workflow use-case list — `refactor-to-conventions` remains P4; add
-   `design-feature` / `implement-fullstack` in P2e.
+2. Final workflow use-case list — `refactor-to-conventions` remains P4; P2e ships the
+   spec-driven spine (`write-spec`/`write-plan`/`implement-feature`/`review-change` +
+   `develop-feature`), superseding the earlier `design-feature`/`implement-fullstack`.
 3. Template routing/state defaults — TanStack Router file-based routing in `src/routes/` + TanStack Query + Nano Stores patterns shipped in `state-and-data` skill and template users slice dogfood.
 4. Repository visibility — private until first npm publish (P3).
 5. Local Postgres without Docker — document only (compose required for `db:setup`);

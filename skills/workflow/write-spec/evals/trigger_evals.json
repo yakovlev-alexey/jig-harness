@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Add password reset to the app — let's start",
+    "should_trigger": true
+  },
+  {
+    "query": "We're changing how invoices are numbered; capture what it should do first",
+    "should_trigger": true
+  },
+  {
+    "query": "Начинаем новую фичу — сначала опиши что она делает в spec",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix the duplicate-email bug in the users slice",
+    "should_trigger": true
+  },
+  {
+    "query": "Turn the approved spec into an implementation plan",
+    "should_trigger": false
+  },
+  {
+    "query": "Execute the approved plan and build the feature",
+    "should_trigger": false
+  }
+]

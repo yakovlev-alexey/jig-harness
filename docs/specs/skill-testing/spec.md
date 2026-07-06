@@ -122,7 +122,7 @@ Each custom rule in `@jig-harness/eslint-plugin` MUST have a colocated
 
 #### Scenario: custom rule has RED and GREEN fixtures
 
-- **GIVEN** `packages/eslint-plugin/src/rules/no-reexport-only.ts` is a shipped
+- **GIVEN** `packages/eslint-plugin/src/rules/no-reexport-only.js` is a shipped
   custom rule
 - **WHEN** `no-reexport-only.test.js` runs under vitest
 - **THEN** `RuleTester` reports passing `valid` cases for compliant modules

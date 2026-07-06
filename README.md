@@ -120,7 +120,9 @@ The harness publishes tooling packages to npm. All `@jig-harness/*` packages sha
 | Package                         | Purpose                                            |
 | ------------------------------- | -------------------------------------------------- |
 | `@jig-harness/create-app`       | `pnpm create @jig-harness/app` scaffolder          |
+| `@jig-harness/skills`           | Bundled agent skills + postinstall linker          |
 | `@jig-harness/generators`       | Plop generators registered for `turbo gen`         |
+| `@jig-harness/spec-present`     | Spec-present gate CLI (`pnpm verify`)              |
 | `@jig-harness/eslint-plugin`    | Custom ESLint rules with RED/GREEN fixtures        |
 | `@jig-harness/eslint-config`    | Flat ESLint preset (off-the-shelf + custom plugin) |
 | `@jig-harness/stylelint-config` | BEM and CSS conventions                            |

@@ -61,3 +61,15 @@ published projection, not a second authoring location.
   not version-locked per app, and conflicts with multi-project workflows.
 
 Feature requirements and acceptance scenarios: [spec](../specs/skills-via-npm/spec.md).
+
+## Documentation note (2026-07-06)
+
+This ADR predates the decomposition of `DESIGN.md` into `docs/README.md`, feature
+specs, and numbered ADRs. Context and Consequences that mention `DESIGN.md` §5 or
+§6.3 describe the pre-decomposition source of truth. Dual-channel distribution
+and repository topology are now documented in:
+
+- [ADR 0007 — Distribution and template resolution](0007-distribution.md)
+- [ADR 0004 — Monorepo delivery and versioning](0004-monorepo-delivery.md)
+- [docs/README.md — Repository topology](../README.md#repository-topology)
+- [skills-via-npm spec](../specs/skills-via-npm/spec.md)

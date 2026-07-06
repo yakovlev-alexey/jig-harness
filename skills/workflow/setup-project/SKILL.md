@@ -27,18 +27,20 @@ Bootstrap a new fullstack app using the jig harness scaffolder. Do not hand-roll
 
 1. Run `pnpm create @jig-harness/app <project-name>` in the target parent directory.
 2. If create fails (network, registry): fix the error and retry, or use the offline path documented in `packages/create-app` (local tarballs via `--tarballs-dir`). Do not substitute hand-rolled layout.
-3. **REQUIRED SUB-SKILL:** Use `project-defaults` for stack conventions and explain the resulting structure to the user:
+3. Skills link automatically on `pnpm install` (default create flow): `@jig-harness/skills` creates gitignored symlinks under `.cursor/skills`, `.codex/skills`, `.claude/skills`, and `.agents/skills`. No manual `skills add` is required for project work. After clone or harness upgrade, run `pnpm install` or `pnpm skills:link`.
+4. **REQUIRED SUB-SKILL:** Use `project-defaults` for stack conventions and explain the resulting structure to the user:
    - `apps/frontend` — Vite + React + React Router + TanStack Query
    - `apps/backend` — Fastify + Zod + Prisma + PostgreSQL
    - `packages/types` — shared Zod contracts
-4. `cd <project-name>` and run `pnpm db:setup` — starts local Postgres (Docker or Podman via `compose.yaml`) and applies Prisma migrations. Required before backend dev or verify.
-5. Run `pnpm exec playwright install chromium` once — frontend integration tests in `pnpm verify` use Playwright.
-6. Run `pnpm verify`.
-7. Fix every verify failure before finishing. Setup is incomplete until verify passes green.
+5. `cd <project-name>` and run `pnpm db:setup` — starts local Postgres (Docker or Podman via `compose.yaml`) and applies Prisma migrations. Required before backend dev or verify.
+6. Run `pnpm exec playwright install chromium` once — frontend integration tests in `pnpm verify` use Playwright.
+7. Run `pnpm verify`.
+8. Fix every verify failure before finishing. Setup is incomplete until verify passes green.
 
 ## Rules
 
 - **sp-scaffolder** — Always use `pnpm create @jig-harness/app` (or its offline equivalent). Never hand-roll the monorepo layout. Never copy `templates/fullstack` manually as a substitute.
+- **sp-skills-linked** — Rely on `@jig-harness/skills` postinstall for project-local skills. Do not tell users to run manual `skills add` for scaffolded project work. After clone or upgrade, `pnpm install` or `pnpm skills:link`.
 - **sp-db-setup** — After scaffold, run `pnpm db:setup` when the project includes `apps/backend` with Prisma. Do not skip Postgres, defer Docker, or start backend dev without a working database. `pnpm verify` requires Postgres — a missing DB is a hard failure, not a skip.
 - **sp-verify** — Always run `pnpm verify` before finishing setup. No deferral for deadlines, user requests, or «template warnings are normal». Verify includes unit + integration tests; run `pnpm exec playwright install chromium` once before the first verify.
 

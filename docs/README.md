@@ -30,6 +30,7 @@ template-app features like `users` (those live in `templates/fullstack/docs/spec
 
 | Feature              | Spec                                                         | Purpose                                                                   |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| Skills via npm       | [`skills-via-npm`](specs/skills-via-npm/spec.md)             | Project-local skill linking via `@jig-harness/skills` on `pnpm install`   |
 | Setup project        | [`setup-project`](specs/setup-project/spec.md)               | Scaffold apps via `pnpm create @jig-harness/app` with green `pnpm verify` |
 | Implement frontend   | [`implement-frontend`](specs/implement-frontend/spec.md)     | Frontend generators, slices, routes, boundaries, state-and-data           |
 | Implement backend    | [`implement-backend`](specs/implement-backend/spec.md)       | Backend generators, layer flow, contracts, custom rules                   |
@@ -47,7 +48,7 @@ jig-harness/                      (pnpm + turborepo, Changesets fixed/linked)
 │   └─ convention/                rulebooks (installable), references/ + evals/
 ├─ packages/                      published as @jig-harness/<dir>
 │   ├─ eslint-plugin · eslint-config · prettier-config · stylelint-config · tsconfig
-│   ├─ generators · spec-present · create-app
+│   ├─ generators · spec-present · create-app · skills
 ├─ templates/fullstack/           dogfood app (frontend + backend + e2e + types)
 ├─ docs/                          specs, ADRs, STATUS (this hub)
 ├─ rules-catalogue.md             rule ↔ layer crosswalk

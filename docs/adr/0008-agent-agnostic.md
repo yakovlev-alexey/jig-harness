@@ -1,4 +1,4 @@
-# 0007. Agent-agnostic enforcement
+# 0008. Agent-agnostic enforcement
 
 - Status: Accepted
 - Date: 2026-07-06

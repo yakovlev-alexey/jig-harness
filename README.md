@@ -41,7 +41,8 @@ The scaffolder copies the [fullstack template](templates/fullstack) and pins pub
 # from jig-harness repo root, after pnpm install
 mkdir -p /tmp/jig-tarballs
 for pkg in @jig-harness/tsconfig @jig-harness/prettier-config @jig-harness/eslint-plugin \
-  @jig-harness/eslint-config @jig-harness/stylelint-config @jig-harness/generators; do
+  @jig-harness/eslint-config @jig-harness/stylelint-config @jig-harness/generators \
+  @jig-harness/spec-present @jig-harness/skills; do
   pnpm --filter "$pkg" pack --pack-destination /tmp/jig-tarballs
 done
 node packages/create-app/bin/create-app.js my-app --tarballs-dir /tmp/jig-tarballs
@@ -49,13 +50,26 @@ node packages/create-app/bin/create-app.js my-app --tarballs-dir /tmp/jig-tarbal
 
 ## Agent skills
 
-Skills live under `[skills/](skills/)` and install via [skills.sh](https://skills.sh):
+Scaffolded apps receive harness skills automatically: `@jig-harness/skills` links
+every workflow and convention skill into `.cursor/skills`, `.codex/skills`,
+`.claude/skills`, and `.agents/skills` on `pnpm install`. Linked directories are
+gitignored; after clone or upgrade run `pnpm install` or `pnpm skills:link`.
+
+Skills are authored in [skills/](skills/). For global install (non-project) or
+harness development, use [skills.sh](https://skills.sh):
 
 ```bash
 pnpm dlx skills add yakovlev-alexey/jig-harness --skill setup-project
-pnpm dlx skills add yakovlev-alexey/jig-harness --skill implement-frontend
-pnpm dlx skills add yakovlev-alexey/jig-harness --skill implement-backend
 ```
+
+**Harness contributors:** link live repo skills (no prepack) into agent dirs:
+
+```bash
+pnpm skills:link:dogfood
+```
+
+This symlinks from canonical `skills/` instead of `bundled/`. Use `pnpm skills:link`
+for the published-package path (same as scaffolded apps).
 
 **Workflow skills** (use-case entry points):
 

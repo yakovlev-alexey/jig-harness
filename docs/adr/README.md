@@ -21,9 +21,10 @@ is not a decision.
 | ADR                                    | Status   | Title                                |
 | -------------------------------------- | -------- | ------------------------------------ |
 | [0001](0001-spec-driven-workflow.md)   | Accepted | Spec-driven workflow                 |
-| [0002](0002-three-layer-rule-model.md) | Accepted | Three-layer rule model               |
-| [0003](0003-monorepo-delivery.md)      | Accepted | Monorepo delivery and versioning     |
-| [0004](0004-stack-and-scope.md)        | Accepted | Stack choice and scope boundaries    |
-| [0005](0005-skill-taxonomy.md)         | Accepted | Two-tier skill taxonomy              |
-| [0006](0006-distribution.md)           | Accepted | Distribution and template resolution |
-| [0007](0007-agent-agnostic.md)         | Accepted | Agent-agnostic enforcement           |
+| [0002](0002-skills-via-npm-package.md) | Accepted | Skills via npm package               |
+| [0003](0003-three-layer-rule-model.md) | Accepted | Three-layer rule model               |
+| [0004](0004-monorepo-delivery.md)      | Accepted | Monorepo delivery and versioning     |
+| [0005](0005-stack-and-scope.md)        | Accepted | Stack choice and scope boundaries    |
+| [0006](0006-skill-taxonomy.md)         | Accepted | Two-tier skill taxonomy              |
+| [0007](0007-distribution.md)           | Accepted | Distribution and template resolution |
+| [0008](0008-agent-agnostic.md)         | Accepted | Agent-agnostic enforcement           |

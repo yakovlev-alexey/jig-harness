@@ -17,12 +17,15 @@
     "spec-present:test": "pnpm --filter @jig-harness/spec-present test",
     "template:dogfood": "bash scripts/template-dogfood.sh",
     "scaffold:verify": "node scripts/scaffold-and-verify.mjs",
+    "skills:link": "jig-link-skills",
+    "skills:link:dogfood": "jig-link-skills-dogfood",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm run build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
+    "@jig-harness/skills": "workspace:*",
     "@jig-harness/spec-present": "workspace:*",
     "lefthook": "catalog:",
     "node-plop": "^0.26.3",

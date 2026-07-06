@@ -6,3 +6,8 @@ test-results
 playwright-report
 .playwright
 playwright/.cache
+.cursor/skills
+.codex/skills
+.claude/skills
+.agents/skills
+.jig-skills-linked.json

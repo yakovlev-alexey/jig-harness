@@ -1,4 +1,4 @@
-# 0005. Two-tier skill taxonomy
+# 0006. Two-tier skill taxonomy
 
 - Status: Accepted
 - Date: 2026-07-06

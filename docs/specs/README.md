@@ -18,6 +18,7 @@ wiring, and CI. They are distinct from **template app specs** (e.g. `users` unde
 
 | Feature              | Spec                                                           | Status |
 | -------------------- | -------------------------------------------------------------- | ------ |
+| Skills via npm       | [`skills-via-npm/spec.md`](skills-via-npm/spec.md)             | ✅     |
 | Setup project        | [`setup-project/spec.md`](setup-project/spec.md)               | ✅     |
 | Implement frontend   | [`implement-frontend/spec.md`](implement-frontend/spec.md)     | ✅     |
 | Implement backend    | [`implement-backend/spec.md`](implement-backend/spec.md)       | ✅     |

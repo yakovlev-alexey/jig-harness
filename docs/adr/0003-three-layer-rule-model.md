@@ -1,4 +1,4 @@
-# 0002. Three-layer rule model
+# 0003. Three-layer rule model
 
 - Status: Accepted
 - Date: 2026-07-06

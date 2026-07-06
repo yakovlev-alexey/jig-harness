@@ -17,6 +17,7 @@ Living meta for the jig-harness phased plan. Feature behavior lives in
 | **P2d — Frontend generators**        | `page`, `slice` turbo gen + L-gen; pages moved to `src/routes/` with TanStack Router file-based routing; route-tree boundaries + routes-dir lint exemptions                                                              | ✅     |
 | **P2e — Spec-driven workflow spine** | `specs` convention + `write-spec`/`write-plan`/`implement-feature`/`review-change` phases + `develop-feature` orchestrator; `spec-present` gate; `docs/specs` + `docs/adr` scaffold and a `users` dogfood spec           | ✅     |
 | **P2f — Vite SSR spine**             | Classic Vite SSR; TanStack Router loaders + Query dehydrate/hydrate; backend `/api` prefix + prod SSR plugin; entry boundaries + backend frontend-src import guard; SSR integration + collapsed E2E server               | ✅     |
+| **Skills via npm**                   | `@jig-harness/skills` npm package; postinstall linker; template devDependency; scaffold integration tests                                                                                                                | ✅     |
 
 ## Next
 
@@ -61,5 +62,5 @@ focus shifts to P3 publish and polish.
 
 ## Documentation migration
 
-Harness feature specs under `docs/specs/` backfill DESIGN.md vertical spines. All
-seven harness feature specs are present.
+Harness feature specs under `docs/specs/` backfill the former monolithic design doc.
+All eight harness feature specs are present.

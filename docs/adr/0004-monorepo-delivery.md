@@ -1,4 +1,4 @@
-# 0003. Monorepo delivery and versioning
+# 0004. Monorepo delivery and versioning
 
 - Status: Accepted
 - Date: 2026-07-06

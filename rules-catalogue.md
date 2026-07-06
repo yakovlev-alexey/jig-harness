@@ -1,7 +1,7 @@
 # Rules catalogue
 
 Single source of truth for jig rules across guidance, capability, and enforcement layers.
-See [docs/specs/](docs/specs/README.md) for feature behavior and [docs/adr/0002-three-layer-rule-model.md](docs/adr/0002-three-layer-rule-model.md) for the three-layer rule model.
+See [docs/specs/](docs/specs/README.md) for feature behavior and [docs/adr/0003-three-layer-rule-model.md](docs/adr/0003-three-layer-rule-model.md) for the three-layer rule model.
 
 | id                                       | rule                                                                              | guidance              | capability                       | enforcement                               | tests                                                 | status        |
 | ---------------------------------------- | --------------------------------------------------------------------------------- | --------------------- | -------------------------------- | ----------------------------------------- | ----------------------------------------------------- | ------------- |
@@ -45,6 +45,7 @@ See [docs/specs/](docs/specs/README.md) for feature behavior and [docs/adr/0002-
 | sd-no-store-in-presentational            | Presentational components and widget-ui must not import store/data                | state-and-data        | —                                | eslint:no-restricted-imports              | l-enf-sd-no-store-in-presentational, template-dogfood | enforced      |
 | sd-ssr-loader-prefetch                   | Route loaders ensureQueryData for SSR; widgets keep useQuery                      | state-and-data        | —                                | —                                         | template-dogfood                                      | guidance-only |
 | sp-scaffolder                            | Use pnpm create @jig-harness/app scaffolder                                       | setup-project         | create-app                       | —                                         | l2-setup-scaffolder                                   | generated     |
+| sp-skills-linked                         | Link harness skills on pnpm install via @jig-harness/skills                       | setup-project         | @jig-harness/skills              | —                                         | scaffold-and-verify                                   | generated     |
 | sp-db-setup                              | Run pnpm db:setup after scaffold for Prisma/Postgres                              | setup-project         | create-app                       | —                                         | l2-setup-scaffolder                                   | guidance-only |
 | sp-verify                                | Run pnpm verify before finishing setup                                            | setup-project         | —                                | —                                         | l2-setup-scaffolder                                   | guidance-only |
 | if-use-generators                        | Use turbo gen component, widget, page, or slice instead of hand-writing           | implement-frontend    | component, widget, page, slice   | —                                         | l2-implement-frontend                                 | generated     |

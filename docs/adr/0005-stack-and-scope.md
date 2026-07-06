@@ -1,4 +1,4 @@
-# 0004. Stack choice and scope boundaries
+# 0005. Stack choice and scope boundaries
 
 - Status: Accepted
 - Date: 2026-07-06

@@ -1,4 +1,4 @@
-# 0006. Distribution and template resolution
+# 0007. Distribution and template resolution
 
 - Status: Accepted
 - Date: 2026-07-06
@@ -13,9 +13,13 @@ developers dogfood with workspace links.
 
 ## Decision
 
-**Skills** — hosted in the monorepo under `skills/`; the skills.sh CLI walks
-`skills/<name>/SKILL.md` (one level deep, one extra for catalog layouts), so
-skills install directly with no separate repo or sync step:
+**Skills — dual channel:**
+
+- _Project-local (primary for scaffolded apps):_ `@jig-harness/skills` bundles
+  repo-root skills and links them into agent directories on `pnpm install`. See
+  [ADR 0002](0002-skills-via-npm-package.md).
+- _Global (contributors / manual install):_ skills.sh reads monorepo-hosted
+  `skills/<name>/SKILL.md` with no separate sync repo:
 
 ```
 pnpm dlx skills add yakovlev-alexey/jig-harness --skill setup-project

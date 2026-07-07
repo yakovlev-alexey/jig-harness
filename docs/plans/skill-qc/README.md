@@ -2,8 +2,9 @@
 
 Vertical decomposition of the 2026-07-07 skill-library QC review: **one plan per
 skill**, each listing everything to improve for that skill (description, trigger set,
-L2 eval, pressure scenarios, baseline recording, catalogue rows). One cross-cutting
-plan (`harness-coherence-check.md`) covers the shared verifier that is not a skill.
+L2 eval, pressure scenarios, baseline recording, catalogue rows). Two cross-cutting
+plans cover shared validators that are not skills: `harness-validate-skills.md` for the
+trigger-eval floor and `harness-coherence-check.md` for rule-ID coherence.
 
 Traces to [skill-testing spec](../../specs/skill-testing/spec.md) R9–R12 and
 [spec-driven-workflow spec](../../specs/spec-driven-workflow/spec.md) R1, R6.
@@ -27,7 +28,8 @@ pnpm verify                # docs/eval changes stay green
 ```
 
 Plus: the eval report the plan claims must exist on disk (dated `l2-*.md` /
-`*-report-*.md`), and any `without_skill` baseline recorded verbatim (R12).
+`*-report-*.md`), L2 reports record `with_skill` vs `without_skill` deltas (R9), and
+any discipline `without_skill` baseline is recorded verbatim (R12).
 
 ## Plans
 
@@ -49,27 +51,32 @@ Plus: the eval report the plan claims must exist on disk (dated `l2-*.md` /
 | [implement-feature](./implement-feature.md)             | wf      | description triggers-only · `imf-*` rows · baseline · deepen pressure · triggers→10              | R10, R11, R12, sdw-R6         |
 | [review-change](./review-change.md)                     | wf      | description triggers-only · `rv-*` rows · baseline · deepen pressure · triggers→10               | R10, R11, R12, sdw-R6         |
 | [develop-feature](./develop-feature.md)                 | wf      | description triggers-only · `df-*` rows · **add** pressure-scenarios.md · baseline · triggers→10 | R10, R11, R12, sdw-R1, sdw-R6 |
+| [harness-validate-skills](./harness-validate-skills.md) | tooling | extend `validate-skills.sh` to enforce trigger count + near-miss annotations                     | R10                           |
 | [harness-coherence-check](./harness-coherence-check.md) | tooling | extend `coherence-check.mjs` to enforce skill-rule-ID coherence                                  | R11, sdw-R6                   |
 
 ## Suggested order (waves)
 
 1. **Wave 1 — XS quick wins:** description fixes (5 spine plans, task A) + factual fixes
    (`setup-project` React Router, `implement-frontend` "when available"). No eval infra.
-2. **Wave 2 — coherence:** `harness-coherence-check` first (the verifier), then the
-   catalogue-row tasks in the 5 spine plans + `project-defaults`/`react-composition`.
-3. **Wave 3 — L2:** the 8 convention plans' L2 evals (highest-judgment first:
+2. **Wave 2 — verifier gates:** `harness-validate-skills` and `harness-coherence-check`
+   first.
+3. **Wave 3 — trigger/crosswalk work:** grow trigger sets with `near_miss_of`, then add
+   the catalogue-row tasks in the 5 spine plans + `project-defaults`/`react-composition`.
+4. **Wave 4 — L2:** the 8 convention plans' L2 evals (highest-judgment first:
    `state-and-data`, `backend-architecture`, `react-composition`, `testing`).
-4. **Wave 4 — baselines & pressure:** the R12 tasks (baseline recording + 3+-pressure
+5. **Wave 5 — baselines & pressure:** the R12 tasks (baseline recording + 3+-pressure
    rewrites) across the workflow plans, including `develop-feature`'s new scenarios.
 
 Trigger-set growth (R10) rides along inside each plan; it needs no cross-plan ordering.
+When adding near-miss negatives, annotate each with `near_miss_of` so the validator can
+prove the sibling-skill boundary coverage mechanically.
 
 ## Requirement coverage
 
 | Requirement                                           | Covered by                                                                                         |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | skill-testing R9 (convention L2)                      | all 8 convention plans                                                                             |
-| skill-testing R10 (triggers-only + ≥10 near-miss set) | all 16 skill plans                                                                                 |
+| skill-testing R10 (triggers-only + ≥10 near-miss set) | all 16 skill plans + `harness-validate-skills`                                                     |
 | skill-testing R11 (rule-ID coherence)                 | `project-defaults`, `react-composition`, the 5 spine plans, `harness-coherence-check`              |
 | skill-testing R12 (baselines + 3+ pressure)           | `setup-project`, `implement-frontend`, `implement-backend`, 4 spine phase plans, `develop-feature` |
 | spec-driven R1 (develop-feature coverage)             | `develop-feature`                                                                                  |

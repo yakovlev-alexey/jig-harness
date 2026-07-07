@@ -228,7 +228,9 @@ Every convention skill under `skills/convention/**` is a reference/pattern/techn
 skill whose primary success metric is L2 (application or retrieval), not L1
 triggering. Each MUST ship an L2 artifact (`evals/evals.json` or a dated
 `evals/l2-*.md`) with at least one application/retrieval case graded by an
-**objective oracle** — never a subjective "output is good".
+**objective oracle** — never a subjective "output is good". Each L2 case MUST
+record `with_skill` and `without_skill` results (or old-skill vs new-skill for an
+edit), then state the observed delta or explain that the case is unverified.
 
 #### Scenario: convention skill ships an L2 eval
 
@@ -244,14 +246,23 @@ triggering. Each MUST ship an L2 artifact (`evals/evals.json` or a dated
 - **THEN** pass/fail is decided by an observable check (lint on produced code, a
   structural/file check, or a documented retrieval checklist), not "looks good"
 
+#### Scenario: L2 case records a baseline delta
+
+- **GIVEN** an L2 case for a convention skill
+- **WHEN** its report is read
+- **THEN** it records the `without_skill` result, the `with_skill` result, and the
+  observed delta or explicitly marks the case unverified
+
 ### R10 — Skill descriptions SHALL state triggers only, and trigger sets SHALL cover near-misses
 
 Each `SKILL.md` `description` MUST state when-to-use triggers and symptoms and MUST
 NOT summarize the skill's procedure or workflow (a workflow summary makes agents
 follow the description and skip the body). Each `evals/trigger_evals.json` MUST
 contain at least 10 cases, including at least 4 near-miss negatives drawn from
-sibling skills, with variation across positives (formality, terseness,
-task-buried-in-a-longer-chain).
+sibling skills. Each near-miss negative MUST carry a machine-checkable
+`near_miss_of` string naming the sibling skill it should route to. Positives MUST
+vary across formality, terseness, and task-buried-in-a-longer-chain cases.
+`validate-skills.sh` MUST enforce the case floor and near-miss annotation.
 
 #### Scenario: description carries no workflow summary
 
@@ -266,18 +277,22 @@ task-buried-in-a-longer-chain).
 - **WHEN** it is validated
 - **THEN** it has at least 10 cases and at least 4 near-miss negatives from sibling
   skills
+- **THEN** each near-miss negative has `near_miss_of` naming the sibling skill
 
 ### R11 — Skill rule IDs SHALL be coherent with the catalogue
 
-Every rule ID that a `SKILL.md` declares as its **own** (in a Rules section/table)
+Every rule ID that a `SKILL.md` declares as its **own** (in a Rules section, table,
+or bullet list)
 MUST have a row in `rules-catalogue.md` whose guidance column names that skill.
 A rule mentioned only as a cross-reference to another skill's rule (e.g. "see
 `state-and-data` / **sd-...**") is exempt. `coherence-check.mjs` MUST fail on an
 uncatalogued own-rule ID, extending the existing custom-ESLint-rule coherence check.
+Rule-like tokens outside an owned Rules declaration (for example generated file
+names in reference snippets) MUST NOT be treated as rule declarations.
 
 #### Scenario: uncatalogued own-rule ID fails coherence
 
-- **GIVEN** a `SKILL.md` Rules table declares id `xx-foo` and no catalogue row has
+- **GIVEN** a `SKILL.md` Rules section declares id `xx-foo` and no catalogue row has
   id `xx-foo`
 - **WHEN** `pnpm run coherence` runs
 - **THEN** it exits non-zero citing the uncatalogued skill rule id
@@ -288,12 +303,21 @@ uncatalogued own-rule ID, extending the existing custom-ESLint-rule coherence ch
 - **WHEN** `pnpm run coherence` runs
 - **THEN** the reference does not require a new catalogue row
 
+#### Scenario: rule-like filenames are ignored
+
+- **GIVEN** a reference snippet contains a filename such as
+  `assert-user-can-be-created.ts`
+- **WHEN** `pnpm run coherence` scans skill artifacts
+- **THEN** it does not report `be-created` or any other filename fragment as a
+  missing rule id
+
 ### R12 — Discipline-skill pressure reports SHALL record a without-skill baseline
 
 A shipped pressure-scenario report MUST record an actual `without_skill` RED
 baseline with the agent's rationalizations verbatim, alongside the `with_skill`
 GREEN result — or be explicitly labelled `unverified — design-time` when no live
-baseline was run. Scenarios SHOULD combine 3+ pressure types.
+baseline was run. Discipline/rigid scenarios MUST combine 3+ pressure types;
+non-discipline skills are exempt from pressure scenarios.
 
 #### Scenario: GREEN-only report is labelled unverified
 
@@ -308,3 +332,10 @@ baseline was run. Scenarios SHOULD combine 3+ pressure types.
 - **WHEN** it is read
 - **THEN** it lists the agent's rationalizations verbatim, and each maps to an entry
   in the skill's rationalization table
+
+#### Scenario: discipline scenario combines pressure types
+
+- **GIVEN** a discipline/rigid skill's `pressure-scenarios.md`
+- **WHEN** a scenario is inspected
+- **THEN** it names at least three pressure types, such as time, sunk cost,
+  authority, economic, exhaustion, social, or pragmatic pressure

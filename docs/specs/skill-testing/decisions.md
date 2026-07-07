@@ -3,7 +3,8 @@
 ## 2026-07-07 — Require L2 output evals for convention skills
 
 **Decision:** Convention skills MUST ship L2 application/retrieval evals with
-objective oracles (R9), not `trigger_evals.json` alone.
+objective oracles and recorded `with_skill` vs `without_skill` deltas (R9), not
+`trigger_evals.json` alone.
 
 **Alternatives considered:**
 
@@ -21,6 +22,8 @@ delta the library currently lacks for its eight convention rulebooks.
 
 **Decision:** `SKILL.md` descriptions carry triggers/symptoms only, never a workflow
 summary; `trigger_evals.json` carries ≥10 cases with ≥4 near-miss negatives (R10).
+Near-miss negatives are annotated with `near_miss_of` so the case floor can be
+checked mechanically instead of relying on prose.
 
 **Alternatives considered:**
 
@@ -28,16 +31,17 @@ summary; `trigger_evals.json` carries ≥10 cases with ≥4 near-miss negatives 
   follow the description and skip the body (observed SDO trap; the spec-driven spine
   descriptions reproduce it, `review-change` most severely).
 - Enforce the no-summary rule mechanically via regex in `validate-skills.sh` — rejected as
-  the primary gate: too fragile to detect reliably; keep it a review requirement and add
-  only a soft count-floor check to the validator.
+  the primary gate: too fragile to detect reliably; keep it a review requirement. The
+  count floor and near-miss annotation are mechanical and belong in the validator.
 
 **Rationale:** The summary-in-description trap is the highest-leverage L1 defect found in
 review; a triggers-only description with a fuller trigger set is a cheap, high-impact fix.
 
 ## 2026-07-07 — Skill rule IDs must be catalogued; coherence-check extended
 
-**Decision:** Every own-rule ID in a `SKILL.md` Rules table must have a catalogue row
-naming that skill; cross-references to another skill's rule are exempt.
+**Decision:** Every own-rule ID in a `SKILL.md` Rules section (table or bullet list)
+must have a catalogue row naming that skill; cross-references to another skill's rule
+are exempt, and rule-like tokens outside owned Rules declarations are ignored.
 `coherence-check.mjs` is extended to enforce this (R11).
 
 **Alternatives considered:**

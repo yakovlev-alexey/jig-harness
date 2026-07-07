@@ -12,26 +12,38 @@ R11 and spec-driven R6.
 
 Extend [scripts/coherence-check.mjs](../../../scripts/coherence-check.mjs). Today it only
 checks custom-ESLint-rule ↔ catalogue. Add a pass that, for each
-`skills/**/SKILL.md` Rules section/table, collects the rule IDs the skill declares as
-its **own** and asserts each has a `rules-catalogue.md` row whose guidance column names
-that skill. Exempt IDs mentioned only as cross-references to another skill's rule
-(e.g. "see `state-and-data` / **sd-...**").
+`skills/**/SKILL.md` Rules section, collects the rule IDs the skill declares as its
+**own**, and asserts each has a `rules-catalogue.md` row whose guidance column names
+that skill. Support both rule tables and bullet-list declarations. Exempt IDs
+mentioned only as cross-references to another skill's rule (e.g. "see
+`state-and-data` / **sd-...**").
 
 Implementation notes:
 
 - Reuse the existing `parseCatalogue()` (id + guidance columns).
-- Detect own-rule IDs from the bolded `**xx-foo**` cells in a `## Rules` table; treat a
-  row that contains "see `<skill>`" or "Reference **wf-...**" as a cross-reference, not
-  ownership.
+- Parse only the `## Rules` section, stopping at the next `##` heading. This avoids
+  false positives from examples, references, and file names.
+- Detect own-rule IDs from either bolded `**xx-foo**` cells in a table or bullet
+  declarations like `- **xx-foo** — ...`; treat rows/bullets that contain
+  "see `<skill>`", "Reference **wf-...**", or "Delegated enforcement" as
+  cross-references, not ownership.
+- Ignore rule-like tokens outside owned Rules declarations, such as
+  `assert-user-can-be-created.ts` in reference examples.
 - Fail listing each uncatalogued own-rule ID and its skill; keep the existing checks.
 
 ## Task B — Add a fixture test for the new check
 
 **Satisfies:** skill-testing R11 · **Effort:** S
 
-Add a small RED/GREEN fixture (temp SKILL.md + catalogue snippet) proving the check
-fails on an uncatalogued own-rule ID and passes on a catalogued one and on a pure
-cross-reference. Wire into `pnpm run test` / the coherence step so CI enforces it.
+Add a small RED/GREEN fixture (temp SKILL.md + catalogue snippet) proving the check:
+
+- fails on an uncatalogued own-rule ID in a bullet-list Rules section;
+- fails on an uncatalogued own-rule ID in a table Rules section;
+- passes on a catalogued one;
+- passes on a pure cross-reference / delegated-enforcement row;
+- ignores rule-like filenames and examples outside `## Rules`.
+
+Wire into `pnpm run test` / the coherence step so CI enforces it.
 
 ## Sequencing
 

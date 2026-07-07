@@ -1,6 +1,6 @@
 ---
 name: write-plan
-description: Use when an approved feature spec exists and you need an implementation plan — turn the spec into a docs/plans/<name>.md whose tasks each trace to a spec requirement, then stop at a user-verify gate.
+description: Use when an approved feature spec exists and needs breaking into implementation steps, or the user asks for a task breakdown or "how are we going to build this".
 ---
 
 # Write Plan

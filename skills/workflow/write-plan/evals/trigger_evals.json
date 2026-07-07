@@ -16,8 +16,37 @@
     "should_trigger": true
   },
   {
+    "query": "User signed off on docs/specs/users/spec.md yesterday — before anyone touches apps/*/src, produce docs/plans/users.md with traced tasks, generators, and file paths.",
+    "should_trigger": true
+  },
+  {
+    "query": "We finished the spec review call. Next: map each SHALL in docs/specs/invoice-numbering/spec.md to an ordered implementation task.",
+    "should_trigger": true
+  },
+  {
     "query": "Capture what the new feature should do before we design anything",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "write-spec"
+  },
+  {
+    "query": "Draft the SHALL requirements and GWT scenarios for password reset",
+    "should_trigger": false,
+    "near_miss_of": "write-spec"
+  },
+  {
+    "query": "We're still debating acceptance criteria — refine the GWT scenarios in the spec before planning",
+    "should_trigger": false,
+    "near_miss_of": "write-spec"
+  },
+  {
+    "query": "Execute the approved plan in docs/plans/user-registration.md and build the feature",
+    "should_trigger": false,
+    "near_miss_of": "implement-feature"
+  },
+  {
+    "query": "The plan is approved — start implementing task 1 with turbo gen",
+    "should_trigger": false,
+    "near_miss_of": "implement-feature"
   },
   {
     "query": "Run pnpm verify and fix the failing tests",

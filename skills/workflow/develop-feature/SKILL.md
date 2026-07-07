@@ -1,6 +1,6 @@
 ---
 name: develop-feature
-description: Use when asked to build a feature end to end, ship a change, or "build X" — chain the spec-driven phases with user-verify gates between them, dispatching to the phase skills rather than implementing anything inline.
+description: Use when asked to build or ship a feature or fix end to end ("build X", "ship Y"), or to take a change from intent to reviewed result, and no single phase is named.
 ---
 
 # Develop Feature

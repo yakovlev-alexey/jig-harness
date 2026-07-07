@@ -20,5 +20,5 @@ Method: subagent evaluates skill description against each query
 ## Notes
 
 - Post-scaffold explanation queries trigger correctly.
-- jig-specific negative (shadcn) triggers — skill covers pd-bem-css / no shadcn.
+- jig-specific positive (shadcn boundary) triggers — skill covers pd-bem-css / no shadcn in scaffold.
 - Component refactor and Prisma addition correctly do not trigger.

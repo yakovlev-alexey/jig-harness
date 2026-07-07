@@ -16,11 +16,45 @@
     "should_trigger": true
   },
   {
+    "query": "need stack picks for greenfield monorepo",
+    "should_trigger": true
+  },
+  {
+    "query": "We're migrating our repo to jig conventions — what does the folder layout look like?",
+    "should_trigger": true
+  },
+  {
+    "query": "pnpm vite react fastify zod — confirm jig defaults?",
+    "should_trigger": true
+  },
+  {
     "query": "Refactor this React component to use hooks",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "frontend-architecture"
+  },
+  {
+    "query": "Add a component to this existing app",
+    "should_trigger": false,
+    "near_miss_of": "frontend-architecture"
+  },
+  {
+    "query": "Where does a Fastify command file go?",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
   },
   {
     "query": "Add Prisma to the existing API",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "Review this diff",
+    "should_trigger": false,
+    "near_miss_of": "review-change"
+  },
+  {
+    "query": "Where should widget unit tests live?",
+    "should_trigger": false,
+    "near_miss_of": "testing"
   }
 ]

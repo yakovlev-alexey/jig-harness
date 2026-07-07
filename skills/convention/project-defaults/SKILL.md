@@ -25,19 +25,20 @@ After scaffold, `setup-project` dispatches here for stack explanation.
 
 ## Stack Defaults
 
-| Rule ID               | Convention                                                                                 | Enforced by                                           |
-| --------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
-| **pd-pnpm**           | Use `pnpm` for package management                                                          | guidance-only                                         |
-| **pd-typescript**     | Use TypeScript for app code, config, tests, and scripts                                    | guidance-only                                         |
-| **pd-turborepo**      | Use Turborepo for fullstack monorepos                                                      | create-app (generated)                                |
-| **pd-react-vite**     | Use React + Vite for interactive web apps                                                  | create-app (generated)                                |
-| **pd-router**         | Use TanStack Router file-based routing in `src/routes/`                                    | create-app, page (generated)                          |
-| **pd-fastify**        | Use Fastify + Zod for API services                                                         | create-app (generated)                                |
-| **pd-contracts**      | Shared frontend/backend contracts live in `packages/types`                                 | create-app (generated)                                |
-| **pd-query**          | Configure a TanStack Query client factory in `src/common/query-client.ts`                  | create-app (generated)                                |
-| **pd-ssr**            | Vite SSR: `entry-client.tsx` / `entry-server.tsx`; prod backend imports built server entry | create-app (generated)                                |
-| **pd-bem-css**        | Use colocated plain CSS with BEM class names (no Tailwind/shadcn in scaffold)              | stylelint `selector-class-pattern` (template dogfood) |
-| **pd-local-postgres** | Local Postgres via `compose.yaml` and `pnpm db:setup` after scaffold                       | create-app (generated)                                |
+| Rule ID                            | Convention                                                                                 | Enforced by                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| **pd-pnpm**                        | Use `pnpm` for package management                                                          | guidance-only                                         |
+| **pd-typescript**                  | Use TypeScript for app code, config, tests, and scripts                                    | guidance-only                                         |
+| **pd-turborepo**                   | Use Turborepo for fullstack monorepos                                                      | create-app (generated)                                |
+| **pd-react-vite**                  | Use React + Vite for interactive web apps                                                  | create-app (generated)                                |
+| **pd-router**                      | Use TanStack Router file-based routing in `src/routes/`                                    | create-app, page (generated)                          |
+| **pd-fastify**                     | Use Fastify + Zod for API services                                                         | create-app (generated)                                |
+| **pd-contracts**                   | Shared frontend/backend contracts live in `packages/types`                                 | create-app (generated)                                |
+| **pd-query**                       | Configure a TanStack Query client factory in `src/common/query-client.ts`                  | create-app (generated)                                |
+| **pd-ssr**                         | Vite SSR: `entry-client.tsx` / `entry-server.tsx`; prod backend imports built server entry | create-app (generated)                                |
+| **ss-backend-frontend-entry-only** | Backend imports built `@app/frontend/server-entry` only, never `frontend/src` source       | import-x/no-restricted-paths (template dogfood)       |
+| **pd-bem-css**                     | Use colocated plain CSS with BEM class names (no Tailwind/shadcn in scaffold)              | stylelint `selector-class-pattern` (template dogfood) |
+| **pd-local-postgres**              | Local Postgres via `compose.yaml` and `pnpm db:setup` after scaffold                       | create-app (generated)                                |
 
 See `rules-catalogue.md` in jig-harness for the full rule ↔ enforcement crosswalk.
 

@@ -16,11 +16,44 @@
     "should_trigger": true
   },
   {
+    "query": "deactivate-user endpoint, users slice, wire usecase",
+    "should_trigger": true
+  },
+  {
+    "query": "Sprint notes unrelated — also need refund-command in billing backend slice with Prisma",
+    "should_trigger": true
+  },
+  {
+    "query": "We're polishing the API layer: add GET /users/:id under apps/backend/src/slices/users",
+    "should_trigger": true
+  },
+  {
     "query": "Add a landing page widget in apps/frontend",
+    "should_trigger": false,
+    "near_miss_of": "implement-frontend"
+  },
+  {
+    "query": "Bootstrap a new jig monorepo from scratch",
     "should_trigger": false
   },
   {
-    "query": "Bootstrap a new jig monorepo",
-    "should_trigger": false
+    "query": "Can my command call findUserByEmailQuery directly?",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "What layer segments are allowed under src/slices/users?",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "Where should shared Zod schemas for the billing API live?",
+    "should_trigger": false,
+    "near_miss_of": "contracts"
+  },
+  {
+    "query": "Can the frontend import createUserUsecase from apps/backend?",
+    "should_trigger": false,
+    "near_miss_of": "contracts"
   }
 ]

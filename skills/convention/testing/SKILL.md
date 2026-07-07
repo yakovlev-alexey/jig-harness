@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Use when choosing test layers, tools, or locations; writing unit, integration, or E2E tests; configuring parallel-safe DB isolation, test routes, or verify vs test:e2e in jig fullstack templates.
+description: Use when unsure which test layer or location fits; Postgres missing or broken in CI; parallel test data collisions; Playwright vs RTL/jsdom questions; verify vs test:e2e scope; or test-route security in jig fullstack templates.
 ---
 
 # Testing

@@ -16,11 +16,40 @@
     "should_trigger": true
   },
   {
+    "query": "duplicate email rejection — unit, inject, or E2E?",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm wiring CI and noticed verify runs integration but not e2e — is that intentional and where do edge-case API tests like 409 duplicate email belong?",
+    "should_trigger": true
+  },
+  {
+    "query": "can i use react testing library for the users list page test?",
+    "should_trigger": true
+  },
+  {
     "query": "Where should I put a new Fastify command file?",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "What Zod shape should the create-user API response use?",
+    "should_trigger": false,
+    "near_miss_of": "contracts"
+  },
+  {
+    "query": "Can my usecase call findUserByEmailQuery directly from another slice?",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "Should the API return the raw Prisma User model to the frontend?",
+    "should_trigger": false,
+    "near_miss_of": "contracts"
   },
   {
     "query": "Add a hero banner component to the landing slice",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "react-composition"
   }
 ]

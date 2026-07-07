@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "Do a two-stage review of this diff: spec compliance then pnpm verify",
+    "query": "Final gate: diff user-registration against docs/specs/user-registration/spec.md and get verify green before I review",
     "should_trigger": true
   },
   {
@@ -12,15 +12,45 @@
     "should_trigger": true
   },
   {
+    "query": "We're at the end of develop-feature — run the review stage on this PR diff",
+    "should_trigger": true
+  },
+  {
     "query": "Реализация готова — проверь соответствие спеке и прогони verify",
     "should_trigger": true
   },
   {
+    "query": "I merged the plan tasks and pushed — before I ship, make sure the implementation matches the spec and conventions",
+    "should_trigger": true
+  },
+  {
     "query": "Write the spec for the new checkout feature",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "write-spec"
   },
   {
     "query": "Break the approved spec into an implementation plan",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "write-plan"
+  },
+  {
+    "query": "The plan is approved — implement the password-reset feature",
+    "should_trigger": false,
+    "near_miss_of": "implement-feature"
+  },
+  {
+    "query": "Should this React component use named exports or a default export?",
+    "should_trigger": false,
+    "near_miss_of": "frontend-architecture"
+  },
+  {
+    "query": "Where should backend integration tests live in a jig fullstack app?",
+    "should_trigger": false,
+    "near_miss_of": "testing"
+  },
+  {
+    "query": "Build user-registration end to end from intent to reviewed result",
+    "should_trigger": false,
+    "near_miss_of": "develop-feature"
   }
 ]

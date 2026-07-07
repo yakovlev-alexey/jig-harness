@@ -1,6 +1,6 @@
 ---
 name: review-change
-description: Use when a change is implemented and needs review before handing to the user — run a two-stage review, spec-compliance first then quality via pnpm verify and conventions, and loop on fixes until clean.
+description: Use when an implemented change needs review before handoff to the user, when verifying a diff against its feature spec, or as the final review stage of develop-feature.
 ---
 
 # Review Change

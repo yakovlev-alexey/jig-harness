@@ -20,7 +20,7 @@ Add or refactor frontend slice UI using jig generators and convention skills. Do
 ## When NOT to Use
 
 - Bootstrapping a new monorepo (use `setup-project`)
-- Backend endpoints, usecases, or API slices (use `implement-backend` when available)
+- Backend endpoints, usecases, or API slices (use `implement-backend`)
 - Greenfield stack choice (use `project-defaults`)
 - Server/client state wiring (use `state-and-data`)
 

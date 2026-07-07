@@ -16,11 +16,45 @@
     "should_trigger": true
   },
   {
+    "query": "Быстро добавь promo-banner в landing — turbo gen не нужен, просто создай папку и TSX",
+    "should_trigger": true
+  },
+  {
+    "query": "We scaffolded last week — add a signup-cta widget under apps/frontend/src/slices/landing and wire it into the landing route",
+    "should_trigger": true
+  },
+  {
+    "query": "Hand-write src/slices/profile/components/avatar-card/ with colocated CSS — skip generators for this one",
+    "should_trigger": true
+  },
+  {
     "query": "Start a new fullstack TypeScript monorepo",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "setup-project"
   },
   {
     "query": "Add a Fastify health check endpoint",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "implement-backend"
+  },
+  {
+    "query": "Wire useQuery and a Nano Store filter for the users list widget",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "Add TanStack Query cache invalidation after create-user mutation",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "Bootstrap apps/frontend and apps/backend manually in a new monorepo",
+    "should_trigger": false,
+    "near_miss_of": "setup-project"
+  },
+  {
+    "query": "Add a Prisma-backed POST /api/users endpoint in apps/backend",
+    "should_trigger": false,
+    "near_miss_of": "implement-backend"
   }
 ]

@@ -1,6 +1,6 @@
 ---
 name: state-and-data
-description: Use when handling frontend server state, async reads, mutations, cache invalidation, UI filters, selected entities, drafts, wizard progress, Nano Stores, TanStack Query, or store folder layout in jig fullstack apps.
+description: Use when deciding TanStack Query vs Nano Stores, wiring useQuery or useMutation, cache invalidation, UI filters, selected entities, drafts, wizard progress, or store/queries vs store/commands vs store/model layout in jig fullstack apps.
 ---
 
 # State And Data

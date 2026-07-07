@@ -16,11 +16,39 @@
     "should_trigger": true
   },
   {
+    "query": "usersFilterAtom or query cache?",
+    "should_trigger": true
+  },
+  {
+    "query": "We're adding a multi-step onboarding wizard — where should step progress and draft form values live on the frontend?",
+    "should_trigger": true
+  },
+  {
+    "query": "While wiring the dashboard page I noticed both the chart widget and table widget need the same date range — what's the jig pattern for that shared selection?",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I prefetch users in the route loader for SSR without duplicating fetch logic in widgets?",
+    "should_trigger": true
+  },
+  {
     "query": "Where should I put a new Fastify command file?",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
   },
   {
     "query": "Can I skip backend integration tests when DATABASE_URL is unset?",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "testing"
+  },
+  {
+    "query": "Should the UserCard component take users as props or fetch them with useQuery inside the component file?",
+    "should_trigger": false,
+    "near_miss_of": "react-composition"
+  },
+  {
+    "query": "Where should shared Zod schemas for the users API live?",
+    "should_trigger": false,
+    "near_miss_of": "contracts"
   }
 ]

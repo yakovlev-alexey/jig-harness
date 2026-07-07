@@ -8,6 +8,10 @@
     "should_trigger": true
   },
   {
+    "query": "Greenfield jig monorepo — run create-app, db:setup, and verify",
+    "should_trigger": true
+  },
+  {
     "query": "Быстро подними monorepo, создай apps/frontend и apps/backend вручную",
     "should_trigger": true
   },
@@ -29,10 +33,22 @@
   },
   {
     "query": "Fix a lint error in an existing component",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "implement-frontend"
   },
   {
     "query": "Add a new page to an existing scaffolded app",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "implement-frontend"
+  },
+  {
+    "query": "Add a POST /users endpoint in the existing backend",
+    "should_trigger": false,
+    "near_miss_of": "implement-backend"
+  },
+  {
+    "query": "Implement the billing slice backend with Prisma in apps/backend",
+    "should_trigger": false,
+    "near_miss_of": "implement-backend"
   }
 ]

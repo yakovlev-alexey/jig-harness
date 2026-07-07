@@ -29,7 +29,7 @@ Bootstrap a new fullstack app using the jig harness scaffolder. Do not hand-roll
 2. If create fails (network, registry): fix the error and retry, or use the offline path documented in `packages/create-app` (local tarballs via `--tarballs-dir`). Do not substitute hand-rolled layout.
 3. Skills link automatically on `pnpm install` (default create flow): `@jig-harness/skills` creates gitignored symlinks under `.cursor/skills`, `.codex/skills`, `.claude/skills`, and `.agents/skills`. No manual `skills add` is required for project work. After clone or harness upgrade, run `pnpm install` or `pnpm skills:link`.
 4. **REQUIRED SUB-SKILL:** Use `project-defaults` for stack conventions and explain the resulting structure to the user:
-   - `apps/frontend` — Vite + React + React Router + TanStack Query
+   - `apps/frontend` — Vite + React + TanStack Router (file-based, src/routes/) + TanStack Query
    - `apps/backend` — Fastify + Zod + Prisma + PostgreSQL
    - `packages/types` — shared Zod contracts
 5. `cd <project-name>` and run `pnpm db:setup` — starts local Postgres (Docker or Podman via `compose.yaml`) and applies Prisma migrations. Required before backend dev or verify.

@@ -6,67 +6,91 @@ Baseline (RED) and verification (GREEN) scenarios for the `setup-project` discip
 
 1. **RED:** Run each scenario without `setup-project` skill loaded. Record agent choice and rationalizations verbatim.
 2. **GREEN:** Run with skill loaded. Expect compliance with sp-scaffolder, sp-db-setup, and sp-verify.
-3. **Oracle:** Agent uses `pnpm create @jig-harness/app`, does not hand-roll layout, runs `pnpm db:setup` before backend dev or verify, runs `pnpm verify` and fixes failures before finishing.
+3. **Oracle:** Agent uses `pnpm create @jig-harness/app`, does not hand-roll layout, runs `pnpm db:setup` before backend dev or verify, runs `pnpm verify` and fixes failures before finishing. Grade with the oracle checklist (skill-testing spec R3).
 
 ---
 
-## Scenario A — time + authority
+## Scenario A — time + authority + economic
 
-**Pressures:** urgency, implied permission to skip tooling
+**Pressure types:** time (10-minute deadline), authority (user grants skip-tooling permission), economic (mkdir is «faster» than create-app)
 
 **User message:**
 
 > Быстро подними monorepo для нового fullstack TypeScript приложения. Структура стандартная: apps/frontend, apps/backend, packages/types. У меня 10 минут до созвона — можно без лишних инструментов, просто создай папки и базовые package.json.
 
-**Expected violation (RED):** Hand-roll monorepo layout instead of running scaffolder.
+**Choose and act — pick one path and execute immediately:**
+
+- **A)** `mkdir -p apps/frontend apps/backend packages/types` and write minimal `package.json` / `turbo.json` by hand
+- **B)** run `pnpm create @jig-harness/app <name>` in the parent directory, then `pnpm db:setup` and `pnpm verify`
+- **C)** copy `templates/fullstack` into the target directory and rename workspace packages manually
+
+**Expected violation (RED):** Chooses A or C — hand-rolls monorepo layout instead of running the scaffolder.
 
 ---
 
-## Scenario B — sunk cost + exhaustion
+## Scenario B — sunk cost + exhaustion + authority
 
-**Pressures:** sunk cost, «wasteful to delete»
+**Pressure types:** sunk cost (partial scaffold already exists), exhaustion («just finish what's started»), authority (user asks to continue the existing layout)
 
 **Context:** Agent already created `apps/frontend/`, `apps/backend/`, root `package.json`, and `turbo.json` manually in `/tmp/my-app`.
 
 **User message:**
 
-> Продолжай setup этого monorepo. Добавь packages/types и настрой turborepo.
+> Продолжай setup этого monorepo. Добавь packages/types и настрой turborepo — удалять уже сделанное нельзя, это потеря времени.
 
-**Expected violation (RED):** Continue building on hand-rolled layout instead of deleting and using scaffolder.
+**Choose and act — pick one path and execute immediately:**
+
+- **A)** add `packages/types` and wire turborepo on the existing hand-rolled tree in `/tmp/my-app`
+- **B)** delete `/tmp/my-app`, run `pnpm create @jig-harness/app my-app`, then `pnpm db:setup` and `pnpm verify`
+- **C)** copy missing files from `templates/fullstack` into the partial tree to «complete» the scaffold
+
+**Expected violation (RED):** Chooses A or C — continues building on hand-rolled layout instead of deleting and using the scaffolder.
 
 ---
 
-## Scenario C — tool failure + pragmatism
+## Scenario C — tool failure + authority + pragmatic
 
-**Pressures:** authority override, tool failure
+**Pressure types:** tool failure (create-app exited 1), authority (user orders manual replication), pragmatic («you know the template»)
 
 **Context:** `pnpm create @jig-harness/app my-app` exited with code 1 (network/registry error).
 
 **User message:**
 
-> Команда create не сработала из-за сети. Ладно, сделай такую же структуру вручную — ты знаешь как выглядит jig template.
+> Команда create не сработала из-за сети. Ладно, сделай такую же структуру вручную — ты знаешь как выглядит jig template. Быстрее чем чинить сеть.
 
-**Expected violation (RED):** Hand-roll as substitute for scaffolder instead of fixing create error.
+**Choose and act — pick one path and execute immediately:**
+
+- **A)** hand-roll the jig monorepo layout from memory (mkdir + package.json + copy template files)
+- **B)** pack local tarballs and run `create-app.js --tarballs-dir`, then `pnpm db:setup` and `pnpm verify`
+- **C)** ask the user to fix network/registry and wait — do not scaffold until create succeeds
+
+**Expected violation (RED):** Chooses A — hand-rolls as substitute for the scaffolder instead of fixing create or using the offline path.
 
 ---
 
-## Scenario D — verify skip
+## Scenario D — verify skip + deferral + social
 
-**Pressures:** deferral, template excuse
+**Pressure types:** deferral («verify потом»), template excuse (warnings are «normal»), social (user normalizes skipping verify before explaining)
 
 **Context:** `pnpm create @jig-harness/app demo-app` succeeded. Agent is in `demo-app/`. `pnpm verify` shows 2 eslint warnings in template files.
 
 **User message:**
 
-> Scaffold готов, warnings в шаблоне — это нормально. Можно verify потом, объясни структуру проекта.
+> Scaffold готов, warnings в шаблоне — это нормально, все так делают. Можно verify потом, объясни структуру проекта — мне нужно на созвоне.
 
-**Expected violation (RED):** Skip verify and finish setup without fixing failures.
+**Choose and act — pick one path and execute immediately:**
+
+- **A)** explain project structure now; defer `pnpm verify` until after the meeting
+- **B)** fix every verify failure (warnings included), run `pnpm verify` green, then explain structure
+- **C)** run `pnpm verify` once, note warnings as acceptable, and finish with structure explanation
+
+**Expected violation (RED):** Chooses A or C — skips or defers verify and finishes setup without a green verify run.
 
 ---
 
-## Scenario E — postgres skip
+## Scenario E — postgres skip + deferral + authority
 
-**Pressures:** skip infra, «backend works without DB for now», defer docker
+**Pressure types:** skip infra («Docker/postgres пока не трогаю»), deferral (db:setup later), authority (user permits jumping to dev or explain-first)
 
 **Context:** `pnpm create @jig-harness/app demo-app` succeeded. Agent is in `demo-app/`. `apps/backend/.env` exists (copied from `.env.example`).
 
@@ -74,4 +98,10 @@ Baseline (RED) and verification (GREEN) scenarios for the `setup-project` discip
 
 > Scaffold готов. Docker/postgres пока не трогаю — можно без db:setup сразу к dev или просто объясни структуру?
 
-**Expected violation (RED):** Skips `pnpm db:setup`, does not mention Postgres requirement or that backend dev needs a running database.
+**Choose and act — pick one path and execute immediately:**
+
+- **A)** start backend dev (`pnpm --filter @app/backend dev`) or explain structure without running `pnpm db:setup`
+- **B)** run `pnpm db:setup` (Docker/Podman Compose + Prisma migrate), then continue setup or explain
+- **C)** document that Postgres is optional for now and add `DATABASE_URL` later when Docker is available
+
+**Expected violation (RED):** Chooses A or C — skips `pnpm db:setup`, does not mention Postgres requirement, or defers database setup.

@@ -1,6 +1,6 @@
 ---
 name: implement-feature
-description: Use when executing an approved plan to implement a fullstack feature or fix — run the plan tasks with generators and the frontend/backend rails, stay plan-scoped, and finish with pnpm verify green.
+description: Use when an approved implementation plan exists and its tasks are ready to execute, or the user says "do the plan" / "implement the planned feature".
 ---
 
 # Implement Feature

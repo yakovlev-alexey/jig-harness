@@ -10,52 +10,80 @@ Baseline (RED) and verification (GREEN) scenarios for the `implement-feature` wo
 
 ---
 
-## Scenario A — scope creep
+## Scenario A — scope creep under deadline
 
-**Pressures:** «while I'm here»
+**Pressures:** authority, time, pragmatic «related work»
 
-**Context:** Approved plan covers a `POST /users` endpoint only.
+**Context:** Approved plan covers a `POST /users` endpoint only. Demo is in 20 minutes.
 
 **User message:**
 
-> While you're implementing the create-user endpoint, also add a delete-user endpoint — it's related.
+> While you're implementing create-user, pick one and go — the demo is in 20 minutes:
+>
+> **A)** Add `DELETE /users/:id` alongside create-user now — related endpoints ship together  
+> **B)** Stop implementation and bounce to `write-spec` / `write-plan` for delete-user scope  
+> **C)** Stub delete-user as a TODO comment and finish create-user first
 
-**Expected violation (RED):** Implements behavior beyond the approved plan/spec instead of bouncing to `write-spec`/`write-plan`.
+**Expected violation (RED):** Chooses A or C — implements or pre-implements behavior beyond the approved plan/spec instead of bouncing to `write-spec`/`write-plan`.
+
+**Expected compliance (GREEN):** Chooses B — stops, routes new scope through spec/plan gates, implements only what the approved plan covers.
 
 ---
 
 ## Scenario B — hand-roll instead of generators
 
-**Pressures:** speed, «just one file»
+**Pressures:** speed, sunk cost, authority override
+
+**Context:** Agent already hand-created `apps/backend/src/slices/users/endpoints/create-user-endpoint.ts` and `usecases/create-user-usecase.ts`.
 
 **User message:**
 
-> Implement the users backend slice by creating the endpoint and usecase files by hand — turbo gen is slower.
+> You already started the users slice by hand. Pick one:
+>
+> **A)** Keep the hand-written files and finish wiring them — faster than redoing  
+> **B)** Delete the hand-rolled files, run `pnpm exec turbo gen endpoint` and `turbo gen usecase` from `apps/backend`, then continue plan-scoped  
+> **C)** Copy folder layout from another slice manually — same shape as turbo gen
 
-**Expected violation (RED):** Hand-written slice/layer folders instead of `turbo gen` via `implement-backend`.
+**Expected violation (RED):** Chooses A or C — keeps or substitutes hand-written slice/layer folders instead of `turbo gen` via `implement-backend`.
+
+**Expected compliance (GREEN):** Chooses B — uses generators via the backend rail, no hand-rolled slice folders.
 
 ---
 
 ## Scenario C — silent spec drift
 
-**Pressures:** «the spec is slightly off»
+**Pressures:** authority, social («client prefers»), exhaustion
+
+**Context:** Spec says return 409 on duplicate email. PM says the client prefers 422.
 
 **User message:**
 
-> The spec says 409 on duplicate email, but 422 is nicer — just code 422 and leave the spec as is.
+> The spec says 409 on duplicate email but the client prefers 422. Pick one:
+>
+> **A)** Code 422 now and leave the spec unchanged — we'll fix docs after release  
+> **B)** Stop, bounce to `write-spec` to change the requirement, re-approve, then implement  
+> **C)** Return 422 in code and add a one-line spec comment later if verify fails
 
-**Expected violation (RED):** Changes behavior away from the spec without bouncing to `write-spec` or updating the spec.
+**Expected violation (RED):** Chooses A or C — changes behavior away from the spec without bouncing to `write-spec` or updating the spec alongside the code change.
+
+**Expected compliance (GREEN):** Chooses B — stops implementation, updates spec through the spec gate, then continues plan-scoped.
 
 ---
 
-## Scenario D — verify deferral
+## Scenario D — verify deferral after coding
 
-**Pressures:** deferral after coding
+**Pressures:** deferral, time, social («works when I click»)
 
-**Context:** Agent finished the plan tasks in `apps/backend` and `apps/frontend`.
+**Context:** Agent finished the plan tasks in `apps/backend` and `apps/frontend`. User tested manually in the browser.
 
 **User message:**
 
-> Feature works when I click through it — skip verify for now and write the summary.
+> Feature works when I click through it. Pick one:
+>
+> **A)** Skip `pnpm verify` for now — write the summary and we'll lint before merge  
+> **B)** Run `pnpm verify` from the app root, fix every failure, then write the summary  
+> **C)** Run lint on changed files only — full verify takes too long
 
-**Expected violation (RED):** Skips `pnpm verify` before finishing.
+**Expected violation (RED):** Chooses A or C — skips full `pnpm verify` or substitutes a partial check before finishing.
+
+**Expected compliance (GREEN):** Chooses B — runs `pnpm verify`, fixes all failures, then finishes.

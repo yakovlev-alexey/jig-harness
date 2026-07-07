@@ -16,11 +16,45 @@
     "should_trigger": true
   },
   {
+    "query": "do the plan",
+    "should_trigger": true
+  },
+  {
+    "query": "I've approved docs/plans/checkout-v2.md in the PR thread — please execute tasks 3 and 4 only, then verify",
+    "should_trigger": true
+  },
+  {
+    "query": "We finished the plan review call; go implement the password-reset slice per the approved plan",
+    "should_trigger": true
+  },
+  {
     "query": "Capture what this change should do before we build it",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "write-spec"
   },
   {
     "query": "Review the implemented change against the spec before handoff",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "review-change"
+  },
+  {
+    "query": "Break docs/specs/user-registration/spec.md into implementation tasks",
+    "should_trigger": false,
+    "near_miss_of": "write-plan"
+  },
+  {
+    "query": "The spec is approved — break it into an implementation plan",
+    "should_trigger": false,
+    "near_miss_of": "write-plan"
+  },
+  {
+    "query": "How are we going to build user-registration? Write the task breakdown.",
+    "should_trigger": false,
+    "near_miss_of": "write-plan"
+  },
+  {
+    "query": "Do a two-stage review of this diff: spec compliance then pnpm verify",
+    "should_trigger": false,
+    "near_miss_of": "review-change"
   }
 ]

@@ -16,11 +16,49 @@
     "should_trigger": true
   },
   {
+    "query": "Both checkout and profile widgets need the same currency formatter — folder path and imports?",
+    "should_trigger": true
+  },
+  {
+    "query": "kebab-case for widget folders?",
+    "should_trigger": true
+  },
+  {
+    "query": "User asked where route pages live versus slice modules in src/",
+    "should_trigger": true
+  },
+  {
     "query": "Fix a Fastify endpoint validation error",
     "should_trigger": false
   },
   {
     "query": "Bootstrap a new fullstack monorepo from scratch",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "project-defaults"
+  },
+  {
+    "query": "Should the landing page widget import another widget internally?",
+    "should_trigger": false,
+    "near_miss_of": "react-composition"
+  },
+  {
+    "query": "Where does the users-filter Nano Store atom file go under store/?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "How should the landing page compose HeroBanner and FeatureHighlight on the route?",
+    "should_trigger": false,
+    "near_miss_of": "react-composition"
+  },
+  {
+    "query": "Which stack should a greenfield jig app use — Vite, Fastify, and pnpm?",
+    "should_trigger": false,
+    "near_miss_of": "project-defaults"
+  },
+  {
+    "query": "Add a TanStack Query hook for the users list fetch",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
   }
 ]

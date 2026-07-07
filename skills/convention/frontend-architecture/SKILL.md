@@ -1,6 +1,6 @@
 ---
 name: frontend-architecture
-description: Use when organizing TypeScript frontend files, vertical product slices, common shared code, imports, exports, file names, folders, barrels, or frontend package boundaries.
+description: Use when deciding where frontend files belong under src/slices/ or src/common/, import paths, export style, folder shape, kebab-case names, barrel files, cross-slice imports, or allowed slice segments.
 ---
 
 # Frontend Architecture

@@ -16,11 +16,41 @@
     "should_trigger": true
   },
   {
+    "query": "Hey can you spec out the notification preferences page before we touch any code? PM wants it scoped properly.",
+    "should_trigger": true
+  },
+  {
+    "query": "We're adding OAuth login — I need the requirements written up with acceptance scenarios before engineering starts.",
+    "should_trigger": true
+  },
+  {
     "query": "Turn the approved spec into an implementation plan",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "write-plan"
   },
   {
     "query": "Execute the approved plan and build the feature",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "implement-feature"
+  },
+  {
+    "query": "Build user-registration end to end from idea to merged PR",
+    "should_trigger": false,
+    "near_miss_of": "develop-feature"
+  },
+  {
+    "query": "Write the task breakdown for how we'll implement password-reset",
+    "should_trigger": false,
+    "near_miss_of": "write-plan"
+  },
+  {
+    "query": "Review whether the implemented delete-user flow matches the spec",
+    "should_trigger": false,
+    "near_miss_of": "review-change"
+  },
+  {
+    "query": "What sections should a spec.md include?",
+    "should_trigger": false,
+    "near_miss_of": "specs"
   }
 ]

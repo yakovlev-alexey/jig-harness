@@ -1,6 +1,6 @@
 ---
 name: write-spec
-description: Use when adding a feature, changing behavior, or starting any change to an existing jig app — capture WHAT the change does in a feature spec before writing code, and stop at a user-verify gate.
+description: Use when adding a feature, changing behavior, fixing a bug, or starting any change to app source in an existing jig app, and no current spec covers it.
 ---
 
 # Write Spec

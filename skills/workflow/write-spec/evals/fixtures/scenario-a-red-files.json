@@ -1,0 +1,4 @@
+[
+  "apps/frontend/src/slices/auth/components/login-form/login-form.tsx",
+  "apps/backend/src/slices/auth/endpoints/login-endpoint.ts"
+]

@@ -1,0 +1,3 @@
+[
+"docs/specs/user-registration/spec.md"
+]

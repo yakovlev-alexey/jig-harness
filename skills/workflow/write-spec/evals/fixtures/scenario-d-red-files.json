@@ -1,0 +1,5 @@
+[
+  "docs/specs/user-registration/spec.md",
+  "docs/plans/user-registration.md",
+  "apps/backend/src/slices/users/endpoints/create-user-endpoint.ts"
+]

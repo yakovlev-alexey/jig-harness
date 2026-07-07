@@ -1,0 +1,8 @@
+.landing-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.landing-page__highlight {
+  max-width: 36rem;
+}

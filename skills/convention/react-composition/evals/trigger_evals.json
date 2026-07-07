@@ -16,11 +16,49 @@
     "should_trigger": true
   },
   {
-    "query": "Organize backend Fastify slice folders",
-    "should_trigger": false
+    "query": "HeroBanner JSX is nested 8 levels deep — extract a presentational sub-component?",
+    "should_trigger": true
   },
   {
-    "query": "Scaffold a new monorepo with create-app",
-    "should_trigger": false
+    "query": "I'm refactoring the profile route: stats card markup and useQuery hooks are mixed in profile-stats.tsx. How should I split page vs widget vs presentational files?",
+    "should_trigger": true
+  },
+  {
+    "query": "New checkout summary needs `.widget.tsx`, BEM classes, and colocated CSS in the checkout slice.",
+    "should_trigger": true
+  },
+  {
+    "query": "Add Storybook stories for empty, loading, and error states on the user-list widget UI.",
+    "should_trigger": true
+  },
+  {
+    "query": "Where should I put a new React component file under src/slices/landing?",
+    "should_trigger": false,
+    "near_miss_of": "frontend-architecture"
+  },
+  {
+    "query": "Can I add an index.ts barrel so widgets import from one path?",
+    "should_trigger": false,
+    "near_miss_of": "frontend-architecture"
+  },
+  {
+    "query": "Should the users list from the API live in TanStack Query or a Nano Store?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "What goes in store/queries vs store/commands vs store/model for the users slice?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "What stack should I use for a new fullstack jig app?",
+    "should_trigger": false,
+    "near_miss_of": "project-defaults"
+  },
+  {
+    "query": "Organize backend Fastify slice folders for a new command",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
   }
 ]

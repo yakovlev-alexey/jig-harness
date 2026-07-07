@@ -16,11 +16,49 @@
     "should_trigger": true
   },
   {
-    "query": "Fix ESLint in a React widget",
-    "should_trigger": false
+    "query": "I'm wiring the signup form and need the request body shape typed on both sides — where does that schema go?",
+    "should_trigger": true
+  },
+  {
+    "query": "hey can we just share the usecase from backend in the frontend to save time?",
+    "should_trigger": true
+  },
+  {
+    "query": "What Zod schema should validate the PATCH /users/:id response before it hits the client?",
+    "should_trigger": true
   },
   {
     "query": "Where do I put a Fastify command file?",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "Should the usecase call Prisma directly or go through a repository?",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "Which backend layer owns duplicate-email domain validation?",
+    "should_trigger": false,
+    "near_miss_of": "backend-architecture"
+  },
+  {
+    "query": "How do I invalidate the users list query after createUser mutation?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "Should this filter live in a Nano Store or component state?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "What query key should the billing page use for TanStack Query?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "Fix ESLint in a React widget",
     "should_trigger": false
   }
 ]

@@ -1,0 +1,46 @@
+[
+  {
+    "query": "How should frontend integration tests run in the jig template?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can I skip backend integration tests when DATABASE_URL is unset?",
+    "should_trigger": true
+  },
+  {
+    "query": "What is the difference between pnpm verify and pnpm test:e2e?",
+    "should_trigger": true
+  },
+  {
+    "query": "Where should I put a new Fastify command file?",
+    "should_trigger": false
+  },
+  {
+    "query": "Add a hero banner component to the landing slice",
+    "should_trigger": false
+  },
+  {
+    "query": "What ESLint rules govern React composition in this repo?",
+    "should_trigger": false
+  },
+  {
+    "query": "Start a new fullstack app from the jig template",
+    "should_trigger": false,
+    "near_miss_of": "setup-project"
+  },
+  {
+    "query": "Write a spec for the checkout flow before coding",
+    "should_trigger": false,
+    "near_miss_of": "write-spec"
+  },
+  {
+    "query": "Break this feature into implementation tasks in a plan doc",
+    "should_trigger": false,
+    "near_miss_of": "write-plan"
+  },
+  {
+    "query": "Review this PR for architecture and convention drift",
+    "should_trigger": false,
+    "near_miss_of": "nonexistent-sibling-skill"
+  }
+]

@@ -61,6 +61,33 @@ validate_skill() {
   validate_description_prefix "$skill_file"
 }
 
+load_installed_skill_names() {
+  node -e "
+    const fs = require('fs');
+    const path = require('path');
+    const { execSync } = require('child_process');
+    const root = '$ROOT';
+    const skillsDir = path.join(root, 'skills');
+    if (!fs.existsSync(skillsDir)) {
+      console.log('');
+      process.exit(0);
+    }
+    const files = execSync('find skills -name SKILL.md', { cwd: root, encoding: 'utf8' })
+      .trim()
+      .split('\\n')
+      .filter(Boolean);
+    const names = [];
+    for (const rel of files) {
+      const text = fs.readFileSync(path.join(root, rel), 'utf8');
+      const match = text.match(/^---\\r?\\n([\\s\\S]*?)\\r?\\n---/);
+      const nameLine = match && match[1].split('\\n').find((l) => l.startsWith('name:'));
+      const name = nameLine ? nameLine.slice('name:'.length).trim() : null;
+      if (name) names.push(name);
+    }
+    console.log(names.join('\\n'));
+  "
+}
+
 validate_evals() {
   local evals_file="$1"
   local rel="${evals_file#$ROOT/}"
@@ -72,17 +99,95 @@ validate_evals() {
     return
   fi
 
-  if ! node -e "
-    const fs = require('fs');
-    const data = JSON.parse(fs.readFileSync('$evals_file', 'utf8'));
-    if (!Array.isArray(data)) throw new Error('root must be an array');
-    if (data.length === 0) throw new Error('evals must be non-empty');
-    for (const item of data) {
-      if (typeof item.query !== 'string') throw new Error('each item needs query string');
-      if (typeof item.should_trigger !== 'boolean') throw new Error('each item needs should_trigger boolean');
-    }
-  " 2>/dev/null; then
-    error "$rel: invalid or empty trigger_evals.json"
+  local installed_skill_names
+  installed_skill_names=$(load_installed_skill_names)
+
+  local validation_output
+  if ! validation_output=$(
+    node -e "
+      const fs = require('fs');
+      const evalsFile = process.argv[1];
+      const installed = process.argv[2]
+        .split('\\n')
+        .map((name) => name.trim())
+        .filter(Boolean);
+      const installedSkillNames = new Set(installed);
+      const data = JSON.parse(fs.readFileSync(evalsFile, 'utf8'));
+      const errors = [];
+
+      if (!Array.isArray(data)) {
+        errors.push('root must be an array');
+      } else if (data.length === 0) {
+        errors.push('evals must be non-empty');
+      } else {
+        let positives = 0;
+        let negatives = 0;
+        let nearMissNegatives = 0;
+
+        data.forEach((item, index) => {
+          const label = 'case ' + (index + 1);
+
+          if (typeof item.query !== 'string') {
+            errors.push(label + ': query must be a string');
+          }
+          if (typeof item.should_trigger !== 'boolean') {
+            errors.push(label + ': should_trigger must be a boolean');
+          }
+
+          const hasNearMissOf = Object.prototype.hasOwnProperty.call(item, 'near_miss_of');
+
+          if (item.should_trigger === true) {
+            positives += 1;
+            if (hasNearMissOf) {
+              errors.push(label + ': positive case must not carry near_miss_of');
+            }
+          } else if (item.should_trigger === false) {
+            negatives += 1;
+            if (hasNearMissOf) {
+              if (typeof item.near_miss_of !== 'string' || item.near_miss_of.trim() === '') {
+                errors.push(label + ': near_miss_of must be a non-empty string');
+              } else if (!installedSkillNames.has(item.near_miss_of)) {
+                errors.push(
+                  label +
+                    ': near_miss_of \"' +
+                    item.near_miss_of +
+                    '\" names no installed skill under skills/',
+                );
+              } else {
+                nearMissNegatives += 1;
+              }
+            }
+          }
+        });
+
+        if (data.length < 10) {
+          errors.push('need at least 10 cases (found ' + data.length + ')');
+        }
+        if (positives < 1) {
+          errors.push('need at least one positive case (should_trigger: true)');
+        }
+        if (negatives < 1) {
+          errors.push('need at least one negative case (should_trigger: false)');
+        }
+        if (nearMissNegatives < 4) {
+          errors.push(
+            'need at least 4 negative near-miss cases with near_miss_of (found ' +
+              nearMissNegatives +
+              ')',
+          );
+        }
+      }
+
+      if (errors.length > 0) {
+        console.log(errors.join('\\n'));
+        process.exit(1);
+      }
+    " "$evals_file" "$installed_skill_names" 2>&1
+  ); then
+    error "$rel: invalid trigger_evals.json"
+    while IFS= read -r detail; do
+      [[ -n "$detail" ]] && error "$rel: $detail"
+    done <<< "$validation_output"
   fi
 }
 
@@ -146,6 +251,24 @@ validate_unique_skill_names() {
     }
   " 2>/dev/null || error "duplicate or missing skill names under skills/"
 }
+
+if [[ "${1:-}" == "--evals-only" ]]; then
+  if [[ $# -ne 2 ]]; then
+    echo "usage: $0 --evals-only <path/to/trigger_evals.json>" >&2
+    exit 2
+  fi
+  evals_path="$2"
+  if [[ "$evals_path" != /* ]]; then
+    evals_path="$ROOT/$evals_path"
+  fi
+  validate_evals "$evals_path"
+  if [[ "$ERRORS" -gt 0 ]]; then
+    echo "validate-skills: $ERRORS error(s)" >&2
+    exit 1
+  fi
+  echo "validate-skills: passed."
+  exit 0
+fi
 
 if [[ -d "$SKILLS_DIR" ]]; then
   skill_count=0

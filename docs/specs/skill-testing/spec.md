@@ -221,3 +221,90 @@ before `template-dogfood` and `scaffold-then-verify`. PR-only E2E MUST depend on
 - **GIVEN** a push to `main` (not a pull_request event)
 - **WHEN** the CI workflow evaluates the `e2e` job
 - **THEN** the job is skipped (`if: github.event_name == 'pull_request'`)
+
+### R9 — Convention skills SHALL ship L2 output evals, not trigger evals alone
+
+Every convention skill under `skills/convention/**` is a reference/pattern/technique
+skill whose primary success metric is L2 (application or retrieval), not L1
+triggering. Each MUST ship an L2 artifact (`evals/evals.json` or a dated
+`evals/l2-*.md`) with at least one application/retrieval case graded by an
+**objective oracle** — never a subjective "output is good".
+
+#### Scenario: convention skill ships an L2 eval
+
+- **GIVEN** `skills/convention/state-and-data`
+- **WHEN** its `evals/` directory is inspected
+- **THEN** it contains an L2 artifact with at least one application/retrieval case
+  beyond `trigger_evals.json`
+
+#### Scenario: L2 case uses an objective oracle
+
+- **GIVEN** an L2 case for a convention skill
+- **WHEN** the case is graded
+- **THEN** pass/fail is decided by an observable check (lint on produced code, a
+  structural/file check, or a documented retrieval checklist), not "looks good"
+
+### R10 — Skill descriptions SHALL state triggers only, and trigger sets SHALL cover near-misses
+
+Each `SKILL.md` `description` MUST state when-to-use triggers and symptoms and MUST
+NOT summarize the skill's procedure or workflow (a workflow summary makes agents
+follow the description and skip the body). Each `evals/trigger_evals.json` MUST
+contain at least 10 cases, including at least 4 near-miss negatives drawn from
+sibling skills, with variation across positives (formality, terseness,
+task-buried-in-a-longer-chain).
+
+#### Scenario: description carries no workflow summary
+
+- **GIVEN** a `SKILL.md` description
+- **WHEN** it is reviewed
+- **THEN** it names triggers/symptoms only and does not enumerate the steps the
+  skill performs
+
+#### Scenario: trigger set meets the near-miss floor
+
+- **GIVEN** a skill's `trigger_evals.json`
+- **WHEN** it is validated
+- **THEN** it has at least 10 cases and at least 4 near-miss negatives from sibling
+  skills
+
+### R11 — Skill rule IDs SHALL be coherent with the catalogue
+
+Every rule ID that a `SKILL.md` declares as its **own** (in a Rules section/table)
+MUST have a row in `rules-catalogue.md` whose guidance column names that skill.
+A rule mentioned only as a cross-reference to another skill's rule (e.g. "see
+`state-and-data` / **sd-...**") is exempt. `coherence-check.mjs` MUST fail on an
+uncatalogued own-rule ID, extending the existing custom-ESLint-rule coherence check.
+
+#### Scenario: uncatalogued own-rule ID fails coherence
+
+- **GIVEN** a `SKILL.md` Rules table declares id `xx-foo` and no catalogue row has
+  id `xx-foo`
+- **WHEN** `pnpm run coherence` runs
+- **THEN** it exits non-zero citing the uncatalogued skill rule id
+
+#### Scenario: cross-referenced rule needs no new row
+
+- **GIVEN** a skill references another skill's rule id without claiming ownership
+- **WHEN** `pnpm run coherence` runs
+- **THEN** the reference does not require a new catalogue row
+
+### R12 — Discipline-skill pressure reports SHALL record a without-skill baseline
+
+A shipped pressure-scenario report MUST record an actual `without_skill` RED
+baseline with the agent's rationalizations verbatim, alongside the `with_skill`
+GREEN result — or be explicitly labelled `unverified — design-time` when no live
+baseline was run. Scenarios SHOULD combine 3+ pressure types.
+
+#### Scenario: GREEN-only report is labelled unverified
+
+- **GIVEN** a pressure-scenario report captured with the skill loaded only
+- **WHEN** it is read
+- **THEN** it is explicitly marked `unverified — design-time`, or a `without_skill`
+  RED baseline is added
+
+#### Scenario: baseline records rationalizations verbatim
+
+- **GIVEN** a discipline skill's recorded RED baseline
+- **WHEN** it is read
+- **THEN** it lists the agent's rationalizations verbatim, and each maps to an entry
+  in the skill's rationalization table

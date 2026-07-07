@@ -17,6 +17,7 @@ feature spec.
 - `skills/workflow/develop-feature`
 - `templates/fullstack/docs/specs/` (scaffolded artifact layout)
 - `docs/adr/` (project-wide decisions)
+- `rules-catalogue.md` (spine rule-ID rows)
 
 ## Requirements
 
@@ -130,3 +131,26 @@ commits instead of an empty `origin/main..HEAD` range.
 - **WHEN** CI runs the spec-present gate
 - **THEN** `SPEC_PRESENT_BASE` equals that SHA and changed files are resolved from
   `before..HEAD`, not from an uninitialized base
+
+### R6 — Spine skill descriptions SHALL state triggers only and their rule IDs SHALL be catalogued
+
+The five spine skill descriptions (`write-spec`, `write-plan`, `implement-feature`,
+`review-change`, `develop-feature`) MUST state triggers/symptoms only per
+[skill-testing R10](../skill-testing/spec.md) — no procedure summary after the
+em-dash. The procedural rule IDs the spine declares (`ws-*`, `wp-*`, `imf-*`,
+`rv-*`, `df-*`) MUST have rows in `rules-catalogue.md` with the owning skill in the
+guidance column, per [skill-testing R11](../skill-testing/spec.md), matching how the
+older workflow skills catalogue `sp-*`, `if-*`, and `ib-*`.
+
+#### Scenario: develop-feature description names triggers, not the chain
+
+- **GIVEN** `skills/workflow/develop-feature/SKILL.md`
+- **WHEN** its `description` is read
+- **THEN** it names triggers ("build X end to end", "ship a change") and does not
+  enumerate the spec → plan → implement → review sequence
+
+#### Scenario: spine rule IDs appear in the catalogue
+
+- **GIVEN** the spine declares `wp-trace-to-spec`
+- **WHEN** `rules-catalogue.md` is checked
+- **THEN** a row exists with id `wp-trace-to-spec` and guidance `write-plan`

@@ -16,11 +16,55 @@
     "should_trigger": true
   },
   {
+    "query": "refactor: usecase calls prisma.user.create — what layers do I extract into?",
+    "should_trigger": true
+  },
+  {
+    "query": "kebab-case for backend slice files?",
+    "should_trigger": true
+  },
+  {
+    "query": "We're adding OAuth callback under apps/backend — can the endpoint call Prisma or must it go through usecase/command/query?",
+    "should_trigger": true
+  },
+  {
+    "query": "Add packages/types/src/slices/billing/billing-contracts.ts for the invoice API body schema",
+    "should_trigger": false,
+    "near_miss_of": "contracts"
+  },
+  {
+    "query": "Where should shared Zod schemas for the users API live — packages/types or slice schemas/?",
+    "should_trigger": false,
+    "near_miss_of": "contracts"
+  },
+  {
+    "query": "Should the users list from the API live in TanStack Query or a Nano Store?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "How do I invalidate the users cache after creating a user on the frontend?",
+    "should_trigger": false,
+    "near_miss_of": "state-and-data"
+  },
+  {
+    "query": "How should backend integration tests isolate parallel vitest workers against Postgres?",
+    "should_trigger": false,
+    "near_miss_of": "testing"
+  },
+  {
+    "query": "Can I skip backend integration tests when DATABASE_URL is unset?",
+    "should_trigger": false,
+    "near_miss_of": "testing"
+  },
+  {
     "query": "Add a hero banner component to the landing slice",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "frontend-architecture"
   },
   {
     "query": "Bootstrap a new fullstack monorepo from scratch",
-    "should_trigger": false
+    "should_trigger": false,
+    "near_miss_of": "project-defaults"
   }
 ]

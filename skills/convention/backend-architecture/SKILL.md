@@ -1,6 +1,6 @@
 ---
 name: backend-architecture
-description: Use when building or refactoring Fastify backend slices, endpoints, usecases, commands, queries, domain rules, Prisma access, or backend folder layout in apps/backend.
+description: Use when organizing or refactoring apps/backend slice layers; when endpoints, usecases, commands, queries, or domain placement is unclear; or when symptoms include command↔query imports, domain I/O, usecases calling Prisma directly, or non-kebab slice file names.
 ---
 
 # Backend Architecture

@@ -18,7 +18,7 @@ Reference only — no spec↔slice mapping is enforced.
 - `scripts/scaffold-and-verify.mjs` — integration assertion after scaffold
 - `scripts/coherence-check.mjs` (or `validate-skills.sh` extension) — manifest ↔ repo skills coherence
 - `skills/workflow/setup-project/SKILL.md` — procedure update (no manual `skills add` for project work)
-- `README.md`, `DESIGN.md`, `rules-catalogue.md` — distribution docs and rule crosswalk
+- `README.md`, `docs/README.md`, `rules-catalogue.md` — distribution docs and rule crosswalk
 
 ## Requirements
 

@@ -12,7 +12,7 @@ Agent-agnostic harness for building TypeScript fullstack web apps on narrow, tes
 
 A rule the agent violates is caught automatically. Generator output is lint-clean. A scaffolded project starts green under `pnpm verify`.
 
-See [DESIGN.md](DESIGN.md) for architecture and [rules-catalogue.md](rules-catalogue.md) for the rule crosswalk across all three layers.
+See [docs/README.md](docs/README.md) for architecture and [rules-catalogue.md](rules-catalogue.md) for the rule crosswalk across all three layers.
 
 ## Stack
 
@@ -120,7 +120,9 @@ The harness publishes tooling packages to npm. All `@jig-harness/*` packages sha
 | Package                         | Purpose                                            |
 | ------------------------------- | -------------------------------------------------- |
 | `@jig-harness/create-app`       | `pnpm create @jig-harness/app` scaffolder          |
+| `@jig-harness/skills`           | Bundled agent skills + postinstall linker          |
 | `@jig-harness/generators`       | Plop generators registered for `turbo gen`         |
+| `@jig-harness/spec-present`     | Spec-present gate CLI (`pnpm verify`)              |
 | `@jig-harness/eslint-plugin`    | Custom ESLint rules with RED/GREEN fixtures        |
 | `@jig-harness/eslint-config`    | Flat ESLint preset (off-the-shelf + custom plugin) |
 | `@jig-harness/stylelint-config` | BEM and CSS conventions                            |
@@ -171,12 +173,12 @@ Postgres is required for backend dev and for `template:dogfood`. E2E (`pnpm --di
 ```
 jig-harness/
 ├── skills/
-│   ├── workflow/          # setup-project, implement-frontend, implement-backend
+│   ├── workflow/          # setup-project, implement-frontend, implement-backend, …
 │   └── convention/        # project-defaults, frontend-architecture, …
 ├── packages/              # published @jig-harness/* tooling
 ├── templates/fullstack/   # dogfood template (apps/frontend, apps/backend, apps/e2e, packages/types)
+├── docs/                  # specs, ADRs, STATUS hub
 ├── rules-catalogue.md     # rule ↔ layer crosswalk
-├── DESIGN.md              # architecture and decisions
 └── scripts/               # validation, coherence, dogfood
 ```
 

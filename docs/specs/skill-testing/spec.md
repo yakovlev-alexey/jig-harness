@@ -510,7 +510,12 @@ are:
       "workspace": { "kind": "none" },
       "oracle": {
         "type": "checklist",
-        "criteria": ["The agent stops before changing app source"]
+        "criteria": [
+          {
+            "id": "stops-before-app-source",
+            "text": "The agent stops before changing app source"
+          }
+        ]
       }
     }
   ]
@@ -628,16 +633,28 @@ temporary Git worktree. No two child threads MAY share a mutable workspace. The
 oracle MUST run in that workspace after the child completes. The runner MUST save a
 normalized `patch.diff` when files changed and a `workspace.json` containing
 `schema_version`, an opaque workspace ID, workspace kind, source hash, relative
-oracle cwd, timeout, changed-file paths and hashes, and cleanup status. It MUST then
-remove the temporary workspace. Prompt-only trigger and retrieval cases do not need
-workspace files and MUST run read-only; mutable cases receive write access only to
-their isolated workspace. Fixtures and persisted artifacts MUST use synthetic data
-and MUST NOT contain credentials, auth/session material, secrets, or private keys.
+oracle cwd, timeout, changed-file records, and cleanup status. Each changed-file
+record MUST name `change` as `added`, `modified`, `deleted`, or `renamed`, record the
+before and after hashes with null on the nonexistent side, and include
+`previous_path` for a rename. It MUST then remove the temporary workspace.
+Prompt-only trigger and retrieval cases do not need workspace files and MUST run
+read-only; mutable cases receive write access only to their isolated workspace.
+Fixtures and persisted artifacts MUST use synthetic data and MUST NOT contain
+credentials, auth/session material, secrets, or private keys.
 
-Each invocation MUST create exactly one run directory containing the five core files
-in R13. `workspace.json` is additionally required for a case that uses a mutable
-workspace, and `patch.diff` is required when that workspace changes. `prompt.md` and
-`response.md` MUST preserve the materialized prompt and raw child response.
+Each completed invocation with a valid selection receipt and an executed oracle MUST
+publish exactly one final run directory containing the five core files in R13. An
+argument or case-definition rejection before spawn MUST publish no run. After spawn
+is accepted, the runner MUST stage artifacts outside `evals/runs/`; a spawn,
+lifecycle, receipt, or oracle-infrastructure failure MUST exit non-zero, remove the
+staging directory, and publish no final run. An executed oracle whose observed
+verdict is `fail` is still a valid completed run and MUST be published. Any retry of
+a failed attempt MUST use a new invocation; the failed attempt MUST NOT masquerade as
+completed evidence. `workspace.json` is additionally required for a completed case
+that uses a mutable workspace, and `patch.diff` is required when that workspace
+changes.
+`prompt.md` and `response.md` MUST preserve the materialized prompt and raw child
+response.
 `events.jsonl` MUST be a runner-produced allowlist export of verbatim spawn, child
 start, child completion, and selection-receipt lifecycle records; it is not a copied
 Codex rollout or session file and MUST omit unrelated tool payloads, credentials,
@@ -699,10 +716,22 @@ For a mutable case, the minimum `workspace.json` is:
   "source_sha256": "sha256",
   "oracle_cwd": ".",
   "timeout_seconds": 300,
-  "changed_files": [{ "path": "apps/backend/src/example.ts", "sha256": "sha256" }],
+  "changed_files": [
+    {
+      "path": "apps/backend/src/example.ts",
+      "change": "modified",
+      "before_sha256": "sha256",
+      "after_sha256": "sha256",
+      "previous_path": null
+    }
+  ],
   "cleanup_status": "removed"
 }
 ```
+
+For an added file, `before_sha256` MUST be null; for a deleted file,
+`after_sha256` MUST be null. A renamed file MUST record its old relative path in
+`previous_path`. A non-rename MUST use null `previous_path`.
 
 The minimum command `oracle.json` is:
 
@@ -761,6 +790,12 @@ subagent thread IDs MUST be globally unique.
 verdict, and use one of three oracle types: `command` with command and exit code;
 `checklist` with individual results and evidence; or `activation` for trigger cases.
 Command oracles MUST preserve sanitized stdout and stderr in `oracle.json`.
+Checklist definitions MUST give every criterion a stable ID. Checklist results MUST
+record one result and artifact-backed evidence per criterion plus a runner-captured
+`grader` object with `kind` (`command` or `human`), an opaque grader ID, grading time,
+and the SHA-256 of the exact prompt, response, and criteria input. The scenario child
+MUST NOT grade its own checklist. Missing independent grader evidence makes the
+attempt invalid and prevents publication of a completed run.
 The activation oracle is derived from `should_trigger`: the target skill MUST be
 present in the selection receipt exactly when `should_trigger` is true. A negative
 case with `near_miss_of` additionally requires the named sibling to be selected and
@@ -815,6 +850,30 @@ accepted evidence.
 - **WHEN** their children and command oracles run
 - **THEN** each receives a different materialized workspace, its own patch and file
   hashes are recorded, and both workspaces are removed after completion
+
+#### Scenario: deleted and renamed files have unambiguous workspace records
+
+- **GIVEN** a mutable case deletes one file and renames another
+- **WHEN** the runner writes `workspace.json`
+- **THEN** the deleted file has null `after_sha256`, the renamed file names its
+  `previous_path`, and all existing before/after versions have hashes
+
+#### Scenario: failed attempts do not become completed evidence
+
+- **GIVEN** a scalar case passes argument validation but its child fails to spawn or
+  returns a mismatched receipt
+- **WHEN** the runner handles the attempt
+- **THEN** it exits non-zero, removes staging, and publishes no final run directory
+- **THEN** an observed oracle verdict of `fail` remains publishable when the child and
+  receipt completed validly
+
+#### Scenario: checklist grading is independent of the scenario child
+
+- **GIVEN** a retrieval case uses a checklist oracle
+- **WHEN** the attempt is graded
+- **THEN** every criterion has runner-captured independent evidence bound to the exact
+  prompt and response hashes
+- **THEN** a child self-verdict or missing grader record cannot publish a completed run
 
 #### Scenario: runtime canary proves effective model and effort
 

@@ -176,3 +176,28 @@ reference-only.
 
 **Rationale:** The grammar matches existing authoring patterns while separating owned
 declarations from cross-references deterministically enough for fixture tests.
+
+## 2026-07-15 — Publish only completed attempts and bind independent checklist grading
+
+**Decision:** Rejected inputs and attempts that fail during spawn, lifecycle capture,
+receipt validation, or oracle infrastructure publish no final run directory. The runner
+stages outside `evals/runs/` and publishes atomically only after a valid child receipt and
+an executed oracle; an observed oracle `fail` remains valid evidence. Checklist oracles
+must be graded independently of the scenario child and bind their criterion evidence to
+the exact prompt, response, and criteria hashes. Workspace change records use before and
+after hashes with null on the nonexistent side so added, deleted, and renamed files are
+unambiguous.
+
+**Alternatives considered:**
+
+- Publish a partial five-file run after spawn failure — rejected: there is no raw child
+  response or observed oracle verdict, so placeholders would look like evidence they are
+  not.
+- Let the scenario child fill its own checklist — rejected: self-grading is not an
+  objective oracle and lets the behavior under test attest to its own success.
+- Give every changed path only one hash — rejected: deleted and renamed files have no
+  single current byte representation.
+
+**Rationale:** Atomic publication keeps `runs/` limited to auditable scenario outcomes,
+while independent checklist evidence and two-sided file hashes close provenance gaps
+without weakening the one-case-one-child rule.

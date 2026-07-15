@@ -1,41 +1,51 @@
-# Plan — validate-skills trigger eval floor (skill QC, cross-cutting)
+# Plan — validate-skills L0 entrypoint (foundation PR)
 
-The shared validator for the R10 trigger-eval floor. This is separate from
-[harness-coherence-check](./harness-coherence-check.md): coherence owns rule-ID
-catalogue checks; `validate-skills.sh` owns structural and trigger-fixture checks.
-Shared gate & verification: [README](./README.md). Traces to skill-testing R10.
+Companion to [harness-eval-contract](./harness-eval-contract.md). This plan preserves
+the existing Bash frontmatter and agentskills.io checks while moving versioned eval
+validation into importable Node modules. No generator applies.
 
-## Task A — Enforce trigger case count and near-miss annotation
+## Task A — Delegate eval validation to the shared Node entrypoint
 
-**Satisfies:** skill-testing R10 · **Effort:** S
+**Satisfies:** skill-testing R1, R2, R10, R13 · **Effort:** S
 
-Extend [scripts/validate-skills.sh](../../../scripts/validate-skills.sh) so
-`validate_evals()` checks each `evals/trigger_evals.json` has:
+Edit `scripts/validate-skills.sh`:
 
-- at least 10 total cases;
-- at least one positive and one negative case;
-- at least 4 negative near-miss cases;
-- each near-miss negative has `near_miss_of` as a non-empty string naming an existing
-  skill under `skills/`;
-- no positive case carries `near_miss_of`.
+- retain the `SKILL.md` existence, frontmatter, line-limit, `Use when` prefix,
+  unique-name, and optional agentskills.io checks;
+- remove the inline `node -e` parser that expects a root array;
+- after structural skill discovery, invoke `node scripts/validate-skill-evals.mjs`
+  exactly once for the repository and propagate its exit status;
+- use `rg`/Node directory traversal in new code instead of adding more `find`/`grep`
+  parsing;
+- keep diagnostics emitted by the Node validator intact rather than collapsing them
+  into a generic `invalid trigger_evals.json` message.
 
-Keep the existing `{ query: string, should_trigger: boolean }` schema requirement.
-Extra fields remain allowed so older eval tooling that only reads those two fields keeps
-working.
+The Node validator is implemented in the contract plan; both plans land atomically so
+the shell script never references a missing entrypoint.
 
-## Task B — Add RED/GREEN validator fixtures
+## Task B — Cover shell-to-Node behavior hermetically
 
-**Satisfies:** skill-testing R10 · **Effort:** S
+**Satisfies:** skill-testing R1, R2, R10, R15 · **Effort:** S
 
-Add a small fixture test or script-level check proving validation fails when:
+Create `scripts/skill-qc/tests/cli.test.mjs` with shell-entrypoint cases. Create temporary
+repositories inside the test and set `SKILLS_REF_VALIDATE=0`; do not read real
+`skills/` fixtures. Assert the exact diagnostic code and path for:
 
-- the file has fewer than 10 cases;
-- it has fewer than 4 annotated near-miss negatives;
-- `near_miss_of` names no installed sibling skill;
-- a positive case carries `near_miss_of`.
+- missing `description` frontmatter;
+- missing or empty `trigger_evals.json` envelope;
+- a valid `schema_version: 1` trigger file delegated to the Node validator;
+- multiple eval diagnostics preserved in stable sorted order.
 
-Also prove a 10-case file with 4 correctly annotated near-miss negatives passes.
+The test MUST assert structured diagnostic fields, not only a non-zero exit status.
+
+## Task C — Verify L0 integration in the foundation PR
+
+**Satisfies:** skill-testing R1, R2, R10, R13, R15 · **Effort:** XS
+
+Run `pnpm run test:skill-validators` and `pnpm run validate-skills`. Confirm current
+skill violations match exact waivers and a synthetic unwaived trigger violation exits
+non-zero with its stable code.
 
 ## Coverage
 
-A→R10, B→R10. No orphan tasks.
+A→R1/R2/R10/R13, B→R1/R2/R10/R15, C→R1/R2/R10/R13/R15.

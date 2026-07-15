@@ -1,56 +1,70 @@
-# Plan — harness coherence-check (skill QC, cross-cutting)
+# Plan — skill rule-ID coherence (foundation PR)
 
-The one **non-skill** unit in this decomposition: the shared verifier for rule-ID
-coherence. It is the prerequisite that makes the per-skill catalogue tasks
-(`project-defaults`, `react-composition`, and the 5 spine plans) machine-checked rather
-than manual. Shared gate & verification: [README](./README.md). Traces to skill-testing
-R11 and spec-driven R6.
+Implement the exact owned-declaration grammar from skill-testing R11. This is part of
+the atomic validator-first foundation PR and uses the shared diagnostic/debt core from
+[harness-eval-contract](./harness-eval-contract.md). No generator applies.
 
-## Task A — Extend coherence-check.mjs to enforce skill-rule-ID coherence
+## Task A — Extract a deterministic owned-rule parser
 
-**Satisfies:** skill-testing R11 · **Effort:** M
+**Satisfies:** skill-testing R1, R11, R15 · **Effort:** M
 
-Extend [scripts/coherence-check.mjs](../../../scripts/coherence-check.mjs). Today it only
-checks custom-ESLint-rule ↔ catalogue. Add a pass that, for each
-`skills/**/SKILL.md` Rules section, collects the rule IDs the skill declares as its
-**own**, and asserts each has a `rules-catalogue.md` row whose guidance column names
-that skill. Support both rule tables and bullet-list declarations. Exempt IDs
-mentioned only as cross-references to another skill's rule (e.g. "see
-`state-and-data` / **sd-...**").
+Create `scripts/skill-qc/rule-ownership.mjs` and export pure functions that parse one
+`SKILL.md` string. Implement R11 literally:
 
-Implementation notes:
+- scan level-two headings named `Rules` or ending in ` Rules` or ` Defaults`;
+- own only IDs in a table's first column;
+- own only IDs in a bullet prefix before its first em dash;
+- keep an owned prefix owned when text after the em dash says `Reference` or `see`;
+- treat a prefix beginning `Reference` or `See` as borrowed;
+- scope a `Delegated enforcement` heading until the next same-or-higher heading;
+- scope a standalone `Delegated enforcement:` label through the next contiguous list or
+  table and end it at the next other block;
+- ignore examples, filenames, and rule-like tokens outside declaration sections.
 
-- Reuse the existing `parseCatalogue()` (id + guidance columns).
-- Parse only the `## Rules` section, stopping at the next `##` heading. This avoids
-  false positives from examples, references, and file names.
-- Detect own-rule IDs from either bolded `**xx-foo**` cells in a table or bullet
-  declarations like `- **xx-foo** — ...`; treat rows/bullets that contain
-  "see `<skill>`", "Reference **wf-...**", or "Delegated enforcement" as
-  cross-references, not ownership.
-- Ignore rule-like tokens outside owned Rules declarations, such as
-  `assert-user-can-be-created.ts` in reference examples.
-- Fail listing each uncatalogued own-rule ID and its skill; keep the existing checks.
+Return owned IDs with source locations; do not print or exit from the parser.
 
-## Task B — Add a fixture test for the new check
+## Task B — Integrate ownership with catalogue coherence
 
-**Satisfies:** skill-testing R11 · **Effort:** S
+**Satisfies:** skill-testing R1, R11, R15 · **Effort:** S
 
-Add a small RED/GREEN fixture (temp SKILL.md + catalogue snippet) proving the check:
+Refactor `scripts/coherence-check.mjs` so its catalogue parser exposes the guidance
+column as well as id and enforcement. Export a pure `collectCoherenceDiagnostics`
+function for the aggregate debt command, keep CLI execution behind the direct-entry
+guard, and apply only coherence-code waivers in CLI mode. Import the ownership parser and
+emit shared diagnostics for:
 
-- fails on an uncatalogued own-rule ID in a bullet-list Rules section;
-- fails on an uncatalogued own-rule ID in a table Rules section;
-- passes on a catalogued one;
-- passes on a pure cross-reference / delegated-enforcement row;
-- ignores rule-like filenames and examples outside `## Rules`.
+- `RULE_OWNED_UNCATALOGUED` when no catalogue row exists;
+- `RULE_GUIDANCE_MISMATCH` when the row's guidance column does not name the owner skill.
 
-Wire into `pnpm run test` / the coherence step so CI enforces it.
+Preserve existing custom-rule ↔ catalogue enforcement checks. CLI rendering and exit
+belong in the entrypoint; importable functions return diagnostics.
 
-## Sequencing
+## Task C — Add grammar and integration fixtures
 
-Land this **before** (or with) the catalogue-row tasks in the per-skill plans so those
-rows are verified on commit. After it lands, `pnpm run coherence` is the oracle for
-every R11 task in this folder.
+**Satisfies:** skill-testing R11, R15 · **Effort:** M
+
+Add `scripts/skill-qc/tests/coherence.test.mjs` with temporary skill/catalogue fixtures
+covering every branch:
+
+- literal `Rules`, `Stack Defaults`, and `Composition Rules` headings;
+- table first-column ownership and borrowed IDs in later columns;
+- bullet ownership before an em dash plus a borrowed ID after it;
+- a bullet whose prefix starts with `Reference` or `See`;
+- heading-scoped and label-scoped delegated blocks and their termination boundaries;
+- an uncatalogued ID, a guidance-owner mismatch, and a valid catalogue row;
+- rule-like filenames and examples outside declaration sections.
+
+Assert diagnostic code, skill, path, subject, and stable fingerprint.
+
+## Task D — Verify catalogue repairs remain debt-controlled
+
+**Satisfies:** skill-testing R1, R11, R15 · **Effort:** XS
+
+Run `pnpm run test:skill-validators` and `pnpm run coherence`. Current uncatalogued
+owned IDs may pass only through exact skill debt entries created by the foundation PR;
+the corresponding per-skill PR deletes each entry after repairing `rules-catalogue.md`
+or the declaration.
 
 ## Coverage
 
-A→R11, B→R11. No orphan tasks.
+A→R1/R11/R15, B→R1/R11/R15, C→R11/R15, D→R1/R11/R15.
